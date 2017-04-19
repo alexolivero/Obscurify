@@ -329,7 +329,7 @@ define([], function() {
             alert("Something went wrong. You likely don't have enough Spotify history for Obscurify to work.");
           }
 
-          if(response.data.audio_features.length > 24 && $scope.long_term_artists.length > 24){
+          if(response.data.audio_features.length > 19 && $scope.long_term_artists.length > 19){
             postData();
           }
 
