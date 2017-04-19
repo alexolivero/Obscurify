@@ -1,0 +1,3 @@
+//delete duplicate rows from mysql
+
+delete from users where id not in ( select ID from (select min(id) as ID from users group by user_id) as temp);

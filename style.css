@@ -1,0 +1,47 @@
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+
+.main-view{
+  padding-top:10px;
+}
+
+.table tbody tr td{
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.user-info h3{
+  margin-top:0px;
+  padding-bottom: 5px;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+  background-color: #00e676;
+  color: black;
+}
+
+.playlistButton {
+	background-color:#00e676;
+	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	font-size:90%;
+	padding:5px 10px;
+	text-decoration:none;
+  margin-top:28px;
+  margin-right: 12px;
+}
+.playlistButton:hover {
+	background-color:#1B5E20;
+  color:white;
+}
+.playlistButton:active {
+	position:relative;
+	top:1px;
+}
+
+.table-hover>tbody>tr:hover {
+    background-color: #212121;
+}
