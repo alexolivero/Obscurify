@@ -13,6 +13,7 @@ define([], function() {
     var top_artist = 0; //to be sent to the database
     $scope.obscurify_top_artists = []; //goes hand in hand with $scope.obscurify_top_artists_counts, these are the artist objects
     $scope.obscurify_top_artists_counts = []; //to display the top artists at the bottom of the page, $scope.obscurify_top_artists[i]'s count of #1 listings
+    $scope.country_user_counts = []; //count of users from 5 countries (US, Brazil, UK, Sweden, Australia)
 
     // All of the artists returned from Spotify's API for the user's top (max 50) artists of all time
     $scope.long_term_artists = [];
@@ -287,17 +288,21 @@ define([], function() {
             energyST = energy/response.data.audio_features.length;
             danceabilityST = danceability/response.data.audio_features.length;
             acousticnessST = acousticness/response.data.audio_features.length;
-
-            drawBarChart();
-
           }
           catch(err){
-            console.log("short term analysis error");
+            console.log(err);
           }
+
+          drawBarChart();
 
   		});
   	}
 
+    /*
+    / Spotify needs the ids of the tracks you want in an array
+    / Use the long_term_ids array populated by getLongTermTracks
+    / Get the average for happiness, energy, etc.
+    */
     var getLongTermTrackAnalysis = function(){
   		$http({
   			method : "get",
@@ -329,28 +334,32 @@ define([], function() {
             alert("Something went wrong. You likely don't have enough Spotify history for Obscurify to work.");
           }
 
+          //only data in database is from people who've got 20 or more long term tracks and artists
           if(response.data.audio_features.length > 19 && $scope.long_term_artists.length > 19){
             postData();
           }
 
           drawBarChart();
-
   		});
   	}
 
+    /*
+    / Simply posts all the following data to the database. Should be called after
+    / getProfile -> getLongTermArtists -> getLongTermTracks -> getLongTermTrackAnalysis
+    */
     var postData = function(){
      $http({
        method : "POST",
        url : 'http://obscurifymusic.com/postData',
        params : {
-         "user_id" : user_id,
-         "user_country" : user_country,
-         "top_artist" : top_artist,
-         "obscurify_score" : $scope.obscurify_score,
-         "happiness" : happinessLT,
-         "energy" : energyLT,
-         "acousticness" : acousticnessLT,
-         "danceability" : danceabilityLT
+         "user_id" : user_id, //from getProfile
+         "user_country" : user_country, //from getProfile
+         "top_artist" : top_artist, //from getLongTermArtists
+         "obscurify_score" : $scope.obscurify_score, //from getLongTermArtists
+         "happiness" : happinessLT, //getLongTermTrackAnalysis
+         "energy" : energyLT, //getLongTermTrackAnalysis
+         "acousticness" : acousticnessLT, //getLongTermTrackAnalysis
+         "danceability" : danceabilityLT //getLongTermTrackAnalysis
        }
      }).then(function (response) {
        //console.log(response);
@@ -359,6 +368,10 @@ define([], function() {
      });
    }
 
+   /*
+   / This function gets the number of users that got every score.
+   / it sets the $scope.user_count, draws the User Scores graph and calls getTopArtists
+   */
     function getScores() {
        $http({
          method : "GET",
@@ -369,13 +382,13 @@ define([], function() {
          for(var i = 0; i < rawData.length; i++){
            $scope.user_count = $scope.user_count + rawData[i][1];
          }
+         //call getTopArtists here because the HTML that goes with it is associated with
+         //$scope.user_count so it'll all display at once with the correct percentage(not NaN)
+         getTopArtists();
          var key = [];
          key.push("Score");
          key.push("Number of users");
          rawData.unshift(key);
-
-         getTopArtists();
-
          var data = google.visualization.arrayToDataTable(rawData);
          var options = {
            legend: { position: 'bottom', textStyle: {color: '#F5F5F5'} },
@@ -399,17 +412,35 @@ define([], function() {
        });
     }
 
+    /*
+    /
+    */
     var getTopArtists = function(){
   		$http({
   			method : "get",
   			url : 'http://obscurifymusic.com/getTopArtists'
   		}).then(function (response) {
+
+        $http({
+    			method : "get",
+    			url : 'http://obscurifymusic.com/getCountryUserCounts'
+    		}).then(function (response) {
+           var data = JSON.parse(response.data.body);
+           for(var i = 0; i < data.length; i++){
+              $scope.country_user_counts.push(data[i][0].fans);
+           }
+    		}, function myError(response) {
+            console.log(response);
+        });
+
         var data = JSON.parse(response.data.body);
         var obscurify_top_artists_ids = [];
         for(var i = 0; i < data.length; i++){
-          if(data[i][0] != null){
-            obscurify_top_artists_ids.push(data[i][0]);
-            $scope.obscurify_top_artists_counts.push(data[i][1]);
+          for(var j = 0; j < data[i].length; j++){
+            if(data[i][j].top_artist != null){
+              obscurify_top_artists_ids.push(data[i][j].top_artist);
+              $scope.obscurify_top_artists_counts.push(data[i][j].fans);
+            }
           }
         }
         $http({
@@ -431,6 +462,11 @@ define([], function() {
       });
   	}
 
+    /*
+    / This function gets called by 3 different places (short term analysis, long term analyis and getGlobalData)
+    / when their data returns from their HTTP calls. All of the variables set in the chart are already initialized
+    / to be 0 so it's okay if this function is called before data comes in, it'll just draw a chart with no bar
+    */
     function drawBarChart() {
           var data = google.visualization.arrayToDataTable([
             ['Aspect', 'Recent', 'All', 'Average'],

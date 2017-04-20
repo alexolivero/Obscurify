@@ -27,7 +27,7 @@
         <div style="clear:both; width: 100%;">
           <div style="width:50%; float:left; ">
             <h4 style="margin-bottom:5px;margin-top:0px;">Average</h4>
-            <div style="font-size:85%; color:#F5F5F5; opacity:0.7; padding-bottom:10px;">{{user_count}} scores</div>
+            <div style="font-size:85%; color:#F5F5F5; opacity:0.7; padding-bottom:10px;">{{user_count | number}} scores</div>
           </div>
           <div style="width:50%; float:right; padding-left: 5px;">
             <h4 style="font-size:300%;margin-top:0px;">{{global_average}}</h4>
@@ -71,6 +71,11 @@
         and the green is the all-time average of all Obscurify users.
         Energy, happiness, danceability, and acousticness are measured from 0 to 1, with 1 being more energetic, etc.
       </div>
+    </br>
+    <div>
+      The All-Time #1 Artists at the bottom of the page shows the artists that have the most #1 spots on the All-Time artist lists
+      of all the users in the country.
+    </div>
       </div>
     </div>
 
@@ -168,18 +173,50 @@
   </div>
 
 
-  <div style="padding-top:15px; color:#F5F5F5;">
-    <div class="col-md-1 col-xs-12">
-    </div>
+  <div class="container" style="padding-top:15px; color:#F5F5F5;">
+    <h2 style="text-align:center;">All-Time #1 Artists</h2>
 	  <div class="row">
-      <div class="col-md-10 col-xs-12">
-        <div ng-repeat="artist in obscurify_top_artists" style="font-size:90%; text-align:center;">
-            <span style="opacity:0.8;">{{artist.name}} tops </span>
-            <span style="opacity:1; font-weight:bold;">{{ ((obscurify_top_artists_counts[$index] / user_count)*100).toFixed(1) }}%</span>
-            <span style="opacity:0.8;">of all lists</span>
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Global</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:0" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/user_count)*100 | number:1  }}%</span>
         </div>
       </div>
-      <div class="col-md-1 col-xs-12">
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">US</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:5" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[0])*100 | number:1  }}%</span>
+        </div>
+      </div>
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Brazil</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:10" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[1])*100 | number:1  }}%</span>
+        </div>
+      </div>
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">UK</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:15" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[2])*100 | number:1  }}%</span>
+        </div>
+      </div>
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Sweden</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:20" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[3])*100 | number:1  }}%</span>
+        </div>
+      </div>
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Australia</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:25" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[4])*100 | number:1  }}%</span>
+        </div>
       </div>
     </div>
   </div>

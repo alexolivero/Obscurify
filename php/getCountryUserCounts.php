@@ -17,12 +17,11 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT top_artist,count(*) as fans from users group by top_artist order by fans desc limit 6;";
-$sql.= "SELECT top_artist,count(*) as fans from users where user_country='US' group by top_artist order by fans desc limit 5;";
-$sql.= "SELECT top_artist,count(*) as fans from users where user_country='BR' group by top_artist order by fans desc limit 5;";
-$sql.= "SELECT top_artist,count(*) as fans from users where user_country='GB' group by top_artist order by fans desc limit 5;";
-$sql.= "SELECT top_artist,count(*) as fans from users where user_country='SE' group by top_artist order by fans desc limit 5;";
-$sql.= "SELECT top_artist,count(*) as fans from users where user_country='AU' group by top_artist order by fans desc limit 5;";
+$sql = "SELECT user_country,count(*) as fans from users where user_country='US' group by user_country;";
+$sql.= "SELECT user_country,count(*) as fans from users where user_country='BR' group by user_country;";
+$sql.= "SELECT user_country,count(*) as fans from users where user_country='GB' group by user_country;";
+$sql.= "SELECT user_country,count(*) as fans from users where user_country='SE' group by user_country;";
+$sql.= "SELECT user_country,count(*) as fans from users where user_country='AU' group by user_country;";
 
 if (!$conn->multi_query($sql)) {
     echo "Multi query failed: (" . $conn->errno . ") " . $conn->error;
@@ -34,7 +33,7 @@ do {
     if ($result = $conn->store_result()) {
       $rows = array();
       while($r = mysqli_fetch_array($result)) {
-        $rows[] = ["top_artist" => $r['top_artist'],
+        $rows[] = ["user_country" => $r['user_country'],
                     "fans" => $r['fans']];
       }
       $final[] = $rows;

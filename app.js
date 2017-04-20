@@ -234,5 +234,23 @@ app.get('/getTopArtists',function(req,res){
 
 });
 
+app.get('/getCountryUserCounts',function(req,res){
+    var options = {
+      url: 'http://obscurifymusic.com/php/getCountryUserCounts.php',
+      method: 'GET'
+    }
+
+    // Start the request
+    request(options, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            // Print out the response body
+            res.send(response);
+        } else{
+          res.send(response);
+        }
+    });
+
+});
+
 console.log('Listening on 3000');
 app.listen(3000, '0.0.0.0');
