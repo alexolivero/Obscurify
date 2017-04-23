@@ -17,11 +17,11 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT user_country,count(*) as fans from users where user_country='US' group by user_country;";
-$sql.= "SELECT user_country,count(*) as fans from users where user_country='BR' group by user_country;";
-$sql.= "SELECT user_country,count(*) as fans from users where user_country='GB' group by user_country;";
-$sql.= "SELECT user_country,count(*) as fans from users where user_country='SE' group by user_country;";
-$sql.= "SELECT user_country,count(*) as fans from users where user_country='AU' group by user_country;";
+$sql = "SELECT user_country,avg(obscurify_score) as avg_score,count(*) as fans from users where user_country='US' group by user_country;";
+$sql.= "SELECT user_country,avg(obscurify_score) as avg_score,count(*) as fans from users where user_country='BR' group by user_country;";
+$sql.= "SELECT user_country,avg(obscurify_score) as avg_score,count(*) as fans from users where user_country='GB' group by user_country;";
+$sql.= "SELECT user_country,avg(obscurify_score) as avg_score,count(*) as fans from users where user_country='SE' group by user_country;";
+$sql.= "SELECT user_country,avg(obscurify_score) as avg_score,count(*) as fans from users where user_country='AU' group by user_country;";
 
 if (!$conn->multi_query($sql)) {
     echo "Multi query failed: (" . $conn->errno . ") " . $conn->error;
@@ -34,10 +34,10 @@ do {
       $rows = array();
       while($r = mysqli_fetch_array($result)) {
         $rows[] = ["user_country" => $r['user_country'],
+                    "avg_score" => $r['avg_score'],
                     "fans" => $r['fans']];
       }
       $final[] = $rows;
-
       $result->free();
     }
 } while ($conn->more_results() && $conn->next_result());

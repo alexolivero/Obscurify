@@ -73,8 +73,7 @@
       </div>
     </br>
     <div>
-      The All-Time #1 Artists at the bottom of the page shows the artists that have the most #1 spots on the All-Time artist lists
-      of all the users in the country.
+      The All-Time #1 Artists section (at the bottom of the page) shows the artists that have the most #1 spots as a percentage.
     </div>
       </div>
     </div>
@@ -182,6 +181,7 @@
             <span style="opacity:0.8;">{{artist.name}} </span>
             <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/user_count)*100 | number:1  }}%</span>
         </div>
+        <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{global_average}}</span>
       </div>
       <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
         <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">US</h4>
@@ -189,6 +189,7 @@
             <span style="opacity:0.8;">{{artist.name}} </span>
             <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[0])*100 | number:1  }}%</span>
         </div>
+        <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[0]}}</span>
       </div>
       <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
         <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Brazil</h4>
@@ -196,6 +197,7 @@
             <span style="opacity:0.8;">{{artist.name}} </span>
             <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[1])*100 | number:1  }}%</span>
         </div>
+      <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[1]}}</span>
       </div>
       <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
         <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">UK</h4>
@@ -203,6 +205,7 @@
             <span style="opacity:0.8;">{{artist.name}} </span>
             <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[2])*100 | number:1  }}%</span>
         </div>
+      <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[2]}}</span>
       </div>
       <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
         <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Sweden</h4>
@@ -210,6 +213,7 @@
             <span style="opacity:0.8;">{{artist.name}} </span>
             <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[3])*100 | number:1  }}%</span>
         </div>
+      <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[3]}}</span>
       </div>
       <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
         <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Australia</h4>
@@ -217,9 +221,13 @@
             <span style="opacity:0.8;">{{artist.name}} </span>
             <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[4])*100 | number:1  }}%</span>
         </div>
+      <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[4]}}</span>
       </div>
     </div>
   </div>
 
+  <div class="container" style="text-align:center; padding-top:40px;">
+    <a href="/logout" style="background-color:#2e7d32; font-size:90%;" class="btn btn-primary">Log out of Obscurify</a>
+  </div>
 
 </div>

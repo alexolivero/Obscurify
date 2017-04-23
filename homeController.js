@@ -14,6 +14,7 @@ define([], function() {
     $scope.obscurify_top_artists = []; //goes hand in hand with $scope.obscurify_top_artists_counts, these are the artist objects
     $scope.obscurify_top_artists_counts = []; //to display the top artists at the bottom of the page, $scope.obscurify_top_artists[i]'s count of #1 listings
     $scope.country_user_counts = []; //count of users from 5 countries (US, Brazil, UK, Sweden, Australia)
+    $scope.country_average_scores = [];//average scores of users from 5 countries
 
     // All of the artists returned from Spotify's API for the user's top (max 50) artists of all time
     $scope.long_term_artists = [];
@@ -428,6 +429,7 @@ define([], function() {
            var data = JSON.parse(response.data.body);
            for(var i = 0; i < data.length; i++){
               $scope.country_user_counts.push(data[i][0].fans);
+              $scope.country_average_scores.push(Math.round(data[i][0].avg_score));
            }
     		}, function myError(response) {
             console.log(response);
