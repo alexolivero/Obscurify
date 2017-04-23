@@ -3,8 +3,9 @@
   <div class="container user-info" style=" padding-top:15px; color:white; border-bottom: 3px solid #424242;">
     <div class="row">
       <div class="col-md-4 col-xs-12" style="padding-bottom:10px; text-align:center;">
-        <img style="width:130px; height:130px; object-fit:cover; border-radius:10%; " src={{imageURL}}>
         <div style="font-size:90%; color:#F5F5F5; opacity:0.7; padding:5px;">{{display_name}}</div>
+        <img style="width:130px; height:130px; object-fit:cover; border-radius:10%; " src={{imageURL}}>
+        <div style="font-size:80%; padding-top:5px;"><a href="/logout">Log out</a></div>
       </div>
       <div class="col-md-4 col-xs-6" style="padding: 0px;border-right: 3px solid #424242;">
         <h4 style="margin-bottom:5px;margin-top:0px;">My Top Genres</h4>
@@ -224,10 +225,6 @@
       <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[4]}}</span>
       </div>
     </div>
-  </div>
-
-  <div class="container" style="text-align:center; padding-top:40px;">
-    <a href="/logout" style="background-color:#2e7d32; font-size:90%;" class="btn btn-primary">Log out of Obscurify</a>
   </div>
 
 </div>
