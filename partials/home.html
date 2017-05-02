@@ -51,31 +51,72 @@
       </div>
     </div>
 
+    <div class="row" style="padding-bottom:20px;">
+      <div ng-show="recommended_tracks.length > 9" class="row">
+        <div class="col-md-1 col-xs-0">
+        </div>
+        <div class="col-md-10 col-xs-12">
+            <h2 style="float:left; color:#F5F5F5;">You Might Like</h2>
+            <button class="playlistButton" ng-click="getRecommendations()" style="float:right;color:black;margin-bottom:10px; margin-top:23px;">Shuffle</button>
+        </div>
+        <div class="col-md-1 col-xs-0">
+        </div>
+      </div>
+
+      <div class="col-md-1 col-xs-0">
+      </div>
+      <div style="padding-right:0px;padding-left:0px;" class="col-md-5 col-xs-12">
+        <table class="table table-hover" style="margin-bottom:0px;">
+            <tbody>
+              <tr ng-repeat="track in recommended_tracks | limitTo : 4" style="border: 2px solid #424242; background-color:#282828;">
+                <td>
+                  <a style="color:white;" ng-href="{{track.uri}}">
+                  <div style="font-size:90%;">{{track.track_name}}</div>
+                  <div style="font-size:80%; opacity:0.8;">{{track.album_name}}</div>
+                  <div style="font-size:80%; opacity:0.8;">{{track.artist_name}}</div>
+                  </a>
+                </td>
+                <td style="text-align:right;"><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{track.album_image_url}}></td>
+            </tbody>
+        </table>
+      </div>
+      <div style="padding-right:0px;padding-left:0px;" class="col-md-5 col-xs-12">
+        <table class="table table-hover">
+            <tbody>
+              <tr ng-repeat="track in recommended_tracks | limitTo : 4 : 4" style="border: 2px solid #424242; background-color:#282828;">
+                <td>
+                  <a style="color:white;" ng-href="{{track.uri}}">
+                  <div style="font-size:90%;">{{track.track_name}}</div>
+                  <div style="font-size:80%; opacity:0.8;">{{track.album_name}}</div>
+                  <div style="font-size:80%; opacity:0.8;">{{track.artist_name}}</div>
+                  </a>
+                </td>
+                <td style="text-align:right;"><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{track.album_image_url}}></td>
+            </tbody>
+        </table>
+      </div>
+      <div class="col-md-1 col-xs-0">
+      </div>
+    </div>
+
     <div ng-click="showHelp = !showHelp;" style="text-align:center; padding-bottom: 5px;font-size:90%;">
       <a>What does this mean?</a>
-      <div ng-show="showHelp" style="color:#F5F5F5; opacity:0.5; padding:15px; border-top: 3px solid #424242; margin-top:5px; ">
-        <div>
-          Popularity, genres, and musical traits are all determined by Spotify, as is the order of your results.
-        </div>
-      </br>
-        <div>
-          Your score is based on the worldwide popularity of your top artists, represented by stars.
-          The average score comes from all Obscurify users who have enough history to have a fair score (more than 20 all-time artists and tracks).
-        </div>
-        </br>
-        <div>
-          That nice green curve on the User Scores chart measures number of users (y axis) versus score (x axis). Only scores that come from 20 or more artists are shown.
-        </div>
-      </br>
-      <div>
-        On the My Taste chart, the purple represents your recent listening history, the red represents your all-time history,
-        and the green is the all-time average of all Obscurify users.
-        Energy, happiness, danceability, and acousticness are measured from 0 to 1, with 1 being more energetic, etc.
-      </div>
-    </br>
-    <div>
-      The All-Time #1 Artists section (at the bottom of the page) shows the artists that have the most #1 spots as a percentage.
-    </div>
+      <div ng-show="showHelp" style="color:#F5F5F5; opacity:0.5; padding:15px; padding-bottom:45px; border-top: 3px solid #424242; margin-top:5px; ">
+            <div> Popularity, genres, and musical traits are all determined by Spotify, as is the order of your results.
+            </div></br>
+            <div> Your score is based on the worldwide popularity of your top artists, represented by stars.
+              The average score comes from all Obscurify users who have enough history to have a fair score (more than 20 all-time artists and tracks).
+            </div></br>
+            <div> That nice green curve on the User Scores chart measures number of users (y axis) versus score (x axis). Only scores that come from 20 or more artists are shown.
+            </div></br>
+          <div> On the My Taste chart, the purple represents your recent listening history, the red represents your all-time history,
+            and the green is the all-time average of all Obscurify users.
+            Energy, happiness, danceability, and acousticness are measured from 0 to 1, with 1 being more energetic, etc.
+          </div> </br>
+          <div> The All-Time #1 Artists section (at the bottom of the page) shows the artists that have the most #1 spots as a percentage.
+          </div> </br>
+          <div> Music listened to while in Private Mode is not recorded and will not show up in any lists.
+          </div>
       </div>
     </div>
 
@@ -88,20 +129,21 @@
   </ul>
 
   <div class="container" style="padding-top:15px; color:#F5F5F5;">
-    <div class="col-md-1 col-xs-12">
-    </div>
 	  <div ng-show="artistsShow" class="row">
+      <div class="col-md-1 col-xs-12">
+      </div>
       <div class="col-md-5 col-xs-12" style="padding:0px;">
         <h1>All-Time</h1>
         <table class="table table-hover">
             <tbody>
-              <tr ng-repeat="artist in long_term_artists" style="border: 2px solid #424242;">
+              <tr ng-repeat="artist in long_term_artists" style="border: 2px solid #424242; background-color:#282828;">
                 <td style="background-color:#00e676; color:black; font-size:150%; width:24px;">{{$index + 1}}</td>
                 <td>
+                  <a style="color:white;" ng-href="{{artist.uri}}">
                   <div style="font-size:90%;">{{artist.name}}</div>
-
                   <div style="font-size:80%; opacity:0.8;">{{artist.randomGenre1}}{{artist.randomGenre2}}</div>
                   <div style="font-size:90%; opacity:0.8;">{{long_term_popularity[$index]}}</div>
+                  </a>
                 </td>
                 <td style="text-align:right;"><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{artist.images[1].url}}></td>
             </tbody>
@@ -115,13 +157,14 @@
 
         <table class="table table-hover">
             <tbody>
-              <tr ng-repeat="artist in short_term_artists" style="border: 2px solid #424242;">
+              <tr ng-repeat="artist in short_term_artists" style="border: 2px solid #424242; background-color:#282828;">
                 <td style="background-color:#00e676; color:black; font-size:150%; width:24px;">{{$index + 1}}</td>
                 <td>
+                  <a style="color:white;" ng-href="{{artist.uri}}">
                   <div style="font-size:90%;">{{artist.name}}</div>
-
                   <div style="font-size:80%; opacity:0.8;">{{artist.randomGenre1}}{{artist.randomGenre2}}</div>
                   <div style="font-size:90%; opacity:0.8;">{{short_term_popularity[$index]}}</div>
+                  </a>
                 </td>
                 <td style="text-align:right;"><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{artist.images[1].url}}></td>
             </tbody>
@@ -134,19 +177,21 @@
 
 
   <div class="container" style="color:#F5F5F5;">
-    <div class="col-md-1 col-xs-12">
-    </div>
     <div ng-show="tracksShow" class="row">
+      <div class="col-md-1 col-xs-12">
+      </div>
       <div class="col-md-5 col-xs-12" style="padding:0px;">
         <h1 style="float:left;">All-Time</h1><button class="playlistButton" ng-click="makeAllTimePlaylist()" style="float:right;color:black;">Create Playlist</button>
         <table class="table table-hover">
             <tbody>
-              <tr ng-repeat="track in long_term_tracks" style="border: 2px solid #424242;">
+              <tr ng-repeat="track in long_term_tracks" style="border: 2px solid #424242; background-color:#282828;">
                 <td style="background-color:#00e676; color:black; font-size:150%; width:24px;">{{$index + 1}}</td>
                 <td>
+                  <a style="color:white;" ng-href="{{track.uri}}">
                   <div style="font-size:90%;">{{track.name}}</div>
 				          <div style="font-size:90%; opacity:0.8;">{{track.artists[0].name}}</div>
                   <div style="font-size:80%; opacity:0.8;">{{long_term_track_popularity[$index]}}</div>
+                  </a>
                 </td>
 				        <td><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{track.album.images[1].url}}></td>
             </tbody>
@@ -156,12 +201,14 @@
         <h1 style="float:left; color:#F5F5F5;" >Six Weeks</h1><button class="playlistButton" ng-click="makeSixWeekPlaylist()" style="float:right;color:black;">Create Playlist</button>
         <table class="table table-hover">
             <tbody>
-              <tr ng-repeat="track in short_term_tracks" style="border: 2px solid #424242;">
+              <tr ng-repeat="track in short_term_tracks" style="border: 2px solid #424242; background-color:#282828;">
                 <td style="background-color:#00e676; color:black; font-size:150%; width:24px;">{{$index + 1}}</td>
                 <td>
+                  <a style="color:white;" ng-href="{{track.uri}}">
                   <div style="font-size:90%;">{{track.name}}</div>
 				          <div style="font-size:90%; opacity:0.8;">{{track.artists[0].name}}</div>
                   <div style="font-size:80%; opacity:0.8;">{{short_term_track_popularity[$index]}}</div>
+                  </a>
                 </td>
 				        <td><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{track.album.images[1].url}}></td>
             </tbody>
@@ -171,7 +218,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="container" style="padding-top:15px; color:#F5F5F5;">
     <h2 style="text-align:center;">All-Time #1 Artists</h2>

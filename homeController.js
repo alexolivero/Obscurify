@@ -36,6 +36,8 @@ define([], function() {
     //This array contains the popularity of $scope.short_term_tracks[i], only to make it easier to display the stars
     $scope.short_term_track_popularity = [];
 
+    $scope.recommended_tracks = [];
+
     var genres = {}; // all of every artists' genres will be placed into this dictionary, the genres with the most occurrences will be put in $scope.top_genres
     $scope.top_genres = []; //list of top genres to be displayed under My Top Genres
 
@@ -128,11 +130,11 @@ define([], function() {
                     random2 = Math.floor(Math.random() * $scope.short_term_artists[i].genres.length);
                   }
                   $scope.short_term_artists[i].randomGenre1 = $scope.short_term_artists[i].genres[random1];
-                  if($scope.short_term_artists[i].randomGenre1.includes("christmas")){
+                  if($scope.short_term_artists[i].randomGenre1.indexOf("christmas") > -1){
                     $scope.short_term_artists[i].randomGenre1 = $scope.short_term_artists[i].randomGenre1.replace("christmas","");
                   }
                   $scope.short_term_artists[i].randomGenre2 = " · " + $scope.short_term_artists[i].genres[random2];
-                  if($scope.short_term_artists[i].randomGenre2.includes("christmas")){
+                  if($scope.short_term_artists[i].randomGenre2.indexOf("christmas") > -1){
                     $scope.short_term_artists[i].randomGenre2 = $scope.short_term_artists[i].randomGenre2.replace("christmas","");
                   }
               }
@@ -205,10 +207,10 @@ define([], function() {
                 }
                 $scope.long_term_artists[i].randomGenre1 = $scope.long_term_artists[i].genres[random1];
                 $scope.long_term_artists[i].randomGenre2 = " · " + $scope.long_term_artists[i].genres[random2];
-                if($scope.long_term_artists[i].randomGenre1.includes("christmas")){
+                if($scope.long_term_artists[i].randomGenre1.indexOf("christmas") > -1){
                   $scope.long_term_artists[i].randomGenre1 = $scope.long_term_artists[i].randomGenre1.replace("christmas","");
                 }
-                if($scope.long_term_artists[i].randomGenre2.includes("christmas")){
+                if($scope.long_term_artists[i].randomGenre2.indexOf("christmas") > -1){
                   $scope.long_term_artists[i].randomGenre2 = $scope.long_term_artists[i].randomGenre2.replace("christmas","");
                 }
 
@@ -260,6 +262,7 @@ define([], function() {
         }
         $scope.long_term_tracks = response.data.items;
         getLongTermTrackAnalysis();
+
   		});
   	}
 
@@ -295,7 +298,7 @@ define([], function() {
           }
 
           drawBarChart();
-
+          $scope.getRecommendations();
   		});
   	}
 
@@ -342,6 +345,49 @@ define([], function() {
 
           drawBarChart();
   		});
+  	}
+
+    $scope.getRecommendations = function(){
+      if($scope.long_term_tracks.length > 9 && $scope.short_term_tracks.length > 9
+        && $scope.long_term_artists.length > 9 && $scope.short_term_artists.length > 9){
+    		$http({
+    			method : "get",
+    			url : 'https://api.spotify.com/v1/recommendations',
+    			headers : {
+    				"Authorization" : "Bearer " + access_token,
+    				"Accept" : "application/json",
+    			},
+          params: { seed_artists: ($scope.long_term_artists[Math.floor(Math.random() * 10)].id + ","
+                                + $scope.short_term_artists[Math.floor(Math.random() * 10)].id),
+                    seed_tracks: ($scope.long_term_tracks[Math.floor(Math.random() * 10)].id + ","
+                                + $scope.short_term_tracks[Math.floor(Math.random() * 10)].id),
+                    target_popularity : 45,
+                    target_energy : energyST.toFixed(1),
+                    target_acousticness : acousticnessST.toFixed(1),
+                  }
+    		}).then(function (response) {
+          $scope.recommended_tracks = [];
+            for(var i = 0; i < response.data.tracks.length; i++){
+                if(i > 11 || (long_term_ids.indexOf(response.data.tracks[i].id) < 0 && short_term_ids.indexOf(response.data.tracks[i].id) < 0 ) ){
+                  $scope.recommended_tracks.push(
+                    {
+                      track_name : response.data.tracks[i].name,
+                      popularity : response.data.tracks[i].popularity,
+                      artist_name : response.data.tracks[i].artists[0].name,
+                      album_name : response.data.tracks[i].album.name,
+                      album_image_url : response.data.tracks[i].album.images[0].url,
+                      uri : response.data.tracks[i].uri
+                    }
+                  );
+                }
+            }
+    		}, function myError(response) {
+            console.log(response);
+
+            //if it doesn't work, if your authorization code expired or anything, just go back to the start and log in again
+            $window.location.href = 'http://obscurifymusic.com';
+        });
+      }
   	}
 
     /*
@@ -569,7 +615,6 @@ define([], function() {
   		getProfile();
   	}
     init();
-
 
     /*
     / These two functions are just here to help. Like any good friend

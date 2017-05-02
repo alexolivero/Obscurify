@@ -29,6 +29,7 @@
 	<script type="text/javascript" src="main.js"></script>
   <link href='http://fonts.googleapis.com/css?family=Montserrat-Thin:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="social_share_css/social-share-kit.css" type="text/css">
   <link href="style.css" type="text/css" rel="stylesheet" />
 
 
@@ -52,21 +53,37 @@
         <h1 style="font-size:400%;">Obscurify</h1>
   </div>
 </div>
+
 <div class="container main-view" ng-view></div>
+
 <div class="container" style="padding-bottom:60px">
-  <div style="text-align:center; padding-top:15px; margin-top:45px; color:#F5F5F5; font-size:80%; opacity: 0.7; border-top: 3px solid #424242; ">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 col xs-12">
-          <a href="mailto:olivero5@msu.edu">olivero5@msu.edu</a>
-        </div>
-        <div class="col-md-4 col xs-12">
-          <a href="https://www.facebook.com/obscurify/">like obscurify on facebook</a>
-        </div>
-        <div class="col-md-4 col xs-12">
-          <a href="https://github.com/alexolivero/Obscurify">obscurify on github</a>
-        </div>
-      </div>
+  <div style="text-align:center; padding-top:15px; margin-top:45px; color:#F5F5F5; border-top: 3px solid #424242; ">
+    <div class="ssk-group">
+        <a href="https://www.facebook.com/obscurify/" class="ssk ssk-sm ssk-text ssk-facebook">
+          <span style="font-size:80%; opacity:0.9;">
+              Like it!
+          </span>
+        </a>
+
+        <a href="https://github.com/alexolivero/Obscurify" class="ssk ssk-sm ssk-text ssk-pomegranate ssk-github">
+          <span style="font-size:80%; opacity:0.9;">
+              Contribute!
+          </span>
+        </a>
+        <a href="mailto:olivero5@msu.edu" class="ssk ssk-sm ssk-text ssk-amethyst ssk-email">
+          <span style="font-size:80%; opacity:0.9;">
+              olivero5@msu.edu
+          </span>
+          </a>
+    </div>
+  </div>
+  <div style="text-align:center; padding-top:5px;">
+    <a href ng-click="dataShow = !dataShow;" style="font-size:90%;">How your data is used</a>
+    <div style="padding-top:10px; color:white" ng-show="dataShow">
+      <p style="opacity:0.7;font-size:80%;">To use Obscurify, you'll need to allow the app to have access to some of your account information -
+      The only data it records is your username (so it can keep track of your score) and the country your account is registered to.
+      Obscurify won't ever email you, and does not record your email address or profile image.
+      All data is solely used to display the most accurate representation of the Spotify listening community.</p>
     </div>
   </div>
 </div>

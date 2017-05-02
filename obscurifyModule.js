@@ -5,4 +5,5 @@ define(['config',
     var app = angular.module('obscurifyMusic', ['ngRoute']);
     app.config(config);
     app.controller('homeController', homeController);
+
 });
