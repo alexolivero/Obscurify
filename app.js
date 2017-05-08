@@ -61,7 +61,6 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/logout', function(req, res) {
-
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -76,6 +75,10 @@ app.get('/logout', function(req, res) {
       state: state,
       show_dialog : true
     }));
+});
+
+app.get('/help', function(req, res) {
+  res.redirect('/#/help');
 });
 
 app.get('/callback', function(req, res) {
@@ -268,6 +271,53 @@ app.get('/getCountryUserCounts',function(req,res){
         }
     });
 
+});
+
+app.post('/getHistory',function(req,res){
+    var user_id = req.query.user_id;
+    var options = {
+      url: 'http://obscurifymusic.com/php/getHistory.php',
+      method: 'POST',
+      form: {
+        'user_id': user_id
+      }
+    }
+    // Start the request
+    request(options, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            // Print out the response body
+            res.send(response);
+        } else{
+          res.send(response);
+        }
+    });
+});
+
+app.post('/postHistory',function(req,res){
+    var user_id = req.query.user_id;
+    var start_month = req.query.start_month;
+    var end_month = req.query.end_month;
+    var artist_ids = req.query.artist_ids;
+    var track_ids = req.query.track_ids;
+    var year = req.query.year;
+    var options = {
+      url: 'http://obscurifymusic.com/php/postHistory.php',
+      method: 'POST',
+      form: {'user_id': user_id,
+            'artist_ids' : artist_ids,
+            'track_ids' : track_ids,
+            'start_month': start_month,
+            'end_month' : end_month,
+            'year' : year
+      }
+    }
+    request(options, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            res.send(response);
+        } else{
+          res.send(response);
+        }
+    });
 });
 
 console.log('Listening on 3000');

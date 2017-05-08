@@ -52,6 +52,8 @@ define([], function() {
     var long_term_ids = []; //used to send to Spotify's track analysis API for My Taste graph to get data on All-Time tracks
     var short_term_ids = []; //used to send to Spotify's track analysis API for My Taste graph to get data on recent tracks
 
+    var short_term_artist_ids = [];
+
     /*
     / This part is just so the tabs work and stuff for their ng-classes so they appear correctly
     */
@@ -80,6 +82,7 @@ define([], function() {
         getGlobalData();
         getLongTermArtists();
         getShortTermArtists();
+        getHistory();
 
   		}, function myError(response) {
           console.log("get profile error");
@@ -120,6 +123,8 @@ define([], function() {
         $scope.short_term_artists = response.data.items;
 
         for(var i = 0; i < $scope.short_term_artists.length; i++){
+              short_term_artist_ids.push($scope.short_term_artists[i].id);
+
               $scope.recent_obscurify_score = $scope.recent_obscurify_score + (50/response.data.items.length)*(parseInt(response.data.items[i].popularity * (1 - i/response.data.items.length)));
               $scope.short_term_popularity.push(findStarRating(response.data.items[i].popularity));
 
@@ -243,6 +248,9 @@ define([], function() {
         }
         $scope.short_term_tracks = response.data.items;
         getShortTermTrackAnalysis();
+        if(short_term_ids.length > 0 && short_term_artist_ids.length > 0){
+          postHistory();
+        }
   		});
   	}
 
@@ -361,9 +369,7 @@ define([], function() {
                                 + $scope.short_term_artists[Math.floor(Math.random() * 10)].id),
                     seed_tracks: ($scope.long_term_tracks[Math.floor(Math.random() * 10)].id + ","
                                 + $scope.short_term_tracks[Math.floor(Math.random() * 10)].id),
-                    target_popularity : 45,
-                    target_energy : energyST.toFixed(1),
-                    target_acousticness : acousticnessST.toFixed(1),
+                    target_popularity : 45
                   }
     		}).then(function (response) {
           $scope.recommended_tracks = [];
@@ -516,23 +522,24 @@ define([], function() {
     / to be 0 so it's okay if this function is called before data comes in, it'll just draw a chart with no bar
     */
     function drawBarChart() {
-          var data = google.visualization.arrayToDataTable([
-            ['Aspect', 'Recent', 'All', 'Average'],
-            ['Energy', energyST, energyLT, energyGlobal],
-            ['Happiness', happinessST, happinessLT, happinessGlobal],
-            ['Danceability', danceabilityST, danceabilityLT, danceabilityGlobal],
-            ['Acousticness', acousticnessST, acousticnessLT, acousticnessGlobal]
-          ]);
+           var data = google.visualization.arrayToDataTable([
+             ['Aspect', 'Recent', 'All', 'Average'],
+             ['Energy', energyST, energyLT, energyGlobal],
+             ['Happiness', happinessST, happinessLT, happinessGlobal],
+             ['Danceability', danceabilityST, danceabilityLT, danceabilityGlobal],
+             ['Acousticness', acousticnessST, acousticnessLT, acousticnessGlobal]
+           ]);
+
           var options = {
             bar: {groupWidth: "70%"},
             legend: { position: "bottom", textStyle : {color : "#F5F5F5"} },
             backgroundColor: "#303030",
             hAxis : { textStyle : {color : "#F5F5F5"} },
-           vAxis : { textStyle : {color : "#F5F5F5"} },
-            chartArea : {top : 10},
+            vAxis : { textStyle : {color : "#F5F5F5"} },
+            chartArea : {top : 10, backgroundColor: "#303030" },
             colors: ['#512da8','#f44336','#00c853']
           };
-          var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+          var chart = new google.visualization.ColumnChart(document.getElementById("columnchart"));
           chart.draw(data, options);
     }
 
@@ -604,15 +611,64 @@ define([], function() {
   		});
     }
 
+    /*
+    / Simply posts all the following data to the database. Should be called after
+    / getProfile -> getLongTermArtists -> getLongTermTracks -> getLongTermTrackAnalysis
+    */
+    var postHistory = function(){
+      var d = new Date();
+      var n = d.getDate();
+      var end_month = d.getMonth();
+      var start_month = end_month - 1;
+      var year = d.getFullYear();
+      if(n < 6){
+        start_month = start_month - 1;
+        end_month = end_month - 1;
+      }
+      if(end_month < 0){ end_month = end_month + 12;}
+      if(start_month < 0){ start_month = start_month + 12;}
+
+     $http({
+       method : "POST",
+       url : 'http://obscurifymusic.com/postHistory',
+       params : {
+         "user_id" : user_id, //from getProfile
+         "start_month" : start_month,
+         "end_month" : end_month,
+         "artist_ids" : short_term_artist_ids.join(),
+         "track_ids" : short_term_ids.join(),
+         "year" : year
+       }
+     }).then(function (response) {
+         //console.log(response);
+     }, function myError(response) {
+         console.log(response);
+     });
+   }
+
+   var getHistory = function() {
+      $http({
+        method : "POST",
+        url : 'http://obscurifymusic.com/getHistory',
+        params : {
+          "user_id" : user_id
+        }
+      }).then(function (response) {
+          console.log(response);
+      }, function myError(response) {
+          console.log(response);
+      });
+   }
+
 
     /*
     /   This section runs first, at the init(), which loads the linechart of all users' scores and does getProfile
     /   which is responsible for kicking off a bunch of other Spotify API calls
     */
     var init = function(){
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(getScores);
+      getScores();
   		getProfile();
+
   	}
     init();
 

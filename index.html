@@ -20,12 +20,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- Includes -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart']});
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular-route.min.js"></script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script type="text/javascript" src="main.js"></script>
   <link href='http://fonts.googleapis.com/css?family=Montserrat-Thin:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -47,10 +50,18 @@
   </script>
 
 </head>
-<body ng-app="obscurifyMusic" style="background-color:#303030; font-family:'Montserrat', sans-serif; color: #1b5e20;">
-<div style=" background-color:#00e676; margin-bottom: 10px; padding-bottom: 10px;">
-  <div class="container" style="text-align:center;">
-        <h1 style="font-size:400%;">Obscurify</h1>
+<body style="background-color:#303030; font-family:'Montserrat', sans-serif; color: #1b5e20;">
+
+<div class="row" style="background-color:#00e676; text-align:center;">
+  <div class="col-md-6 col-xs-12">
+    <div style="font-size:300%;"><a style="color: #1b5e20;" href="/#/">Obscurify</a></div>
+  </div>
+  <div class="col-md-6 col-xs-12" style="padding-top:20px; padding-bottom:20px;">
+    <a style="color: #1b5e20; font-size:110%;" href="/logout"><span class="glyphicon glyphicon-log-in"></span> Switch User</a>
+    <span style="padding-right:10px; padding-left:10px;">|</span>
+    <a style="color: #1b5e20; font-size:110%;" href="/login"><span class="glyphicon glyphicon-home"></span> Home</a>
+    <span style="padding-right:10px; padding-left:10px;">|</span>
+    <a style="color: #1b5e20; font-size:110%;" href="/help"><span class="glyphicon glyphicon-question-sign"></span> Help</a>
   </div>
 </div>
 
@@ -75,15 +86,6 @@
               olivero5@msu.edu
           </span>
           </a>
-    </div>
-  </div>
-  <div style="text-align:center; padding-top:5px;">
-    <a href ng-click="dataShow = !dataShow;" style="font-size:90%;">How your data is used</a>
-    <div style="padding-top:10px; color:white" ng-show="dataShow">
-      <p style="opacity:0.7;font-size:80%;">To use Obscurify, you'll need to allow the app to have access to some of your account information -
-      The only data it records is your username (so it can keep track of your score) and the country your account is registered to.
-      Obscurify won't ever email you, and does not record your email address or profile image.
-      All data is solely used to display the most accurate representation of the Spotify listening community.</p>
     </div>
   </div>
 </div>
