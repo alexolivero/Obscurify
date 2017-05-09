@@ -654,7 +654,7 @@ define([], function() {
           "user_id" : user_id
         }
       }).then(function (response) {
-          console.log(response);
+          console.log(JSON.parse(response.data.body));
       }, function myError(response) {
           console.log(response);
       });
