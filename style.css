@@ -52,11 +52,11 @@
     border-bottom: 16px solid #00e676; /* green */
     border-right: 16px solid #512da8; /* blue */
     border-radius: 50%;
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     animation: spin 1s linear infinite;
-    position: absolute;
-    left: 50%;
+    position: relative;
+    left:50%;
 }
 
 @keyframes spin {
