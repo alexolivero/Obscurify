@@ -1,5 +1,8 @@
-<div>
+<div ng-show="!doneLoading" style="text-align:center; padding-top:60px;">
+  <div class="loader"></div>
+</div>
 
+<div ng-show="doneLoading">
   <div class="container user-info" style=" padding-top:15px; color:white; border-bottom: 3px solid #424242;">
     <div class="row">
       <div class="col-md-4 col-xs-12" style="padding-bottom:10px; text-align:center;">
@@ -36,8 +39,12 @@
       </div>
     </div>
   </div>
+</div>
+<!-- end of top section -->
 
-  <div class="container" style="border-bottom: 3px solid #424242;">
+<!-- beginning of section with graphs -->
+<div ng-show="doneLoading">
+  <div class="container">
     <div class="row" style="padding-bottom:35px; padding-top:15px;">
       <div class="col-md-6 col-xs-12">
         <h4 style="text-align:center;margin-bottom:0px;color:white;">My Taste</h4>
@@ -48,7 +55,12 @@
         <div id="curve_chart"></div>
       </div>
     </div>
+  </div>
+</div>
+<!-- end of graph section -->
 
+<!-- section with the two tabs My Artists and My Tracks -->
+<div class="container" style="border-bottom: 3px solid #424242;" ng-show="doneLoading">
   <div style="text-align:center; color:#F5F5F5; font-size:90%; opacity:0.7;">
     Your all-time favorite tracks and bands you've been into the last six weeks. What do you want to see?
   </div>
@@ -57,7 +69,10 @@
     <li style="width:50%; text-align:center; font-size:145%; color:white; background-color:#424242;" ng-class="tracksTab"><a ng-click="showTracks()">My Tracks</a></li>
   </ul>
 </div>
+<!-- end of tab section -->
 
+<!-- beginning of top artist/track lists -->
+<div ng-show="doneLoading">
   <div class="container" style="padding-top:15px; color:#F5F5F5;">
 	  <div ng-show="artistsShow" class="row">
       <div class="col-md-1 col-xs-12">
@@ -108,7 +123,6 @@
     </div>
   </div>
 
-
   <div class="container" style="color:#F5F5F5;">
     <div ng-show="tracksShow" class="row">
       <div class="col-md-1 col-xs-12">
@@ -157,7 +171,11 @@
       </div>
     </div>
   </div>
+</div>
+<!-- end of top lists -->
 
+<!-- beginning of You Might Like -->
+<div ng-show="doneLoading">
   <div class="container">
     <div class="row" style="padding-bottom:20px; padding-top:40px;">
       <div ng-show="recommended_tracks.length > 9" class="row">
@@ -208,9 +226,10 @@
     </div>
   </div>
 </div>
+<!-- end of You Might Like -->
 
-
-
+<!-- beginning of All-Time #1 Artist section -->
+<div ng-show="doneLoading">
   <div class="container" style="color:#F5F5F5;">
     <h2 style="text-align:center;">All-Time #1 Artists</h2>
 	  <div class="row">
@@ -264,5 +283,4 @@
       </div>
     </div>
   </div>
-
 </div>

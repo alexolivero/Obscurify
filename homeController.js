@@ -41,6 +41,10 @@ define([], function() {
     var genres = {}; // all of every artists' genres will be placed into this dictionary, the genres with the most occurrences will be put in $scope.top_genres
     $scope.top_genres = []; //list of top genres to be displayed under My Top Genres
 
+    $scope.doneLoading = false;
+
+    var lineChartData;
+
     /*
     /variables for the My Taste graph
     */
@@ -306,6 +310,8 @@ define([], function() {
           }
 
           drawBarChart();
+          $scope.doneLoading = true;
+          drawLineChart();
           $scope.getRecommendations();
   		});
   	}
@@ -350,8 +356,9 @@ define([], function() {
           if(response.data.audio_features.length > 19 && $scope.long_term_artists.length > 19){
             postData();
           }
-
           drawBarChart();
+          $scope.doneLoading = true;
+          drawLineChart();
   		});
   	}
 
@@ -442,27 +449,29 @@ define([], function() {
          key.push("Score");
          key.push("Number of users");
          rawData.unshift(key);
-         var data = google.visualization.arrayToDataTable(rawData);
-         var options = {
-           legend: { position: 'bottom', textStyle: {color: '#F5F5F5'} },
-           backgroundColor: "#303030",
-           curveType: 'function',
-           hAxis : {
-              textStyle : {color : "#F5F5F5"}
-            },
-          vAxis : {
-             textStyle : {color : "#F5F5F5"},
-             gridlines : {color : "white"}
-           },
-           chartArea : {top : 10},
-           colors: ['#00c853']
-         };
-         var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-         chart.draw(data, options);
-
+         lineChartData = google.visualization.arrayToDataTable(rawData);
        }, function myError(response) {
            console.log(response);
        });
+    }
+
+    function drawLineChart () {
+      var options = {
+        legend: { position: 'bottom', textStyle: {color: '#F5F5F5'} },
+        backgroundColor: "#303030",
+        curveType: 'function',
+        hAxis : {
+           textStyle : {color : "#F5F5F5"}
+         },
+       vAxis : {
+          textStyle : {color : "#F5F5F5"},
+          gridlines : {color : "white"}
+        },
+        chartArea : {top : 10},
+        colors: ['#00c853']
+      };
+      var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+      chart.draw(lineChartData, options);
     }
 
     /*
@@ -668,7 +677,6 @@ define([], function() {
     var init = function(){
       getScores();
   		getProfile();
-
   	}
     init();
 

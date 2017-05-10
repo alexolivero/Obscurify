@@ -45,3 +45,21 @@
 .table-hover>tbody>tr:hover {
     background-color: #212121;
 }
+
+.loader {
+    border: 16px solid #f44336; /* red */
+    border-top: 16px solid #00e676; /* green */
+    border-bottom: 16px solid #00e676; /* green */
+    border-right: 16px solid #512da8; /* blue */
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    left: 50%;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
