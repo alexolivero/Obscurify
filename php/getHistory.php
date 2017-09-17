@@ -4,6 +4,37 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+function convertIntToMonth($monthNum) {
+	switch ($monthNum) {
+		case 0:
+			return "Jan.";
+		case 1:
+			return "Feb.";
+		case 2:
+			return "March";
+		case 3:
+			return "April";
+		case 4:
+			return "May";
+		case 5:
+			return "June";
+		case 6:
+			return "July";
+		case 7:
+			return "Aug.";
+		case 8:
+			return "Sept.";
+		case 9:
+			return "Oct.";
+		case 10:
+			return "Nov.";
+		case 11:
+			return "Dec.";
+		default:
+			return "";
+	}
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "password";
@@ -27,11 +58,12 @@ if ($result) {
   $jsonData = array();
   while ($array = mysqli_fetch_row($result)) {
     $temp = array();
-    $temp[] = $array[0];
-    $temp[] = $array[1];
-    $temp[] = $array[2];
-    $temp[] = (int)$array[3];
-    $temp[] = (int)$array[4];
+    $temp["user_id"] = $array[0];
+    $temp["artist_ids"] = $array[1];
+    $temp["track_ids"] = $array[2];
+    $temp["start_month"] = convertIntToMonth((int)$array[3]);
+    $temp["end_month"] = convertIntToMonth((int)$array[4]);
+	$temp["year"] = (int)$array[5];
     $jsonData[] = $temp;
   }
   echo json_encode($jsonData);

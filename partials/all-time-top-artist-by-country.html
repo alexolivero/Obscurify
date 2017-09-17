@@ -1,0 +1,53 @@
+<div class="container" style="color:#F5F5F5;">
+    <h3 style="text-align:center;">All-Time #1 Artist by Country</h3>
+	  <div class="row">
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Global</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:0" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/user_count)*100 | number:1  }}%</span>
+        </div>
+        <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{global_average}}</span>
+      </div>
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">US</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:5" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[0])*100 | number:1  }}%</span>
+        </div>
+        <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[0]}}</span>
+      </div>
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Brazil</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:10" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[1])*100 | number:1  }}%</span>
+        </div>
+      <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[1]}}</span>
+      </div>
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">UK</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:15" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[2])*100 | number:1  }}%</span>
+        </div>
+      <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[2]}}</span>
+      </div>
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Sweden</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:20" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[3])*100 | number:1  }}%</span>
+        </div>
+      <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[3]}}</span>
+      </div>
+      <div class="col-md-2 col-xs-6" style="padding-bottom: 15px;">
+        <h4 style="border-bottom: 3px solid #424242; padding-bottom: 5px; margin-bottom: 5px;">Australia</h4>
+        <div ng-repeat="artist in obscurify_top_artists | limitTo:5:25" style="font-size:80%;">
+            <span style="opacity:0.8;">{{artist.name}} </span>
+            <span style="opacity:1; font-weight:bold;">{{ (obscurify_top_artists_counts[obscurify_top_artists.indexOf(artist)]/country_user_counts[4])*100 | number:1  }}%</span>
+        </div>
+      <span style=" font-size:80%;"> Average Score: </span><span style="font-size:120%;">{{country_average_scores[4]}}</span>
+      </div>
+    </div>
+  </div>

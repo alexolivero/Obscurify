@@ -1,0 +1,15 @@
+<div ng-show="!doneLoading" style="padding-top:60px; margin-right:80px; text-align:center;">
+  <div class="loader"></div>
+  <div style="color:#f5f5f5; font-size:80%; padding-top:10px; margin-left:80px;">
+    Preparing your profile...
+  </div>
+</div>
+
+<div ng-show="doneLoading">
+  <div ng-include src="'partials/user-info.html'"></div>
+  <div ng-include src="'partials/top-lists.html'"></div>
+  <div ng-include src="'partials/graphs.html'"></div>
+  <div ng-include src="'partials/you-might-like.html'"></div>
+  <div ng-include src="'partials/all-time-top-artist-by-country.html'"></div>
+</div>
+

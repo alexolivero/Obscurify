@@ -1,0 +1,130 @@
+<div class="container" style="margin-top:40px;">
+  <div style="text-align:center; color:#F5F5F5; font-size:90%; opacity:0.7;">
+	See your all-time favorite tracks or the bands you've been into the last six weeks.
+  </div>
+  <div style="text-align:center; color:#F5F5F5; font-size:80%; opacity:0.4;">
+	Stars represent artist or track popularity. Having more stars in your list (especially near the top) results in a higher score.
+  </div>
+  <ul class="nav nav-tabs" style="padding-top:15px;">
+	<li style="width:50%; text-align:center; font-size:145%; color:#F5F5F5; background-color:#424242;" ng-class="artistsTab"><a ng-click="showArtists()">My Artists</a></li>
+	<li style="width:50%; text-align:center; font-size:145%; color:white; background-color:#424242;" ng-class="tracksTab"><a ng-click="showTracks()">My Tracks</a></li>
+  </ul>
+</div>
+
+<!-- beginning of top artist/track lists -->
+<div style="padding-bottom:40px; border-bottom: 3px solid #424242;">
+  <div class="container" style="padding-top:15px; color:#F5F5F5;">
+	  <div ng-show="artistsShow" class="row">
+      <div class="col-md-1 col-xs-12">
+      </div>
+      <div class="col-md-5 col-xs-12" style="padding:0px;">
+        <h1 style="display:inline-block;">All-Time</h1>
+		<div style="font-size:80%; opacity:0.8; display:inline-block; padding-left:5px;">Score : {{obscurify_score}}</div>
+        <div style="max-height:800px; overflow:auto;">
+          <table class="table table-hover">
+              <tbody>
+                <tr ng-repeat="artist in long_term_artists" style="border: 2px solid #424242; background-color:#282828;">
+                  <td style="background-color:#00e676; color:black; font-size:150%; width:24px;">{{$index + 1}}</td>
+                  <td>
+                    <a style="color:white;" ng-href="{{artist.uri}}">
+                    <div style="font-size:90%;">{{artist.name}}</div>
+                    <div style="font-size:80%; opacity:0.8;">{{artist.randomGenre1}}{{artist.randomGenre2}}</div>
+                    <div style="font-size:90%; opacity:0.8;">{{long_term_popularity[$index]}}</div>
+                    </a>
+                  </td>
+                  <td style="text-align:right;"><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{artist.images[1].url}}></td>
+              </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-5 col-xs-12" style="padding:0px;">
+	  
+	  
+		<div class="dropdown">
+			<h1 style="display:inline-block;" class="dropbtn">{{artistSixWeekRangeHeader}}<span ng-show="user_history.length > 1;" class="caret"></span></h1>
+			<div class="dropdown-content" ng-show="user_history.length > 1;">
+				<a ng-click="getShortTermArtists(true);">Current</a>
+				<a ng-repeat="history in user_history" ng-click="artistHistoryClicked(history);">{{history.end_month}} '{{history.year % 1000}}</a>
+			</div>
+			<div style="font-size:80%; opacity:0.8; display:inline-block; padding-left:5px;">Score : {{recent_obscurify_score}}</div>
+		</div>
+		
+        <div style="max-height:800px; overflow:auto;">
+          <table class="table table-hover">
+              <tbody>
+                <tr ng-repeat="artist in short_term_artists" style="border: 2px solid #424242; background-color:#282828;">
+                  <td style="background-color:#00e676; color:black; font-size:150%; width:24px;">{{$index + 1}}</td>
+                  <td>
+                    <a style="color:white;" ng-href="{{artist.uri}}">
+                    <div style="font-size:90%;">{{artist.name}}</div>
+                    <div style="font-size:80%; opacity:0.8;">{{artist.randomGenre1}}{{artist.randomGenre2}}</div>
+                    <div style="font-size:90%; opacity:0.8;">{{short_term_popularity[$index]}}</div>
+                    </a>
+                  </td>
+                  <td style="text-align:right;"><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{artist.images[1].url}}></td>
+              </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-1 col-xs-12">
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="color:#F5F5F5;">
+    <div ng-show="tracksShow" class="row">
+      <div class="col-md-1 col-xs-12">
+      </div>
+      <div class="col-md-5 col-xs-12" style="padding:0px;">
+        <h1 style="float:left;">All-Time</h1>
+        <button class="playlistButton" ng-click="makeAllTimePlaylist()" style="float:right;color:black;">Export Playlist</button>
+        <div style="max-height:800px; overflow:auto; float:left;">
+          <table class="table table-hover">
+              <tbody>
+                <tr ng-repeat="track in long_term_tracks" style="border: 2px solid #424242; background-color:#282828;">
+                  <td style="background-color:#00e676; color:black; font-size:150%; width:24px;">{{$index + 1}}</td>
+                  <td>
+                    <a style="color:white;" ng-href="{{track.uri}}">
+                    <div style="font-size:90%;">{{track.name}}</div>
+  				    <div style="font-size:90%; opacity:0.8;">{{track.artists[0].name}}</div>
+                    <div style="font-size:80%; opacity:0.8;">{{long_term_track_popularity[$index]}}</div>
+                    </a>
+                  </td>
+  				  <td style="text-align:right;"><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{track.album.images[1].url}}></td>
+              </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-5 col-xs-12" style="padding:0px;">
+		
+		<div class="dropdown">
+			<h1 style="display:inline-block" class="dropbtn">{{trackSixWeekRangeHeader}}<span ng-show="user_history.length > 1;" class="caret"></span></h1>
+			<div class="dropdown-content" ng-show="user_history.length > 1;">
+				<a ng-click="getShortTermTracks(true);">Current</a>
+				<a ng-repeat="history in user_history" ng-click="trackHistoryClicked(history)">{{history.end_month}} '{{history.year % 1000}}</a>
+			</div>
+		</div>
+		
+        <button class="playlistButton" ng-click="makeSixWeekPlaylist()" style="float:right;color:black;">Export Playlist</button>
+        <div style="max-height:800px; overflow:auto; float:left; width : 100%;">
+          <table class="table table-hover">
+              <tbody>
+                <tr ng-repeat="track in short_term_tracks" style="border: 2px solid #424242; background-color:#282828;">
+                  <td style="background-color:#00e676; color:black; font-size:150%; width:24px;">{{$index + 1}}</td>
+                  <td>
+                    <a style="color:white;" ng-href="{{track.uri}}">
+                    <div style="font-size:90%;">{{track.name}}</div>
+  				    <div style="font-size:90%; opacity:0.8;">{{track.artists[0].name}}</div>
+                    <div style="font-size:80%; opacity:0.8;">{{short_term_track_popularity[$index]}}</div>
+                    </a>
+                  </td>
+  				  <td style="text-align:right;"><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{track.album.images[1].url}}></td>
+              </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-1 col-xs-12">
+      </div>
+    </div>
+  </div>
+</div>

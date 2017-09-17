@@ -1,0 +1,46 @@
+<div class="container user-info" style="padding-top:15px; color:white; border-bottom: 3px solid #424242;">
+    <div class="row">
+      <div class="col-md-4 col-xs-12" style="padding-bottom:10px; text-align:center;">
+        <div style="font-size:90%; color:#F5F5F5; opacity:0.9; padding:5px;">{{display_name}}</div>
+        <img style="width:130px; height:130px; object-fit:cover; border-radius:10%; " src={{imageURL}}>
+      </div>
+      <div class="col-md-4 col-xs-6" style="padding: 0px;border-right: 3px solid #424242;">
+        <h4 style="margin-bottom:5px;margin-top:0px;">My Top Genres</h4>
+        <div style="margin-bottom:15px; color:#F5F5F5; max-height: 130px; overflow-y:auto; width: 90%; ">
+          <div ng-repeat="genre in top_genres | limitTo:15" style="opacity:0.8; font-size:90%;">
+            {{genre[0]}}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-xs-6" style="padding-right: 0px; padding-left:5px; color:white;">
+        <div style="float:left; width: 100%;">
+          <div style="width:70%; float:left; margin-bottom:15px;">
+            <h4 style="margin-bottom:5px;margin-top:0px;">My Score</h4>
+            <div style="font-size:85%; color:#F5F5F5; opacity:0.7;">lower = more obscure</div>
+          </div>
+          <div style="width:30%; float:right;">
+            <h4 style="font-size:225%;margin-top:0px; padding-left: 5px;">{{obscurify_score}}</h4>
+          </div>
+        </div>
+        <div style="clear:both; width: 100%;">
+          <div style="width:70%; float:left; ">
+		  
+			<h4 style="margin-bottom:5px;margin-top:0px;">
+			<span style="font-size:85%;" class="glyphicon glyphicon-globe"></span>
+              Average
+			</h4>
+			
+            <div style="font-size:85%; color:#F5F5F5; opacity:0.7; padding-bottom:10px;">of {{user_count | number}} scores</div>
+          </div>
+          <div style="width:30%; float:right; padding-left: 5px;">
+            <h4 style="font-size:225%;margin-top:0px;">{{global_average}}</h4>
+          </div>
+        </div>
+		
+		<div style="clear:both; width: 100%; font-size:70%; color:#F5F5F5; opacity:0.35; max-width:300px;">
+			Your score is the uniqueness of your listening history compared to the rest of Earth
+		</div>
+		
+      </div>
+    </div>
+  </div>

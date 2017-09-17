@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="row" style="padding-bottom:20px; padding-top:20px;">
+      <div ng-show="recommended_tracks.length > 9" class="row">
+        <div class="col-md-1 col-xs-0">
+        </div>
+        <div class="col-md-10 col-xs-12">
+            <h2 style="float:left; color:#F5F5F5;">You Might Like</h2>
+            <button class="playlistButton" ng-click="getRecommendations()" style="float:right;color:black;margin-bottom:10px; margin-top:23px;">See More</button>
+        </div>
+        <div class="col-md-1 col-xs-0">
+        </div>
+      </div>
+
+      <div class="col-md-1 col-xs-0">
+      </div>
+      <div style="padding-right:0px;padding-left:0px;" class="col-md-5 col-xs-12">
+        <table class="table table-hover" style="margin-bottom:0px;">
+            <tbody>
+              <tr ng-repeat="track in recommended_tracks | limitTo : 4" style="border: 2px solid #424242; background-color:#282828;">
+                <td>
+                  <a style="color:white;" ng-href="{{track.uri}}">
+                  <div style="font-size:90%;">{{track.track_name}}</div>
+                  <div style="font-size:80%; opacity:0.8;">{{track.album_name}}</div>
+                  <div style="font-size:80%; opacity:0.8;">{{track.artist_name}}</div>
+                  </a>
+                </td>
+                <td style="text-align:right;"><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{track.album_image_url}}></td>
+            </tbody>
+        </table>
+      </div>
+      <div style="padding-right:0px;padding-left:0px;" class="col-md-5 col-xs-12">
+        <table class="table table-hover">
+            <tbody>
+              <tr ng-repeat="track in recommended_tracks | limitTo : 4 : 4" style="border: 2px solid #424242; background-color:#282828;">
+                <td>
+                  <a style="color:white;" ng-href="{{track.uri}}">
+                  <div style="font-size:90%;">{{track.track_name}}</div>
+                  <div style="font-size:80%; opacity:0.8;">{{track.album_name}}</div>
+                  <div style="font-size:80%; opacity:0.8;">{{track.artist_name}}</div>
+                  </a>
+                </td>
+                <td style="text-align:right;"><img style="width:60px; height:60px; object-fit:cover; border-radius:10%;" src={{track.album_image_url}}></td>
+            </tbody>
+        </table>
+      </div>
+      <div class="col-md-1 col-xs-0">
+      </div>
+    </div>
+  </div>
