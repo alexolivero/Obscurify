@@ -22,5 +22,3 @@ I have these running on ports 8080, 8081, and 8082 respectively, with an nginx r
 
 I got those tasty CLIENT codes from Spotify:
 https://developer.spotify.com/my-applications/
-
-This is my first readme, let me know how I did.
