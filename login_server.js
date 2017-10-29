@@ -44,7 +44,7 @@ app.use(express.static(__dirname ))
       });
 	  
 app.get('/', function(req, res) {
-    res.sendFile('html/login.html', {root: __dirname })
+    res.sendFile('index.html', {root: __dirname })
 });
 
 app.get('/login', function(req, res) {
@@ -114,7 +114,7 @@ app.get('/callback', function(req, res) {
 		
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
-        res.redirect('/home/' + access_token);
+        res.redirect('/#!/home/' + access_token);
       } else {
         res.redirect('/#' +
           querystring.stringify({

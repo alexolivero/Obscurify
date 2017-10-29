@@ -1,21 +1,31 @@
 var app = angular.module('obscurify', ['ngRoute']);
 
-app.controller('mainController', function($scope, $http, $window) {
+app.config(function($routeProvider) {
+    $routeProvider
+    .when("/", {
+        templateUrl : "partials/login.html"
+    })
+    .when("/home/:token", {
+        templateUrl : "partials/home.html",
+		controller : "mainController"
+    });
+});
+
+app.controller('mainController', function($scope, $http, $window, $routeParams) {
 	
-	var access_token = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
-	if(access_token.indexOf('#') > 0){
-		//weird case when the callback appends #!#_=_ to the end of the token, so just strip it
-		//TODO: understand why this happens
-		access_token = access_token.substring(0, access_token.indexOf('#'));
-	}
-	
-	$scope.displayName = "";	$scope.imageURL = "";	$scope.longTermArtists = [];
-	$scope.shortTermArtists = [];	$scope.longTermTracks = [];	$scope.shortTermTracks = [];
-	$scope.obscurifyScore = null;	$scope.topGenres = [];
+	//variables to show on the UI
+	$scope.displayName = "";
+	$scope.imageURL = "";
+	$scope.longTermArtists = [];
+	$scope.shortTermArtists = [];
+	$scope.longTermTracks = [];
+	$scope.shortTermTracks = [];
+	$scope.obscurifyScore = null;
+	$scope.topGenres = [];
 	
 	$http({
   			method : "get",
-  			url : 'http://67.205.147.250/home/' + access_token + '/getUserData'
+  			url : 'http://67.205.147.250/spotifyData/' + $routeParams.token + '/getUserData'
   		}).then(function (response) {
 			
 			console.log(response);
@@ -31,6 +41,8 @@ app.controller('mainController', function($scope, $http, $window) {
 			$scope.shortTermTracks = response.data.shortTermTracks;
 			$scope.obscurifyScore = response.data.obscurifyScore;
 			$scope.topGenres = response.data.topGenres;
+			$scope.longTermAudioFeatures = response.data.longTermAudioFeatures;
+			$scope.shortTermAudioFeatures = response.data.shortTermAudioFeatures;
 
   		}, function myError(response) {
 			console.log(response);		  

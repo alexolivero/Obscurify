@@ -18,7 +18,16 @@ pm2 start login_server.js -- 'CLIENT_ID' 'CLIENT_SECRET' --watch<br />
 pm2 start home_server.js --watch<br />
 pm2 start database_server.js --watch<br />
 
+<<<<<<< HEAD
 I have these running on ports 8080, 8081, and 8082 respectively, with an nginx reverse proxy (sounds fancier than it really is) routing urls to the right node app.
+=======
+pm2 start spotify_data_server.js --watch
+>>>>>>> origin/obscurify-2.0
 
 I got those tasty CLIENT codes from Spotify:
 https://developer.spotify.com/my-applications/
+<<<<<<< HEAD
+=======
+
+and you should be good to go.
+>>>>>>> origin/obscurify-2.0
