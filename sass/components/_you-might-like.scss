@@ -1,0 +1,53 @@
+.you-might-like {
+  background: $green-gradient;
+  color: $o-white;
+  padding-top: 86px;
+  padding-bottom: 86px;
+
+  .you-might-like-header {
+    display: inline-block;
+    font-size: 44px;
+    font-weight: bold;
+    margin-bottom: 25px;
+
+      @media #{$tablet} {
+        font-size: 64px;
+        margin-bottom: 51px;
+      }
+    }
+
+  .you-might-like-card {
+    padding: 20px 15px 10px 20px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+    position: relative;
+    margin-bottom: 120px;
+    height: 354px;
+    width: 320px;
+
+    h4 {
+      font-size: 18px;
+      color: $o-black;
+      margin-bottom: 5px;
+      letter-spacing: 2.25px
+    }
+
+    p {
+      font-size: 14px;
+      color: $o-offwhite;
+      letter-spacing: 2.25px;
+
+    }
+
+    .you-might-like-card-img {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+      margin-top: 20px;
+
+    }
+  }
+
+    
+}

@@ -1,0 +1,143 @@
+.track-list {
+  background-color: #F2F1EF;
+  padding: 108px 0px;
+
+  .track-list-header {
+    display: inline-block;
+    font-size: 44px;
+    font-weight: bold;
+    margin-bottom: 25px;
+
+    @media #{$tablet} {
+      font-size: 64px;
+      margin-bottom: 51px;
+    }
+
+    a {
+      color: $o-black;
+      text-decoration: line-through;
+
+      &.active {
+        text-decoration: none;
+      }
+
+      &:hover {
+        color: rgba(0,0,0,0.4);
+      }
+    }
+  }
+
+  .track-list-row {
+    overflow-x: scroll;
+    display: block;
+
+    @media #{$tablet} {
+      display: block;
+    }
+
+    @media #{$desktop} {
+      overflow: hidden;
+      display: flex;
+    }
+  }
+
+  .track-list-item-container {
+    margin-left: 2px;
+
+    &.track-list {
+      left: 36px;
+      position: relative;
+    }
+
+    .track-list-column {
+      width: 320px;
+      display: inline-block;
+      margin-right: 100px;
+
+      @media #{$desktop} {
+        width: 454px;
+      }
+    }
+  }
+
+  h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 30px;
+
+    @media #{$tablet} {
+      margin-bottom: 60px;
+    }
+  }
+
+  .track-list-item {
+    height: 85px;
+    padding: 10px 15px 10px 15px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+    position: relative;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .track-list-item-info {
+      display: inline-block;
+      margin-left: 0px;
+
+      @media #{$desktop} {
+        margin-left: 10px;
+      }
+
+      h3 {
+        font-size: 14px;
+        margin-bottom: 2px;
+        letter-spacing: 2px;
+      }
+
+      img {
+        width: 70px;
+        height: 70px;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+        position: relative;
+        bottom: 0px;
+
+        @media #{$desktop} {
+          width: 100px;
+          height: 100px;
+          bottom: 19px;
+        }
+      }
+
+      .track-list-item-info-text {
+        display: inline-block;
+        margin-left: 10px;
+
+      }
+    }
+    .track-list-item-info-genres {
+      display: inline-block;
+      text-transform: lowercase;
+      p {
+        font-size: 12px;
+        color: $o-offwhite;
+        display: inline-block;
+      }
+    }
+
+    .track-list-item-right {
+      float: right;
+      font-size: 48px;
+      font-weight: bold;
+      display: inline-block;
+      margin-right: -10px;
+
+      @media #{$tablet} {
+        margin-right: 0;
+      } 
+
+    
+    }
+
+  }
+}

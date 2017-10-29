@@ -1,0 +1,27 @@
+body {
+  background-color: $o-black;
+}
+
+h1,h2,h3,h4,h5,p,li,a {
+  font-family: $font-family;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 55px;
+  font-weight: bold;
+  letter-spacing: 5px;
+
+  @media #{$tablet} {
+    font-size: 72px;
+  }
+
+}
+
+
+.vcenter {
+   display: inline-block;
+   vertical-align: middle;
+   float: none;
+}

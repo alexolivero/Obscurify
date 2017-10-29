@@ -1,0 +1,42 @@
+nav {
+  height: 100px;
+  background-color: $o-black;
+  display: flex;
+  align-items: center;
+
+  .nav-container {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &:before {
+      display: none;
+    }
+    &:after {
+      display: none;
+    }
+  }
+
+  .nav-header {
+    font-size: 36px;
+    color: $o-white;
+    &:hover {
+      color: #efefef;
+      text-decoration: none;
+    }
+  }
+
+  .nav-right {
+    a {
+      font-size: 24px;
+      color: #fff;
+
+      &:hover {
+        text-decoration: none;
+        color: #efefef;
+      }
+    }
+  }
+
+
+}

@@ -1,0 +1,16 @@
+.footer {
+  display: flex;
+  justify-content: center;
+
+
+  .footer-links {
+    border-top: 1px solid #efefef;
+    display: flex;
+    justify-content: space-around;
+    padding:20px 0px;
+
+    a {
+      margin: 0 20px;
+    }
+  }
+}

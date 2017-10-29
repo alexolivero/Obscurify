@@ -1,0 +1,83 @@
+.landing {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1) ), url('../images/landing-bg.png') no-repeat;
+  padding:0px 34px;
+  color: $o-white;
+
+  .landing-jumbotron {
+    max-width: 827px;
+    margin-bottom: 100px;
+    span {
+      color: $s-green;
+    }
+
+    p {
+      font-size: 24px;
+      letter-spacing: 4px;
+    }
+  }
+
+
+  a {
+    width: 238px;
+    height: 80px;
+    border-radius: 100px;
+    background-color: $o-white;
+    position: relative;
+    display: block;
+    color: grey;
+    padding: 15px 26px 21px 100px;
+    transition: .1s;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    margin: 47px auto 0;
+
+    &:before {
+      content: '';
+      height: 50px;
+      width: 50px;
+      background: url('../images/spotify-icon.png') no-repeat;
+      background-size: 50px 50px;
+      position: absolute;
+      left: 28px;
+    }
+
+    &:hover {
+      text-decoration: none;
+      color: $o-black;
+      background-color: $o-white;
+    }
+
+  }
+}
+
+.landing-info {
+  background-color: $o-black;
+  color: $o-white;
+  margin-top: 44px+88px;
+  margin-bottom: 88px;
+
+  .landing-info-box {
+    padding: 44px 30px;
+  }
+
+  h4 {
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+    letter-spacing: 4.5px;
+
+    span {
+      margin-right: 12px;
+    }
+  }
+
+  p {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    line-height: 20px;
+  }
+}
