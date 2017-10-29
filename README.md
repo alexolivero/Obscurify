@@ -19,7 +19,7 @@ by running the following commands in the root folder:
 
 pm2 start login_server.js -- 'CLIENT_ID' 'CLIENT_SECRET' --watch
 
-pm2 start home_server.js --watch
+pm2 start spotify_data_server.js --watch
 
 pm2 start database_server.js --watch
 
