@@ -3,7 +3,7 @@ var app = angular.module('obscurify', ['ngRoute']);
 app.config(function($routeProvider) {
     $routeProvider
     .when("/", {
-        templateUrl : "partials/login.html"
+        templateUrl : "partials/spotify.html"
     })
     .when("/home/:token", {
         templateUrl : "partials/home.html",
