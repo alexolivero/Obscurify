@@ -90,9 +90,13 @@
       }
 
       h3 {
-        font-size: 14px;
+        font-size: 12px;
         margin-bottom: 2px;
         letter-spacing: 2px;
+
+        @media #{$tablet} {
+          font-size: 14px;
+        }
       }
 
       img {
@@ -131,13 +135,11 @@
       font-size: 48px;
       font-weight: bold;
       display: inline-block;
-      margin-right: -10px;
+      margin-right: -2px;
 
       @media #{$tablet} {
         margin-right: 0;
       } 
-
-    
     }
 
   }

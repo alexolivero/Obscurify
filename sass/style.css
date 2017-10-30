@@ -116,7 +116,7 @@ nav {
   .user-info .user-avatar {
     width: 240px;
     height: 240px;
-    border-radius: 50px; }
+    border-radius: 50%; }
   .user-info h1 {
     font-size: 32px;
     text-align: center; }
@@ -274,9 +274,12 @@ nav {
         .track-list .track-list-item .track-list-item-info {
           margin-left: 10px; } }
       .track-list .track-list-item .track-list-item-info h3 {
-        font-size: 14px;
+        font-size: 12px;
         margin-bottom: 2px;
         letter-spacing: 2px; }
+        @media (min-width: 768px) {
+          .track-list .track-list-item .track-list-item-info h3 {
+            font-size: 14px; } }
       .track-list .track-list-item .track-list-item-info img {
         width: 70px;
         height: 70px;
@@ -304,7 +307,7 @@ nav {
       font-size: 48px;
       font-weight: bold;
       display: inline-block;
-      margin-right: -10px; }
+      margin-right: -2px; }
       @media (min-width: 768px) {
         .track-list .track-list-item .track-list-item-right {
           margin-right: 0; } }
