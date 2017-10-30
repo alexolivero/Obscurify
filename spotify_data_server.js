@@ -45,7 +45,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 	async.map(urls, httpGet, function (err, response){
 		if (err || response[0].error){
 			return res.status(404).send("OMG NO :(");
-		} 
+		}
 		var obscurifyScore = 0;
 		var topGenres = [];
 		var genres = {};
@@ -54,30 +54,41 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		var longTermTrackIDs = [];
 		var longTermArtistIDs = [];
 		
-		for(var i = 0; i < response[2].items.length; i++){
-			longTermTrackIDs.push(response[2].items[i].id);
+		var longTermTracks = response[2];
+		var longTermArtists = response[0];
+		var shortTermTracks = response[3];
+		var shortTermArtists = response[1];
+		
+		for(var i = 0; i < longTermTracks.items.length; i++){
+			longTermTrackIDs.push(longTermTracks.items[i].id);
+			//findStarRating
 		}
 		
-		for(var i = 0; i < response[3].items.length; i++){
-			shortTermTrackIDs.push(response[3].items[i].id);
+		for(var i = 0; i < shortTermTracks.items.length; i++){
+			shortTermTrackIDs.push(shortTermTracks.items[i].id);
+			//findStarRating
 		}
 		
-		for(var i = 0; i < response[1].items.length; i++){
-			shortTermArtistIDs.push(response[1].items[i].id);
+		for(var i = 0; i < shortTermArtists.items.length; i++){
+			shortTermArtistIDs.push(shortTermArtists.items[i].id);
+			shortTermArtists.items[i].randomGenres = findRandomGenres(shortTermArtists.items[i]);
+			//findStarRating
 		}
 	  
-		for(var i = 0; i < response[0].items.length; i++){
-			longTermArtistIDs.push(response[0].items[i].id);
+		for(var i = 0; i < longTermArtists.items.length; i++){
+			longTermArtistIDs.push(longTermArtists.items[i].id);
+			longTermArtists.items[i].randomGenres = findRandomGenres(longTermArtists.items[i]);
+			//findStarRating
 			
 			//where the magic happens
-			obscurifyScore = obscurifyScore + (50/response[0].items.length)*(parseInt(response[0].items[i].popularity * (1 - i/response[0].items.length)));
+			obscurifyScore = obscurifyScore + (50/longTermArtists.items.length)*(parseInt(longTermArtists.items[i].popularity * (1 - i/longTermArtists.items.length)));
 
 			//Populate the genre dictionary with this artist's genres
-			for(var genre = 0; genre < response[0].items[i].genres.length; genre++){
-				if(genres[response[0].items[i].genres[genre]] != null){
-					genres[response[0].items[i].genres[genre]] = genres[response[0].items[i].genres[genre]] + 1;
+			for(var genre = 0; genre < longTermArtists.items[i].genres.length; genre++){
+				if(genres[longTermArtists.items[i].genres[genre]] != null){
+					genres[longTermArtists.items[i].genres[genre]] = genres[longTermArtists.items[i].genres[genre]] + 1;
 				} else{
-					genres[response[0].items[i].genres[genre]] = 1;
+					genres[longTermArtists.items[i].genres[genre]] = 1;
 				}
 			}
 		}		
@@ -96,14 +107,14 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		  "https://api.spotify.com/v1/audio-features?ids=" + shortTermTrackIDs.join()
 		];
 		
-		var responseWithoutAudioFeatures = {
+		var responseToTheFrontEnd = {
 						'displayName':response[4].display_name,
 						'country':response[4].country,
 						'imageURL':response[4].images,
-						'longTermArtists':response[0],
-						'shortTermArtists':response[1],
-						'longTermTracks':response[2],
-						'shortTermTracks':response[3],
+						'longTermArtists':longTermArtists,
+						'shortTermArtists':shortTermArtists,
+						'longTermTracks':longTermTracks,
+						'shortTermTracks':shortTermTracks,
 						'obscurifyScore':obscurifyScore,
 						'topGenres':topGenres,
 						'longTermAudioFeatures':null,
@@ -113,7 +124,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		async.map(audioFeatureUrls, httpGet, function (err, audioFeatureResponse){
 			if (err || audioFeatureResponse[0].error){
 				//so if something went wrong, just send what we've already got back to the client
-				return res.send(responseWithoutAudioFeatures);
+				return res.send(responseToTheFrontEnd);
 			}
 
 			var longTermAudioFeatures = {
@@ -157,21 +168,9 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				shortTermAudioFeatures.acousticness /= audioFeatureResponse[1].audio_features.length;
 				
 				//aww yeah look at this fat payload! to angular we go!
-				res.send(
-					{
-						'displayName':response[4].display_name,
-						'country':response[4].country,
-						'imageURL':response[4].images,
-						'longTermArtists':response[0],
-						'shortTermArtists':response[1],
-						'longTermTracks':response[2],
-						'shortTermTracks':response[3],
-						'obscurifyScore':obscurifyScore,
-						'topGenres':topGenres,
-						'longTermAudioFeatures':longTermAudioFeatures,
-						'shortTermAudioFeatures':shortTermAudioFeatures
-					}
-				)
+				responseToTheFrontEnd.longTermAudioFeatures = longTermAudioFeatures;
+				responseToTheFrontEnd.shortTermAudioFeatures = shortTermAudioFeatures;
+				res.send(responseToTheFrontEnd);
 				
 				//make a call to the database_server and toss this into MONGO!!!
 				request({
@@ -192,7 +191,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				}, function (error, response, body){});
 			}
 			catch(err){
-				return res.send(responseWithoutAudioFeatures);
+				return res.send(responseToTheFrontEnd);
 			}
 			
 			
@@ -205,6 +204,35 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		if (a[1] > b[1]) return -1;
 		if (a[1] < b[1]) return 1;
 		return 0;
+	}
+	
+	function findStarRating(popularity){
+		
+	}
+	
+	function findRandomGenres(artist){
+		if(artist.genres.length > 1){
+			var random1 = Math.floor(Math.random() * artist.genres.length);
+			var random2 = Math.floor(Math.random() * artist.genres.length);
+			while (random1 == random2){
+				random2 = Math.floor(Math.random() * artist.genres.length);
+			}
+			var returnData = {randomGenre1 : artist.genres[random1], randomGenre2 : artist.genres[random2]};
+			//check to see if these genres contain the word "christmas", if so remove it
+			if(returnData.randomGenre1.indexOf("christmas") > -1){
+				returnData.randomGenre1 = returnData.randomGenre1.replace("christmas","");
+			}
+			if(returnData.randomGenre2.indexOf("christmas") > -1){
+				returnData.randomGenre2 = returnData.randomGenre2.replace("christmas","");
+			}
+			return returnData;
+		}
+		else if(artist.genres.length == 1){
+			return {randomGenre1 : artist.genres[0], randomGenre2 : null}
+		}
+		else{
+			return {randomGenre1 : null, randomGenre2 : null}
+		}
 	}
 	
 });
