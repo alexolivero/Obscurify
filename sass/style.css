@@ -296,6 +296,13 @@ nav {
       .track-list .track-list-item .track-list-item-info .track-list-item-info-text {
         display: inline-block;
         margin-left: 10px; }
+        .track-list .track-list-item .track-list-item-info .track-list-item-info-text h3, .track-list .track-list-item .track-list-item-info .track-list-item-info-text p {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          padding-right: 10px; }
+        .track-list .track-list-item .track-list-item-info .track-list-item-info-text h3 {
+          width: 170px; }
     .track-list .track-list-item .track-list-item-info-genres {
       display: inline-block;
       text-transform: lowercase; }

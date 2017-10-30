@@ -117,8 +117,17 @@
       .track-list-item-info-text {
         display: inline-block;
         margin-left: 10px;
-        text-overflow: ellipsis;
 
+        h3,p {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          padding-right: 10px;
+        }
+
+        h3 {
+          width: 170px;
+        }
       }
     }
     .track-list-item-info-genres {

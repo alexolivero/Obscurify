@@ -61,24 +61,24 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		
 		for(var i = 0; i < longTermTracks.items.length; i++){
 			longTermTrackIDs.push(longTermTracks.items[i].id);
-			//findStarRating
+			longTermTracks.items[i].starRating = findStarRating(longTermTracks.items[i].popularity);
 		}
 		
 		for(var i = 0; i < shortTermTracks.items.length; i++){
 			shortTermTrackIDs.push(shortTermTracks.items[i].id);
-			//findStarRating
+			shortTermTracks.items[i].starRating = findStarRating(shortTermTracks.items[i].popularity);
 		}
 		
 		for(var i = 0; i < shortTermArtists.items.length; i++){
 			shortTermArtistIDs.push(shortTermArtists.items[i].id);
 			shortTermArtists.items[i].randomGenres = findRandomGenres(shortTermArtists.items[i]);
-			//findStarRating
+			shortTermArtists.items[i].starRating = findStarRating(shortTermArtists.items[i].popularity);
 		}
 	  
 		for(var i = 0; i < longTermArtists.items.length; i++){
 			longTermArtistIDs.push(longTermArtists.items[i].id);
 			longTermArtists.items[i].randomGenres = findRandomGenres(longTermArtists.items[i]);
-			//findStarRating
+			longTermArtists.items[i].starRating = findStarRating(longTermArtists.items[i].popularity);
 			
 			//where the magic happens
 			obscurifyScore = obscurifyScore + (50/longTermArtists.items.length)*(parseInt(longTermArtists.items[i].popularity * (1 - i/longTermArtists.items.length)));
@@ -207,10 +207,15 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 	}
 	
 	function findStarRating(popularity){
-		
+		if(popularity >= 90){ return "★★★★★"; }
+        else if(popularity >= 80){ return "★★★★"; }
+        else if(popularity >= 65){ return "★★★"; }
+        else if(popularity >= 50){ return "★★";  }
+        else if(popularity >= 35){ return "★"; }
+        else{ return ""; }
 	}
 	
-	function findRandomGenres(artist){
+	function findRandomGenres(artist){//
 		if(artist.genres.length > 1){
 			var random1 = Math.floor(Math.random() * artist.genres.length);
 			var random2 = Math.floor(Math.random() * artist.genres.length);
