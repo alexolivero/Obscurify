@@ -22,6 +22,11 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 	$scope.shortTermTracks = [];
 	$scope.obscurifyScore = null;
 	$scope.topGenres = [];
+	$scope.userCountByCountry = "";
+	$scope.percentileByCountry = "";
+	$scope.globalAverageScore = "";
+	$scope.totalUserCount = "";
+	$scope.country = "";
 	
 	$http({
   			method : "get",
@@ -43,6 +48,11 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 			$scope.topGenres = response.data.topGenres;
 			$scope.longTermAudioFeatures = response.data.longTermAudioFeatures;
 			$scope.shortTermAudioFeatures = response.data.shortTermAudioFeatures;
+			$scope.userCountByCountry = response.data.userCountByCountry;
+			$scope.percentileByCountry = response.data.percentileByCountry;
+			$scope.globalAverageScore = response.data.globalAverageScore;
+			$scope.totalUserCount = response.data.totalUserCount;
+			$scope.country = response.data.country;
 
   		}, function myError(response) {
 			console.log(response);		  

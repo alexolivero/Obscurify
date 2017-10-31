@@ -101,10 +101,12 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		
 		
 		//now in this section we're trying to find the energy, happiness,
-		//acousticness, and danceability of your top 50 all-time/recent tracks		
-		const audioFeatureUrls= [			  
+		//acousticness, and danceability of your top 50 all-time/recent tracks
+		//and also query the Obscurify database to get user averages and whatnot
+		const audioFeatureAndObscurifyUrls= [			  
 		  "https://api.spotify.com/v1/audio-features?ids=" + longTermTrackIDs.join(),
-		  "https://api.spotify.com/v1/audio-features?ids=" + shortTermTrackIDs.join()
+		  "https://api.spotify.com/v1/audio-features?ids=" + shortTermTrackIDs.join(),
+		  "http://67.205.147.250/api/getObscurifyData?obscurifyScore=" + obscurifyScore + "&country=" + response[4].country
 		];
 		
 		var responseToTheFrontEnd = {
@@ -118,11 +120,16 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 						'obscurifyScore':obscurifyScore,
 						'topGenres':topGenres,
 						'longTermAudioFeatures':null,
-						'shortTermAudioFeatures':null
+						'shortTermAudioFeatures':null,
+						'totalUserCount':null,
+						'percentileByCountry':null,
+						'globalAverageScore':null,
+						'userCountByCountry':null,
+						'audioFeatureAverages':null
 					};
 
-		async.map(audioFeatureUrls, httpGet, function (err, audioFeatureResponse){
-			if (err || audioFeatureResponse[0].error){
+		async.map(audioFeatureAndObscurifyUrls, httpGet, function (err, audioFeatureAndObscurifyDataResponse){
+			if (err || audioFeatureAndObscurifyDataResponse[0].error){
 				//so if something went wrong, just send what we've already got back to the client
 				return res.send(responseToTheFrontEnd);
 			}
@@ -144,30 +151,35 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				//this is a little process I like to call "average the audio features for your top tracks"
 				//there's probably a smarter way to do this...?
 				//first do it for long term tracks
-				for(var i = 0; i < audioFeatureResponse[0].audio_features.length; i++){
-					longTermAudioFeatures.danceability += audioFeatureResponse[0].audio_features[i].danceability;
-					longTermAudioFeatures.energy += audioFeatureResponse[0].audio_features[i].energy;
-					longTermAudioFeatures.happiness += audioFeatureResponse[0].audio_features[i].valence;
-					longTermAudioFeatures.acousticness += audioFeatureResponse[0].audio_features[i].acousticness;
+				for(var i = 0; i < audioFeatureAndObscurifyDataResponse[0].audio_features.length; i++){
+					longTermAudioFeatures.danceability += audioFeatureAndObscurifyDataResponse[0].audio_features[i].danceability;
+					longTermAudioFeatures.energy += audioFeatureAndObscurifyDataResponse[0].audio_features[i].energy;
+					longTermAudioFeatures.happiness += audioFeatureAndObscurifyDataResponse[0].audio_features[i].valence;
+					longTermAudioFeatures.acousticness += audioFeatureAndObscurifyDataResponse[0].audio_features[i].acousticness;
 				}
-				longTermAudioFeatures.danceability /= audioFeatureResponse[0].audio_features.length;
-				longTermAudioFeatures.energy /= audioFeatureResponse[0].audio_features.length;
-				longTermAudioFeatures.happiness /= audioFeatureResponse[0].audio_features.length;
-				longTermAudioFeatures.acousticness /= audioFeatureResponse[0].audio_features.length;
+				longTermAudioFeatures.danceability /= audioFeatureAndObscurifyDataResponse[0].audio_features.length;
+				longTermAudioFeatures.energy /= audioFeatureAndObscurifyDataResponse[0].audio_features.length;
+				longTermAudioFeatures.happiness /= audioFeatureAndObscurifyDataResponse[0].audio_features.length;
+				longTermAudioFeatures.acousticness /= audioFeatureAndObscurifyDataResponse[0].audio_features.length;
 				
 				//now do it for short term tracks baby!!!
-				for(var i = 0; i < audioFeatureResponse[1].audio_features.length; i++){
-					shortTermAudioFeatures.danceability += audioFeatureResponse[1].audio_features[i].danceability;
-					shortTermAudioFeatures.energy += audioFeatureResponse[1].audio_features[i].energy;
-					shortTermAudioFeatures.happiness += audioFeatureResponse[1].audio_features[i].valence;
-					shortTermAudioFeatures.acousticness += audioFeatureResponse[1].audio_features[i].acousticness;
+				for(var i = 0; i < audioFeatureAndObscurifyDataResponse[1].audio_features.length; i++){
+					shortTermAudioFeatures.danceability += audioFeatureAndObscurifyDataResponse[1].audio_features[i].danceability;
+					shortTermAudioFeatures.energy += audioFeatureAndObscurifyDataResponse[1].audio_features[i].energy;
+					shortTermAudioFeatures.happiness += audioFeatureAndObscurifyDataResponse[1].audio_features[i].valence;
+					shortTermAudioFeatures.acousticness += audioFeatureAndObscurifyDataResponse[1].audio_features[i].acousticness;
 				}
-				shortTermAudioFeatures.danceability /= audioFeatureResponse[1].audio_features.length;
-				shortTermAudioFeatures.energy /= audioFeatureResponse[1].audio_features.length;
-				shortTermAudioFeatures.happiness /= audioFeatureResponse[1].audio_features.length;
-				shortTermAudioFeatures.acousticness /= audioFeatureResponse[1].audio_features.length;
+				shortTermAudioFeatures.danceability /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
+				shortTermAudioFeatures.energy /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
+				shortTermAudioFeatures.happiness /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
+				shortTermAudioFeatures.acousticness /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
 				
 				//aww yeah look at this fat payload! to angular we go!
+				responseToTheFrontEnd.totalUserCount = audioFeatureAndObscurifyDataResponse[2].totalUserCount;
+				responseToTheFrontEnd.percentileByCountry = audioFeatureAndObscurifyDataResponse[2].percentileByCountry;
+				responseToTheFrontEnd.globalAverageScore = audioFeatureAndObscurifyDataResponse[2].globalAverageScore;
+				responseToTheFrontEnd.userCountByCountry = audioFeatureAndObscurifyDataResponse[2].userCountByCountry;
+				responseToTheFrontEnd.audioFeatureAverages = audioFeatureAndObscurifyDataResponse[2].audioFeatureAverages;
 				responseToTheFrontEnd.longTermAudioFeatures = longTermAudioFeatures;
 				responseToTheFrontEnd.shortTermAudioFeatures = shortTermAudioFeatures;
 				res.send(responseToTheFrontEnd);
@@ -199,7 +211,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		
 	});
 		
-	//this is just used to sort the topGenres so the poor client doesn't have to
+	//this is just used to sort the topGenres so the client doesn't have to
 	function Comparator(a, b) {
 		if (a[1] > b[1]) return -1;
 		if (a[1] < b[1]) return 1;
@@ -215,7 +227,8 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
         else{ return ""; }
 	}
 	
-	function findRandomGenres(artist){//
+	//will return up to two random genres out of the artist's array of all genres
+	function findRandomGenres(artist){
 		if(artist.genres.length > 1){
 			var random1 = Math.floor(Math.random() * artist.genres.length);
 			var random2 = Math.floor(Math.random() * artist.genres.length);

@@ -8,26 +8,26 @@
 
     <div class="row">
       <div class="col-md-7 col-md-offset-2 obscurity-rating">
-        <h1>23%</h1>
+        <h1>{{percentileByCountry}}%</h1>
       </div>
     </div><!--.row-->
 
     <div class="row">
       <div class="col-md-4 col-md-offset-5 obscurity-description">
-        <p>Your music is 20% more obscure than North American users on Spotify.</p>
+        <p>Your music is {{percentileByCountry}}% more obscure than {{userCountByCountry}} {{country}} users on Spotify.</p>
       </div>
     </div><!--.row-->
 
     <div class="row obscurity-info">
       <div class="col-md-4 col-md-offset-1">
         <h3>Your Score</h3>
-        <h2>153</h2>
-        <p>Lower = More Obscure</p>
+        <h2>{{obscurifyScore}}</h2>
+        <p>lower = more obscure</p>
       </div>
       <div class="col-md-4 col-md-offset-1">
-        <h3>Average User Score</h3>
-        <h2>200</h2>
-        <p>of 54,345 scores</p>
+        <h3>Global Average</h3>
+        <h2>{{globalAverageScore}}</h2>
+        <p>of {{totalUserCount}} scores</p>
       </div>
     </div><!--.row-->
 

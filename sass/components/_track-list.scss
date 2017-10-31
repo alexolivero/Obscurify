@@ -50,9 +50,13 @@
     }
 
     .track-list-column {
-      width: 320px;
+      width: 100%;
       display: inline-block;
       margin-right: 100px;
+
+      @media #{$tablet} {
+        
+      }
 
       @media #{$desktop} {
         width: 454px;
@@ -105,7 +109,7 @@
         box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
         object-fit: cover;
         position: relative;
-        bottom: 0px;
+        bottom: 30px;
 
         @media #{$desktop} {
           width: 100px;
@@ -117,22 +121,43 @@
       .track-list-item-info-text {
         display: inline-block;
         margin-left: 10px;
+        position: relative;
+        top: 20px;
 
-        h3,p {
+        h3 {
+          width: 140px;
           text-overflow: ellipsis;
           white-space: nowrap;
           overflow: hidden;
           padding-right: 10px;
+
+          @media #{$tablet} {
+            width: 100%;
+          }
+
+          @media #{$desktop} {
+            width: 170px;
+          }
         }
 
-        h3 {
-          width: 170px;
-        }
+
       }
     }
     .track-list-item-info-genres {
       display: inline-block;
       text-transform: lowercase;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 160px;
+
+      @media #{$tablet} {
+        width: 100%;
+      }
+
+      @media #{$desktop} {
+            width: 170px;
+          }
       p {
         font-size: 12px;
         color: $o-offwhite;
@@ -140,15 +165,24 @@
       }
     }
 
+    .stars {
+      color: $o-offwhite;
+      font-size: 12px;
+      display: block;
+
+    }
+
     .track-list-item-right {
-      float: right;
-      font-size: 48px;
+      font-size: 34px; 
       font-weight: bold;
-      display: inline-block;
-      margin-right: -2px;
+      position: absolute;
+      top: 15px;
+      right: 10px;
 
       @media #{$tablet} {
-        margin-right: 0;
+        font-size: 48px;
+        top: 7px;
+        right: 10px;
       } 
     }
 
