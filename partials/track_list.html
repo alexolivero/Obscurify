@@ -4,9 +4,11 @@
       <div class="row">
         <div class="col-md-8">
           <div class="track-list-header">
-            <a class="active" href="#carousel-example-generic" role="button" data-slide-to="0" target="_self">My Artists</a>
+            <a ng-class="artistNav" href="#carousel-example-generic" role="button" data-slide-to="0" target="_self" ng-click="artistNavClicked()">
+			My Artists</a>
             <span>/</span>
-            <a href="#carousel-example-generic" role="button" data-slide-to="1" target="_self">My Tracks</a>
+            <a ng-class="trackNav" href="#carousel-example-generic" role="button" data-slide-to="1" target="_self" ng-click="trackNavClicked()">
+			My Tracks</a>
           </div>
         </div>
       </div> <!--.row-->
@@ -24,14 +26,14 @@
                 <div class="track-list-item-info">
                   <img src="{{artist.images[1].url}}" alt="" />
 
-                  <div class="track-list-item-info-text">
+                  <a class="track-list-item-info-text" ng-href="{{artist.uri}}">
                     <h3>{{artist.name}}</h3>
                     <div class="track-list-item-info-genres">
                       <p>{{artist.randomGenres.randomGenre1}} /</p>
                       <p>{{artist.randomGenres.randomGenre2}}</p>
                     </div>
                     <p class="stars">{{artist.starRating}}</p>
-                  </div>
+                  </a>
                 </div>
                 <div class="track-list-item-right">
                   <p>{{$index + 1}}</p>
@@ -50,14 +52,14 @@
                 <div class="track-list-item-info">
                   <img src="{{artist.images[1].url}}" alt="" />
 
-                  <div class="track-list-item-info-text">
+                  <a class="track-list-item-info-text" ng-href="{{artist.uri}}">
                     <h3>{{artist.name}}</h3>
                     <div class="track-list-item-info-genres">
                       <p>{{artist.randomGenres.randomGenre1}} /</p>
                       <p>{{artist.randomGenres.randomGenre2}}</p>
                     </div>
                     <p class="stars">{{artist.starRating}}</p>
-                  </div>
+                  </a>
                 </div>
                 <div class="track-list-item-right">
                   <p>{{$index + 1}}</p>
@@ -82,14 +84,14 @@
 			  <div ng-repeat="track in shortTermTracks.items track by $index" class="track-list-item">
                 <div class="track-list-item-info">
                   <img src="{{track.album.images[1].url}}" alt="" />
-                  <div class="track-list-item-info-text">
+                  <a class="track-list-item-info-text" ng-href="{{track.uri}}">
                     <h3>{{track.name}}</h3>
                     <div class="track-list-item-info-genres">
                       <p>{{track.album.name}} /</p>
                       <p>{{track.artists[0].name}}</p>
                     </div>
                     <p class="stars">{{track.starRating}}</p>
-                  </div>
+                  </a>
                 </div>
                 <div class="track-list-item-right">
                   <p>{{$index + 1}}</p>
@@ -108,14 +110,14 @@
                 <div class="track-list-item-info">
                   <img src="{{track.album.images[1].url}}" alt="" />
 
-                  <div class="track-list-item-info-text">
+                  <a class="track-list-item-info-text" ng-href="{{track.uri}}">
                     <h3>{{track.name}}</h3>
                     <div class="track-list-item-info-genres">
                       <p>{{track.album.name}} /</p>
                       <p>{{track.artists[0].name}}</p>
                     </div>
                     <p class="stars">{{track.starRating}}</p>
-                  </div>
+                  </a>
                 </div>
                 <div class="track-list-item-right">
                   <p>{{$index + 1}}</p>

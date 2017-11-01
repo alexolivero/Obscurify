@@ -1,6 +1,6 @@
 var app = angular.module('obscurify', ['ngRoute']);
 
-app.config(function($routeProvider) {
+app.config(function($routeProvider,$compileProvider) {
     $routeProvider
     .when("/", {
         templateUrl : "partials/spotify.html"
@@ -9,6 +9,7 @@ app.config(function($routeProvider) {
         templateUrl : "partials/home.html",
 		controller : "mainController"
     });
+	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|spotify):/);
 });
 
 app.controller('mainController', function($scope, $http, $window, $routeParams) {
@@ -28,6 +29,12 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 	$scope.totalUserCount = "";
 	$scope.country = "";
 	
+	//to control whether "Artists" or "Tracks" has a line-through
+	$scope.trackNav = "";
+	$scope.artistNav = "active";
+	$scope.trackNavClicked = function(){ $scope.trackNav = "active"; $scope.artistNav = "";}
+	$scope.artistNavClicked = function(){ $scope.trackNav = ""; $scope.artistNav = "active";}
+		
 	$http({
   			method : "get",
   			url : 'http://67.205.147.250/spotifyData/' + $routeParams.token + '/getUserData'
@@ -46,13 +53,53 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 			$scope.shortTermTracks = response.data.shortTermTracks;
 			$scope.obscurifyScore = response.data.obscurifyScore;
 			$scope.topGenres = response.data.topGenres;
-			$scope.longTermAudioFeatures = response.data.longTermAudioFeatures;
-			$scope.shortTermAudioFeatures = response.data.shortTermAudioFeatures;
+			var longTermAudioFeatures = response.data.longTermAudioFeatures;
+			var shortTermAudioFeatures = response.data.shortTermAudioFeatures;
+			var audioFeatureAverages = response.data.audioFeatureAverages;
 			$scope.userCountByCountry = response.data.userCountByCountry;
 			$scope.percentileByCountry = response.data.percentileByCountry;
 			$scope.globalAverageScore = response.data.globalAverageScore;
 			$scope.totalUserCount = response.data.totalUserCount;
 			$scope.country = response.data.country;
+
+			var moodRingData = [
+					  [//Current
+						{axis:"Energy",value : shortTermAudioFeatures.energy},
+						{axis:"Happiness",value : shortTermAudioFeatures.happiness},
+						{axis:"Danceability",value : shortTermAudioFeatures.danceability},
+						{axis:"Acousticness",value : shortTermAudioFeatures.acousticness}			
+					  ],[//All Time
+						{axis:"Energy",value : longTermAudioFeatures.energy},
+						{axis:"Happiness",value : longTermAudioFeatures.happiness},
+						{axis:"Danceability",value : longTermAudioFeatures.danceability},
+						{axis:"Acousticness",value : longTermAudioFeatures.acousticness}	
+					  ],[//Obscurify Average
+						{axis:"Energy",value : audioFeatureAverages.energy},
+						{axis:"Happiness",value : audioFeatureAverages.happiness},
+						{axis:"Danceability",value : audioFeatureAverages.danceability},
+						{axis:"Acousticness",value : audioFeatureAverages.acousticness}	
+					  ]
+					];
+					
+			//////////////////// Draw the Chart ////////////////////////// 
+			
+			var margin = {top: 100, right: 100, bottom: 100, left: 100},
+				width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+				height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+			
+			var radarChartOptions = {
+			  w: width,
+			  h: height,
+			  margin: margin,
+			  maxValue: 0.5,
+			  levels: 5,
+			  roundStrokes: true,
+			  color: d3.scale.ordinal().range(["#EDC951","#CC333F","#00A0B0"])
+			};
+			//Call function to draw the Radar chart
+			RadarChart(".radarChart", moodRingData, radarChartOptions);
+			
+			
 
   		}, function myError(response) {
 			console.log(response);		  

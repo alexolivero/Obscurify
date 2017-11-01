@@ -7,6 +7,8 @@ const async = require('async');
 var moment = require('moment');
 var mongo = require('mongodb');
 
+var obscurify_secret = process.argv[2];
+
 var app = express();
 
 app.use(express.static(__dirname ))
@@ -25,7 +27,9 @@ app.post('/api/saveUserHistory', function(req, res) {
 		req.body.longTermArtistIDs == null ||
 		req.body.longTermTrackIDs == null ||
 		req.body.obscurifyScore == null ||
-		req.body.longTermAudioFeatures == null){
+		req.body.longTermAudioFeatures == null ||
+		req.body.obscurify_secret != obscurify_secret //this file and spotify_data_server.js should have the same obscurify_secret
+		){
 			return res.send({"status" : "no WAY DUDE!!"});
 	}
 	

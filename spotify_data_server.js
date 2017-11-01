@@ -4,6 +4,8 @@ var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 const async = require('async');
 
+var obscurify_secret = process.argv[2];
+
 var app = express();
 
 app.use(express.static(__dirname ))
@@ -185,22 +187,34 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				res.send(responseToTheFrontEnd);
 				
 				//make a call to the database_server and toss this into MONGO!!!
-				request({
-					url: 'http://67.205.147.250/api/saveUserHistory',
-					method: "POST",
-					json: true,
-					body: {
-							'userID' : response[4].id,
-							'email':response[4].email,
-							'country':response[4].country,
-							'longTermArtistIDs':longTermArtistIDs,
-							'longTermTrackIDs':longTermTrackIDs,
-							'obscurifyScore':obscurifyScore,
-							'longTermAudioFeatures':longTermAudioFeatures,
-							'shortTermArtistIDs' : shortTermArtistIDs,
-							'shortTermTrackIDs' : shortTermTrackIDs
-						} 
-				}, function (error, response, body){});
+				if(
+					longTermArtists.items.length > 19 && //only post data for users who have significant Spotify history
+					longTermTracks.items.length > 19 &&
+					obscurifyScore > 39 && //arbitrary number, but if your score is below 40 then something is likely wrong
+					longTermAudioFeatures.happiness > 0 &&
+					longTermAudioFeatures.energy > 0 &&
+					longTermAudioFeatures.danceability > 0 &&
+					longTermAudioFeatures.acousticness > 0
+				){
+					request({
+						url: 'http://67.205.147.250/api/saveUserHistory',
+						method: "POST",
+						json: true,
+						body: {
+								'userID' : response[4].id,
+								'email':response[4].email,
+								'country':response[4].country,
+								'longTermArtistIDs':longTermArtistIDs,
+								'longTermTrackIDs':longTermTrackIDs,
+								'obscurifyScore':obscurifyScore,
+								'longTermAudioFeatures':longTermAudioFeatures,
+								'shortTermArtistIDs' : shortTermArtistIDs,
+								'shortTermTrackIDs' : shortTermTrackIDs,
+								'obscurify_secret' : obscurify_secret // so ya'll aint be cheatin
+							} 
+					}, function (error, response, body){});
+				}
+				
 			}
 			catch(err){
 				return res.send(responseToTheFrontEnd);
