@@ -1,5 +1,3 @@
-$bars: 6;
-
 
 .music-data-section {
 	  background-color: #F2F1EF;
@@ -20,34 +18,74 @@ $bars: 6;
 	  }
 
 	.equalizer-container {
-	    margin: 100px auto 0;
-	    width: #{$bars * 21}px;
+	    margin: 100px auto 20px;
+	    width: 100%;
 	    height: 200px;
 	    display: flex;
 	    align-items: flex-end;
-	}
+	    padding: 20px;
 
-	.bar {
-	    width: 200px;
-	    min-height: 10px;
-	    margin-right: 1px;
-	    box-shadow: 0 10px 15px #000;
-	}
+		.bar {
+		    width: 200px;
+		    min-height: 10px;
+		    margin-right: 1px;
+		}
 
-	$multiplier: 100 / $bars;
-	@for $i from 0 through $bars {
-	    .bar:nth-child(#{$i}) {
-	        $saturation: 100 - (($i + 1) * $multiplier);
-	        background-color: hsla(140, 73%, 42%, 1);
-	        animation: grow#{$i} #{random(700) + 1500}ms alternate infinite;
-	    }
-	    
-	    @keyframes grow#{$i} {
-	        @for $j from 0 through 10 {
-	            #{$j * 10}% {
-	                height: #{random(100)+80}px;
-	            }
-	        }
-	    }
+		$bars: 6;
+		$multiplier: 100 / $bars;
+
+		&.low {
+			@for $i from 0 through $bars {
+			    .bar:nth-child(#{$i}) {
+			        $saturation: 100 - (($i + 1) * $multiplier);
+			        background-color: hsla(140, 73%, 42%, 1);
+			        animation: grow#{$i} #{random(700) + 1500}ms alternate infinite;
+			    }
+			    
+			    @keyframes grow#{$i} {
+			        @for $j from 0 through 10 {
+			            #{$j * 10}% {
+			                height: #{random(20)}px;
+			            }
+			        }
+			    }
+			}
+		}
+
+		&.med {
+			@for $i from 0 through $bars {
+			    .bar:nth-child(#{$i}) {
+			        $saturation: 100 - (($i + 1) * $multiplier);
+			        background-color: hsla(140, 73%, 42%, 1);
+			        animation: grow-med#{$i} #{random(700) + 1500}ms alternate infinite;
+			    }
+			    
+			    @keyframes grow-med#{$i} {
+			        @for $j from 0 through 10 {
+			            #{$j * 10}% {
+			                height: #{random(50)+ 20}px;
+			            }
+			        }
+			    }
+			}
+		}
+
+		&.high {
+			@for $i from 0 through $bars {
+			    .bar:nth-child(#{$i}) {
+			        $saturation: 100 - (($i + 1) * $multiplier);
+			        background-color: hsla(140, 73%, 42%, 1);
+			        animation: grow-high#{$i} #{random(700) + 1500}ms alternate infinite;
+			    }
+			    
+			    @keyframes grow-high#{$i} {
+			        @for $j from 0 through 10 {
+			            #{$j * 10}% {
+			                height: #{random(90)+ 70}px;
+			            }
+			        }
+			    }
+			}
+		}
 	}
 }
