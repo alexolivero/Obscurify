@@ -1,0 +1,140 @@
+<div class="container-fluid track-list">
+  <div class="container">
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="track-list-header">
+            <a ng-class="artistNav" href="#carousel-example-generic" role="button" data-slide-to="0" target="_self" ng-click="artistNavClicked()">
+			My Artists</a>
+            <span>/</span>
+            <a ng-class="trackNav" href="#carousel-example-generic" role="button" data-slide-to="1" target="_self" ng-click="trackNavClicked()">
+			My Tracks</a>
+          </div>
+        </div>
+      </div> <!--.row-->
+
+  <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval='false'>
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+    <div class="item active">
+        <div class="track-list-item-container">
+
+          <div class="col-md-6">
+            <div class="track-list-column">
+              <h2>Current</h2>
+              <div ng-repeat="artist in shortTermArtists.items track by $index " class="track-list-item">
+                <div class="track-list-item-info">
+                  <img src="{{artist.images[1].url}}" alt="" />
+
+<<<<<<< Updated upstream
+                  <a class="track-list-item-info-text" ng-href="{{artist.uri}}">
+                    <h3>{{artist.name}}</h3>
+=======
+                  <div class="track-list-item-info-text">
+                    <h3>{{artist.name | limitTo: 20}}...</h3>
+>>>>>>> Stashed changes
+                    <div class="track-list-item-info-genres">
+                      <p>{{artist.randomGenres.randomGenre1}} /</p>
+                      <p>{{artist.randomGenres.randomGenre2}}</p>
+                    </div>
+                    <p class="stars">{{artist.starRating}}</p>
+                  </a>
+                </div>
+                <div class="track-list-item-right">
+                  <p>{{$index + 1}}</p>
+                </div>
+
+              </div>             
+              
+            </div>
+          </div>
+
+
+          <div class="col-md-6">
+            <div class="track-list-column">
+              <h2>All Time</h2>
+			  <div ng-repeat="artist in longTermArtists.items track by $index" class="track-list-item">
+                <div class="track-list-item-info">
+                  <img src="{{artist.images[1].url}}" alt="" />
+
+                  <a class="track-list-item-info-text" ng-href="{{artist.uri}}">
+                    <h3>{{artist.name}}</h3>
+                    <div class="track-list-item-info-genres">
+                      <p>{{artist.randomGenres.randomGenre1}} /</p>
+                      <p>{{artist.randomGenres.randomGenre2}}</p>
+                    </div>
+                    <p class="stars">{{artist.starRating}}</p>
+                  </a>
+                </div>
+                <div class="track-list-item-right">
+                  <p>{{$index + 1}}</p>
+                </div>
+
+              </div>
+              
+            </div>
+          </div>
+        </div>
+    </div>
+
+
+    <div class="item">
+      <div class="track-list-item-container">
+
+          <div class="col-sm-6">
+            <div class="track-list-column">
+              <h2>Current</h2>
+              
+			  
+			  <div ng-repeat="track in shortTermTracks.items track by $index" class="track-list-item">
+                <div class="track-list-item-info">
+                  <img src="{{track.album.images[1].url}}" alt="" />
+                  <a class="track-list-item-info-text" ng-href="{{track.uri}}">
+                    <h3>{{track.name}}</h3>
+                    <div class="track-list-item-info-genres">
+                      <p>{{track.album.name}} /</p>
+                      <p>{{track.artists[0].name}}</p>
+                    </div>
+                    <p class="stars">{{track.starRating}}</p>
+                  </a>
+                </div>
+                <div class="track-list-item-right">
+                  <p>{{$index + 1}}</p>
+                </div>
+
+              </div>
+              
+            </div>
+          </div>
+
+
+          <div class="col-sm-6">
+            <div class="track-list-column">
+              <h2>All Time</h2>
+              <div ng-repeat="track in longTermTracks.items track by $index" class="track-list-item">
+                <div class="track-list-item-info">
+                  <img src="{{track.album.images[1].url}}" alt="" />
+
+                  <a class="track-list-item-info-text" ng-href="{{track.uri}}">
+                    <h3>{{track.name}}</h3>
+                    <div class="track-list-item-info-genres">
+                      <p>{{track.album.name}} /</p>
+                      <p>{{track.artists[0].name}}</p>
+                    </div>
+                    <p class="stars">{{track.starRating}}</p>
+                  </a>
+                </div>
+                <div class="track-list-item-right">
+                  <p>{{$index + 1}}</p>
+                </div>
+
+              </div>
+              
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
