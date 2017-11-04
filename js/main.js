@@ -62,44 +62,25 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 			$scope.totalUserCount = response.data.totalUserCount;
 			$scope.country = response.data.country;
 
-			var moodRingData = [
-					  [//Current
-						{axis:"Energy",value : shortTermAudioFeatures.energy},
-						{axis:"Happiness",value : shortTermAudioFeatures.happiness},
-						{axis:"Danceability",value : shortTermAudioFeatures.danceability},
-						{axis:"Acousticness",value : shortTermAudioFeatures.acousticness}			
-					  ],[//All Time
-						{axis:"Energy",value : longTermAudioFeatures.energy},
-						{axis:"Happiness",value : longTermAudioFeatures.happiness},
-						{axis:"Danceability",value : longTermAudioFeatures.danceability},
-						{axis:"Acousticness",value : longTermAudioFeatures.acousticness}	
-					  ],[//Obscurify Average
-						{axis:"Energy",value : audioFeatureAverages.energy},
-						{axis:"Happiness",value : audioFeatureAverages.happiness},
-						{axis:"Danceability",value : audioFeatureAverages.danceability},
-						{axis:"Acousticness",value : audioFeatureAverages.acousticness}	
-					  ]
-					];
+			// var moodRingData = [
+					  // [//Current
+						// {axis:"Energy",value : shortTermAudioFeatures.energy},
+						// {axis:"Happiness",value : shortTermAudioFeatures.happiness},
+						// {axis:"Danceability",value : shortTermAudioFeatures.danceability},
+						// {axis:"Acousticness",value : shortTermAudioFeatures.acousticness}			
+					  // ],[//All Time
+						// {axis:"Energy",value : longTermAudioFeatures.energy},
+						// {axis:"Happiness",value : longTermAudioFeatures.happiness},
+						// {axis:"Danceability",value : longTermAudioFeatures.danceability},
+						// {axis:"Acousticness",value : longTermAudioFeatures.acousticness}	
+					  // ],[//Obscurify Average
+						// {axis:"Energy",value : audioFeatureAverages.energy},
+						// {axis:"Happiness",value : audioFeatureAverages.happiness},
+						// {axis:"Danceability",value : audioFeatureAverages.danceability},
+						// {axis:"Acousticness",value : audioFeatureAverages.acousticness}	
+					  // ]
+					// ];
 					
-			//////////////////// Draw the Chart ////////////////////////// 
-			
-			var margin = {top: 100, right: 100, bottom: 100, left: 100},
-				width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
-				height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
-			
-			var radarChartOptions = {
-			  w: width,
-			  h: height,
-			  margin: margin,
-			  maxValue: 0.5,
-			  levels: 5,
-			  roundStrokes: true,
-			  color: d3.scale.ordinal().range(["#EDC951","#CC333F","#00A0B0"])
-			};
-			//Call function to draw the Radar chart
-			RadarChart(".radarChart", moodRingData, radarChartOptions);
-			
-			
 
   		}, function myError(response) {
 			console.log(response);		  

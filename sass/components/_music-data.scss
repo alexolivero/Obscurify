@@ -9,6 +9,7 @@
 		    font-size: 44px;
 		    font-weight: bold;
 		    margin-bottom: 25px;
+		    color: $o-black;
 
 		    @media #{$tablet} {
 		      font-size: 64px;
@@ -18,12 +19,34 @@
 	  }
 
 	.equalizer-container {
-	    margin: 100px auto 20px;
+	    margin: 0px auto 20px;
 	    width: 100%;
 	    height: 200px;
 	    display: flex;
 	    align-items: flex-end;
 	    padding: 20px;
+	    position: relative;
+
+	    .avg-line {
+    	    position: absolute;
+		    width: 432px;
+		    background-color: black;
+		    display: block;
+		    height: 2px;
+		    z-index: 0;
+		    top: 69px;
+		    font-size: 14px;
+
+		    &:before {
+		    	content:'avg';
+		    	display: inline-block;
+		    	position: absolute;
+		    	top: -10px;
+    			left: -27px;
+
+		    }
+		
+	    }
 
 		.bar {
 		    width: 200px;

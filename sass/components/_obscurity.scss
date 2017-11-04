@@ -29,7 +29,11 @@
     text-align: center;
     margin-top: 25px;
     h1 {
-      font-size: 144px;
+      font-size: 100px;
+
+      @media #{$tablet} {
+        font-size: 144px;
+      }
     }
   }
 
@@ -54,6 +58,10 @@
     h2 {
       font-size: 48px;
       margin-bottom: 6px;
+    }
+
+    p {
+      margin-bottom: 20px;
     }
   }
 }

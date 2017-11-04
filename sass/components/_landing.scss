@@ -14,9 +14,21 @@
       color: $s-green;
     }
 
+    h1 {
+      font-size: 36px;
+      @media #{$tablet} {
+        font-size: 55px;
+      }
+    }
+
     p {
-      font-size: 24px;
+      font-size: 16px;
       letter-spacing: 4px;
+
+      @media #{$tablet} {
+        font-size: 24px;
+        margin-top: 1em;
+      }
     }
   }
 
@@ -28,12 +40,14 @@
     background-color: $o-white;
     position: relative;
     display: block;
-    color: grey;
+    color: $o-black;
     padding: 15px 26px 21px 100px;
     transition: .1s;
     font-size: 18px;
     letter-spacing: 1.5px;
     margin: 47px auto 0;
+    text-decoration: none;
+
 
     &:before {
       content: '';
@@ -45,10 +59,11 @@
       left: 28px;
     }
 
-    &:hover {
-      text-decoration: none;
+    &:hover { 
+      text-decoration: line-through;
       color: $o-black;
       background-color: $o-white;
+ 
     }
 
   }

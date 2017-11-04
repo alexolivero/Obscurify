@@ -1,4 +1,4 @@
-<div class="container-fluid track-list">
+<div class="container-fluid track-list">``
   <div class="container">
 
       <div class="row">
@@ -19,9 +19,12 @@
     <div class="item active">
         <div class="track-list-item-container">
 
-          <div class="col-md-6">
-            <div class="track-list-column">
+          <div class="col-sm-6 track-list-column">
+            
+              <div class="overlay-gradient"></div>
               <h2>Current</h2>
+              <div class="column-overflow">
+              
               <div ng-repeat="artist in shortTermArtists.items track by $index " class="track-list-item">
                 <div class="track-list-item-info">
                   <img src="{{artist.images[1].url}}" alt="" />
@@ -39,35 +42,38 @@
                   <p>{{$index + 1}}</p>
                 </div>
 
-              </div>             
+              </div>  
+                     
               
             </div>
           </div>
 
 
-          <div class="col-md-6">
-            <div class="track-list-column">
+          <div class="col-sm-6 track-list-column">
+            
+              <div class="overlay-gradient"></div>
               <h2>All Time</h2>
-			  <div ng-repeat="artist in longTermArtists.items track by $index" class="track-list-item">
-                <div class="track-list-item-info">
-                  <img src="{{artist.images[1].url}}" alt="" />
+              <div class="column-overflow">
+  			         <div ng-repeat="artist in longTermArtists.items track by $index" class="track-list-item">
+                  <div class="track-list-item-info">
+                    <img src="{{artist.images[1].url}}" alt="" />
 
-                  <a class="track-list-item-info-text" ng-href="{{artist.uri}}">
-                    <h3>{{artist.name}}</h3>
-                    <div class="track-list-item-info-genres">
-                      <p>{{artist.randomGenres.randomGenre1}} /</p>
-                      <p>{{artist.randomGenres.randomGenre2}}</p>
-                    </div>
-                    <p class="stars">{{artist.starRating}}</p>
-                  </a>
-                </div>
-                <div class="track-list-item-right">
-                  <p>{{$index + 1}}</p>
-                </div>
+                    <a class="track-list-item-info-text" ng-href="{{artist.uri}}">
+                      <h3>{{artist.name}}</h3>
+                      <div class="track-list-item-info-genres">
+                        <p>{{artist.randomGenres.randomGenre1}} /</p>
+                        <p>{{artist.randomGenres.randomGenre2}}</p>
+                      </div>
+                      <p class="stars">{{artist.starRating}}</p>
+                    </a>
+                  </div>
+                  <div class="track-list-item-right">
+                    <p>{{$index + 1}}</p>
+                  </div>
 
+                  </div>
+          
               </div>
-              
-            </div>
           </div>
         </div>
     </div>
@@ -76,11 +82,12 @@
     <div class="item">
       <div class="track-list-item-container">
 
-          <div class="col-sm-6">
-            <div class="track-list-column">
+          <div class="col-sm-6 track-list-column">
+            
+              <div class="overlay-gradient"></div>
               <h2>Current</h2>
               
-			  
+			         <div class="column-overflow">
 			  <div ng-repeat="track in shortTermTracks.items track by $index" class="track-list-item">
                 <div class="track-list-item-info">
                   <img src="{{track.album.images[1].url}}" alt="" />
@@ -103,9 +110,11 @@
           </div>
 
 
-          <div class="col-sm-6">
-            <div class="track-list-column">
+          <div class="col-sm-6 track-list-column">
+          
+              <div class="overlay-gradient"></div>
               <h2>All Time</h2>
+              <div class="column-overflow">
               <div ng-repeat="track in longTermTracks.items track by $index" class="track-list-item">
                 <div class="track-list-item-info">
                   <img src="{{track.album.images[1].url}}" alt="" />
@@ -124,7 +133,7 @@
                 </div>
 
               </div>
-              
+             
             </div>
           </div>
         </div>

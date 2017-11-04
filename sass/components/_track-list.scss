@@ -1,12 +1,17 @@
 .track-list {
   background-color: #F2F1EF;
-  padding: 108px 0px;
+  padding: 58px 0px;
+
+  @media #{$tablet} {
+    padding: 108px 0px;
+  }
 
   .track-list-header {
     display: inline-block;
-    font-size: 44px;
+    font-size: 36px;
     font-weight: bold;
     margin-bottom: 25px;
+
 
     @media #{$tablet} {
       font-size: 64px;
@@ -53,6 +58,9 @@
       width: 100%;
       display: inline-block;
       margin-right: 100px;
+      position: relative;
+      margin-bottom: 2em;
+      padding: 0;
 
       @media #{$tablet} {
         
@@ -61,6 +69,30 @@
       @media #{$desktop} {
         width: 454px;
       }
+
+      .column-overflow {
+        height: 700px;
+        position: relative;
+        overflow-y: scroll;
+        padding-top: 27px;
+        padding-left: 5px;
+        padding-right: 5px;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+      }
+
+      .overlay-gradient {
+        background-image: linear-gradient(-180deg, rgba(242, 241, 239, 0.5) 0%, #F2F1EF 100%);
+        position: absolute;
+        display: block;
+        height: 100px;
+        width: 100%;
+        z-index: 1;
+        bottom: 0px;
+      }
     }
   }
 
@@ -68,6 +100,7 @@
     font-size: 36px;
     font-weight: bold;
     margin-bottom: 30px;
+    color: $o-black;
 
     @media #{$tablet} {
       margin-bottom: 60px;
