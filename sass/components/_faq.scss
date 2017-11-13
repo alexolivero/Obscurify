@@ -1,0 +1,23 @@
+.faq{
+	background: $green-gradient;
+	color: $o-white;
+	padding: 58px 0px;
+	
+	.faq-header{
+		margin: 0 auto;
+		margin-bottom:30px;
+		margin-top:40px;
+	}
+	
+	h5{
+		font-size:16px;
+		padding-bottom:10px;
+		padding-top:20px;
+		font-weight: bold;
+	}
+	
+	.faq-text{
+		opacity: 0.85;
+	}
+
+}

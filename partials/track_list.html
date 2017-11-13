@@ -4,16 +4,16 @@
       <div class="row">
         <div class="col-md-8">
           <div class="track-list-header">
-            <a ng-class="artistNav" href="#carousel-example-generic" role="button" data-slide-to="0" target="_self" ng-click="artistNavClicked()">
+            <a ng-class="artistNav" href="#carousel-track-list" role="button" data-slide-to="0" target="_self" ng-click="artistNavClicked()">
 			My Artists</a>
             <span>/</span>
-            <a ng-class="trackNav" href="#carousel-example-generic" role="button" data-slide-to="1" target="_self" ng-click="trackNavClicked()">
+            <a ng-class="trackNav" href="#carousel-track-list" role="button" data-slide-to="1" target="_self" ng-click="trackNavClicked()">
 			My Tracks</a>
           </div>
         </div>
       </div> <!--.row-->
 
-  <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval='false'>
+  <div id="carousel-track-list" class="carousel slide" data-ride="carousel" data-interval='false'>
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
     <div class="item active">
@@ -22,7 +22,7 @@
           <div class="col-sm-6 track-list-column">
             
               <div class="overlay-gradient"></div>
-              <h2>Current</h2>
+              <h2>Current</h2><div class="obscurifyScore">Score : {{recentObscurifyScore}}</div>
               <div class="column-overflow">
               
               <div ng-repeat="artist in shortTermArtists.items track by $index " class="track-list-item">
@@ -52,7 +52,7 @@
           <div class="col-sm-6 track-list-column">
             
               <div class="overlay-gradient"></div>
-              <h2>All Time</h2>
+              <h2>All Time</h2><div class="obscurifyScore">Score : {{obscurifyScore}}</div>
               <div class="column-overflow">
   			         <div ng-repeat="artist in longTermArtists.items track by $index" class="track-list-item">
                   <div class="track-list-item-info">
@@ -85,10 +85,11 @@
           <div class="col-sm-6 track-list-column">
             
               <div class="overlay-gradient"></div>
-              <h2>Current</h2>
-              
-			         <div class="column-overflow">
-			  <div ng-repeat="track in shortTermTracks.items track by $index" class="track-list-item">
+                <h2>Current</h2>
+                <button ng-click="makePlaylist(false);">Export As Playlist</button>
+            
+              <div class="column-overflow">
+	      <div ng-repeat="track in shortTermTracks.items track by $index" class="track-list-item">
                 <div class="track-list-item-info">
                   <img src="{{track.album.images[1].url}}" alt="" />
                   <a class="track-list-item-info-text" ng-href="{{track.uri}}">
@@ -113,7 +114,7 @@
           <div class="col-sm-6 track-list-column">
           
               <div class="overlay-gradient"></div>
-              <h2>All Time</h2>
+              <h2>All Time</h2><button ng-click="makePlaylist(true);">Export As Playlist</button>
               <div class="column-overflow">
               <div ng-repeat="track in longTermTracks.items track by $index" class="track-list-item">
                 <div class="track-list-item-info">

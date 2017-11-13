@@ -2,7 +2,7 @@ body {
   background-color: $o-black;
 }
 
-h1,h2,h3,h4,h5,p,li,a {
+h1,h2,h3,h4,h5,p,li,a, button {
   font-family: $font-family;
   margin: 0;
   padding: 0;
@@ -19,6 +19,21 @@ h1 {
 
 }
 
+h2 {
+  font-size: 35px;
+  font-weight: bold;
+  letter-spacing: 5px;
+
+  @media #{$tablet} {
+    font-size: 60px;
+  }
+
+}
+
+h3 {
+  letter-spacing: 1.5px;
+  font-weight: bold;
+}
 
 .vcenter {
    display: inline-block;

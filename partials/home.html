@@ -1,8 +1,14 @@
-<div ng-include src="'partials/user_info.html'"></div>
-<!-- <div ng-include src="'partials/user_nav.html'"></div> -->
-<div ng-include src="'partials/top_genres.html'"></div>
-<div ng-include src="'partials/obscurity.html'"></div>
-<div ng-include src="'partials/track_list.html'"></div>
-<div ng-include src="'partials/music_data.html'"></div>
-<!-- <div ng-include src="'partials/you_might_like.html'"></div> -->
-<div ng-include src="'partials/footer.html'"></div>
+<div ng-show="!doneLoading" class="loading-screen">
+	<div ng-include src="'partials/loading.html'"></div>
+</div>
+
+<div ng-show="doneLoading">
+	<div ng-include src="'partials/user_info.html'"></div>
+	<!-- <div ng-include src="'partials/user_nav.html'"></div> -->
+	<div ng-include src="'partials/top_genres.html'"></div>
+	<div ng-include src="'partials/obscurity.html'"></div>
+	<div ng-include src="'partials/track_list.html'"></div>
+	<div ng-include src="'partials/music_data.html'"></div>
+	<div ng-include src="'partials/you_might_like.html'"></div>
+	<div ng-include src="'partials/footer.html'"></div>
+</div>

@@ -1,0 +1,41 @@
+
+.loading-screen {
+	transition: all linear 0.5s;
+
+	.loading-section{
+		background-color: $s-green;
+		color:$o-white;
+		height: 100vh;
+
+		.loading-container {
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			.loading-spinner {
+				text-align: center;
+				animation-name: spin;
+				animation-duration: 1000ms;
+				animation-iteration-count: infinite;
+				animation-timing-function: ease-in; 
+			}
+		}
+	}
+
+	&.ng-hide{
+		opacity: 0;
+		transition: all linear 0.5s;
+		background-color: $o-offwhite;
+	}
+}
+
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}

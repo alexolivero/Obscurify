@@ -1,8 +1,12 @@
 
 .music-data-section {
 	  background-color: #F2F1EF;
-	  padding: 108px 0px;
+	  padding-bottom: 68px;
+	  margin-top: -1px;
 
+	  @media #{$desktop} {
+	  	padding-bottom: 108px;
+	  }
 	  .music-data-header {
 	    display: inline-block;
 	    h2 {
@@ -10,32 +14,77 @@
 		    font-weight: bold;
 		    margin-bottom: 25px;
 		    color: $o-black;
+			letter-spacing: 1.4px;
 
 		    @media #{$tablet} {
 		      font-size: 64px;
-		      margin-bottom: 51px;
+		      margin-bottom: 28px;
 		    }
 	    }
 	  }
 
+	  .moodTitle {
+	  	margin-bottom: 12px;
+	  }
+	  
+	  .moodDescription{
+		color:gray;
+		padding-top:10px;
+	  }
+	  
+	  .time-range {
+		display: inline-block;
+		font-size: 16px;
+		font-weight: bold;
+		margin-bottom: 54px;
+
+
+		@media #{$tablet} {
+		  font-size: 32px;
+		  margin-bottom: 48px;
+		}
+
+		a {
+		  color: $o-black;
+		  text-decoration: line-through;
+
+		  &.active {
+			text-decoration: none;
+		  }
+
+		  &:hover {
+			color: rgba(0,0,0,0.4);
+		  }
+		}
+	  }
+
 	.equalizer-container {
-	    margin: 0px auto 20px;
-	    width: 100%;
+	    margin: 12px auto 48px;
+	    width: 80%;
 	    height: 200px;
 	    display: flex;
 	    align-items: flex-end;
-	    padding: 20px;
 	    position: relative;
 
 	    .avg-line {
     	    position: absolute;
-		    width: 432px;
-		    background-color: black;
+		    width: 233px;
+		    background: repeating-linear-gradient(
+				45deg,
+				#606dbc,
+				#606dbc 10px,
+				#465298 10px,
+				#465298 20px
+				);
 		    display: block;
 		    height: 2px;
 		    z-index: 0;
-		    top: 69px;
-		    font-size: 14px;
+		    top: 100px;
+		    font-size: 12px;
+			
+			@media #{$tablet} {
+				width: 243px;
+			  }
 
 		    &:before {
 		    	content:'avg';
@@ -57,58 +106,167 @@
 		$bars: 6;
 		$multiplier: 100 / $bars;
 
-		&.low {
+		&.level-one {
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
 			        background-color: hsla(140, 73%, 42%, 1);
-			        animation: grow#{$i} #{random(700) + 1500}ms alternate infinite;
+			        animation: grow-one#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
-			    @keyframes grow#{$i} {
+			    @keyframes grow-one#{$i} {
 			        @for $j from 0 through 10 {
 			            #{$j * 10}% {
-			                height: #{random(20)}px;
+			                height: #{random(10)}px;
 			            }
 			        }
 			    }
 			}
 		}
 
-		&.med {
+		&.level-two {
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
 			        background-color: hsla(140, 73%, 42%, 1);
-			        animation: grow-med#{$i} #{random(700) + 1500}ms alternate infinite;
+			        animation: grow-two#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
-			    @keyframes grow-med#{$i} {
+			    @keyframes grow-two#{$i} {
 			        @for $j from 0 through 10 {
 			            #{$j * 10}% {
-			                height: #{random(50)+ 20}px;
+			                height: #{random(20)+ 10}px;
 			            }
 			        }
 			    }
 			}
 		}
 
-		&.high {
+		&.level-three {
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
 			        background-color: hsla(140, 73%, 42%, 1);
-			        animation: grow-high#{$i} #{random(700) + 1500}ms alternate infinite;
+			        animation: grow-three#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
-			    @keyframes grow-high#{$i} {
+			    @keyframes grow-three#{$i} {
 			        @for $j from 0 through 10 {
 			            #{$j * 10}% {
-			                height: #{random(90)+ 70}px;
+			                height: #{random(20)+ 40}px;
 			            }
 			        }
 			    }
 			}
 		}
+		
+		&.level-four {
+			@for $i from 0 through $bars {
+			    .bar:nth-child(#{$i}) {
+			        $saturation: 100 - (($i + 1) * $multiplier);
+			        background-color: hsla(140, 73%, 42%, 1);
+			        animation: grow-four#{$i} #{random(700) + 1500}ms alternate infinite;
+			    }
+			    
+			    @keyframes grow-four#{$i} {
+			        @for $j from 0 through 10 {
+			            #{$j * 10}% {
+			                height: #{random(20)+ 70}px;
+			            }
+			        }
+			    }
+			}
+		}
+		
+		&.level-five {
+			@for $i from 0 through $bars {
+			    .bar:nth-child(#{$i}) {
+			        $saturation: 100 - (($i + 1) * $multiplier);
+			        background-color: hsla(140, 73%, 42%, 1);
+			        animation: grow-five#{$i} #{random(700) + 1500}ms alternate infinite;
+			    }
+			    
+			    @keyframes grow-five#{$i} {
+			        @for $j from 0 through 10 {
+			            #{$j * 10}% {
+			                height: #{random(20)+ 90}px;
+			            }
+			        }
+			    }
+			}
+		}
+		
+		&.level-six {
+			@for $i from 0 through $bars {
+			    .bar:nth-child(#{$i}) {
+			        $saturation: 100 - (($i + 1) * $multiplier);
+			        background-color: hsla(140, 73%, 42%, 1);
+			        animation: grow-six#{$i} #{random(700) + 1500}ms alternate infinite;
+			    }
+			    
+			    @keyframes grow-six#{$i} {
+			        @for $j from 0 through 10 {
+			            #{$j * 10}% {
+			                height: #{random(25)+ 110}px;
+			            }
+			        }
+			    }
+			}
+		}
+		
+		&.level-seven {
+			@for $i from 0 through $bars {
+			    .bar:nth-child(#{$i}) {
+			        $saturation: 100 - (($i + 1) * $multiplier);
+			        background-color: hsla(140, 73%, 42%, 1);
+			        animation: grow-seven#{$i} #{random(700) + 1500}ms alternate infinite;
+			    }
+			    
+			    @keyframes grow-seven#{$i} {
+			        @for $j from 0 through 10 {
+			            #{$j * 10}% {
+			                height: #{random(25)+ 145}px;
+			            }
+			        }
+			    }
+			}
+		}
+		
+		&.level-eight {
+			@for $i from 0 through $bars {
+			    .bar:nth-child(#{$i}) {
+			        $saturation: 100 - (($i + 1) * $multiplier);
+			        background-color: hsla(140, 73%, 42%, 1);
+			        animation: grow-eight#{$i} #{random(700) + 1500}ms alternate infinite;
+			    }
+			    
+			    @keyframes grow-eight#{$i} {
+			        @for $j from 0 through 10 {
+			            #{$j * 10}% {
+			                height: #{random(30)+ 170}px;
+			            }
+			        }
+			    }
+			}
+		}
+		
+		&.level-nine {
+			@for $i from 0 through $bars {
+			    .bar:nth-child(#{$i}) {
+			        $saturation: 100 - (($i + 1) * $multiplier);
+			        background-color: hsla(140, 73%, 42%, 1);
+			        animation: grow-nine#{$i} #{random(700) + 1500}ms alternate infinite;
+			    }
+			    
+			    @keyframes grow-nine#{$i} {
+			        @for $j from 0 through 10 {
+			            #{$j * 10}% {
+			                height: #{random(10)+ 190}px;
+			            }
+			        }
+			    }
+			}
+		}
+		
 	}
 }

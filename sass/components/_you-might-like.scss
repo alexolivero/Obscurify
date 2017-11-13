@@ -4,50 +4,134 @@
   padding-top: 86px;
   padding-bottom: 86px;
 
+  h1 {
+    font-size: 36px;
+    @media #{$tablet} {
+      font-size: 55px;
+    }
+  }
+
   .you-might-like-header {
-    display: inline-block;
+    display: flex;
     font-size: 44px;
     font-weight: bold;
     margin-bottom: 25px;
+    justify-content: space-between;
+    flex-wrap: wrap;
 
       @media #{$tablet} {
         font-size: 64px;
         margin-bottom: 51px;
       }
     }
+	
+  .show-more{
+	 display: inline-block;
+   background: none;
+   border: none;
+   font-size: 14px;
+   font-weight: normal;
+   height: 100%;
+   margin-top: 24px;
+   @media #{$tablet} {
+          position: relative;
+          font-size: 16px;
+          margin-top: 37px;
+        }
+
+   &:hover {
+       &:before {
+        content: '';
+        background: url("../images/refresh-icon.svg") no-repeat;
+        background-size: 14px;
+        width: 14px;
+        height: 14px;
+        display: inline-block;
+        margin-right: 5px;
+        animation-name: spin;
+        animation-duration: 2000ms;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear; 
+        position: relative;
+     }
+   }
+
+   &:before {
+    content: '';
+    background: url("../images/refresh-icon.svg") no-repeat;
+    background-size: 14px;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 5px;
+    position: relative;
+   }
+
+  }
+
+  .you-might-like-card-container {
+    margin-top: 20px;
+
+    @media #{$tablet} {
+      margin-top: 40px;
+    }
+  }
 
   .you-might-like-card {
     padding: 20px 15px 10px 20px;
     background-color: #FFFFFF;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
     position: relative;
-    margin-bottom: 120px;
-    height: 354px;
-    width: 320px;
+    margin-bottom: 180px;
+    height: 280px;
+    width: 280px;
+    margin-right: auto;
+    margin-left: auto;
+
+    @media #{$tablet} {
+      height: 240px;
+      width: 240px;
+      margin-right: 0;
+      margin-left: 0;
+    }
+
+    @media #{$desktop} {
+      height: 280px;
+      width: 280px;
+    }
 
     h4 {
-      font-size: 18px;
+      font-size: 16px;
       color: $o-black;
       margin-bottom: 5px;
-      letter-spacing: 2.25px
+      letter-spacing: 1.5px;
     }
 
     p {
-      font-size: 14px;
+      font-size: 12px;
       color: $o-offwhite;
-      letter-spacing: 2.25px;
+      letter-spacing: 1.4px;
 
     }
 
     .you-might-like-card-img {
       position: relative;
-      width: 320px;
-      height: 320px;
+      width: 280px;
+      height: 280px;
       box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
       margin-top: 20px;
 
-    }
-  }
+      @media #{$tablet} {
+        height: 240px;
+        width: 240px;
+      }
 
-    
+      @media #{$desktop} {
+        height: 280px;
+        width: 280px;
+      }
+
+
+    }
+  }    
 }

@@ -2,6 +2,7 @@
 @import "base/mixins";
 @import "base/commons";
 
+@import "components/loading";
 @import "components/header";
 @import "components/landing";
 @import "components/user-info";
@@ -13,3 +14,5 @@
 @import "components/music-data";
 
 @import "components/footer";
+@import "components/faq";
+@import "components/about";

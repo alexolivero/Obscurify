@@ -60,7 +60,7 @@
     }
 
     &:hover { 
-      text-decoration: line-through;
+      text-decoration: underline;
       color: $o-black;
       background-color: $o-white;
  
@@ -84,6 +84,7 @@
     font-size: 24px;
     text-align: center;
     letter-spacing: 4.5px;
+	padding-bottom:10px;
 
     span {
       margin-right: 12px;

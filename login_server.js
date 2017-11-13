@@ -14,7 +14,7 @@ var cookieParser = require('cookie-parser');
 
 var client_id = process.argv[2];
 var client_secret = process.argv[3];
-var redirect_uri = 'http://67.205.147.250/callback'; // Your redirect uri
+var redirect_uri = 'http://obscurifymusic.com/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters

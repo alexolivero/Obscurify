@@ -49,6 +49,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 			return res.status(404).send("OMG NO :(");
 		}
 		var obscurifyScore = 0;
+		var recentObscurifyScore = 0;
 		var topGenres = [];
 		var genres = {};
 		var shortTermTrackIDs = [];
@@ -75,6 +76,9 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 			shortTermArtistIDs.push(shortTermArtists.items[i].id);
 			shortTermArtists.items[i].randomGenres = findRandomGenres(shortTermArtists.items[i]);
 			shortTermArtists.items[i].starRating = findStarRating(shortTermArtists.items[i].popularity);
+			
+			//where the magic happens
+			recentObscurifyScore = recentObscurifyScore + (50/shortTermArtists.items.length)*(parseInt(shortTermArtists.items[i].popularity * (1 - i/shortTermArtists.items.length)));
 		}
 	  
 		for(var i = 0; i < longTermArtists.items.length; i++){
@@ -99,20 +103,30 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		}
 		
 		obscurifyScore = parseInt(obscurifyScore/10);
+		recentObscurifyScore = parseInt(recentObscurifyScore/10);
 		topGenres.sort(Comparator);
-		
-		
+		      		
 		//now in this section we're trying to find the energy, happiness,
 		//acousticness, and danceability of your top 50 all-time/recent tracks
+		//also find recommended tracks
 		//and also query the Obscurify database to get user averages and whatnot
 		const audioFeatureAndObscurifyUrls= [			  
 		  "https://api.spotify.com/v1/audio-features?ids=" + longTermTrackIDs.join(),
 		  "https://api.spotify.com/v1/audio-features?ids=" + shortTermTrackIDs.join(),
-		  "http://67.205.147.250/api/getObscurifyData?obscurifyScore=" + obscurifyScore + "&country=" + response[4].country
+		  "http://67.205.147.250/api/getObscurifyData?obscurifyScore=" + obscurifyScore + "&country=" + response[4].country,
+		  "https://api.spotify.com/v1/recommendations?seed_artists=" 
+				+ longTermArtistIDs[Math.floor(Math.random() * longTermArtistIDs.length)] + ","
+				+ shortTermArtistIDs[Math.floor(Math.random() * shortTermArtistIDs.length)] + "&seed_tracks="
+				+ longTermTrackIDs[Math.floor(Math.random() * longTermTrackIDs.length)] + "," 
+				+ shortTermTrackIDs[Math.floor(Math.random() * shortTermTrackIDs.length)]
+				+ "&max_popularity=55" + "&min_popularity=35" + "&limit=40"
+		  
 		];
+		
 		
 		var responseToTheFrontEnd = {
 						'displayName':response[4].display_name,
+						'userID':response[4].id,
 						'country':response[4].country,
 						'imageURL':response[4].images,
 						'longTermArtists':longTermArtists,
@@ -120,6 +134,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 						'longTermTracks':longTermTracks,
 						'shortTermTracks':shortTermTracks,
 						'obscurifyScore':obscurifyScore,
+						'recentObscurifyScore':recentObscurifyScore,
 						'topGenres':topGenres,
 						'longTermAudioFeatures':null,
 						'shortTermAudioFeatures':null,
@@ -127,7 +142,8 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 						'percentileByCountry':null,
 						'globalAverageScore':null,
 						'userCountByCountry':null,
-						'audioFeatureAverages':null
+						'audioFeatureAverages':null,
+						'recommendedTracks':null
 					};
 
 		async.map(audioFeatureAndObscurifyUrls, httpGet, function (err, audioFeatureAndObscurifyDataResponse){
@@ -135,6 +151,32 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				//so if something went wrong, just send what we've already got back to the client
 				return res.send(responseToTheFrontEnd);
 			}
+			
+			var recommendedTracksResponse = audioFeatureAndObscurifyDataResponse[3].tracks;
+			var recommendedTracks = [];
+			var artistsAppearingInResponse = [];
+			if(recommendedTracksResponse != undefined ){
+				for(var i = 0; i < recommendedTracksResponse.length; i++){
+					if(
+						artistsAppearingInResponse.indexOf(recommendedTracksResponse[i].artists[0].name) < 0 &&
+						longTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0 &&
+						shortTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0
+						){
+					  recommendedTracks.push(
+						{
+						  trackName : recommendedTracksResponse[i].name,
+						  popularity : recommendedTracksResponse[i].popularity,
+						  artistName : recommendedTracksResponse[i].artists[0].name,
+						  albumName : recommendedTracksResponse[i].album.name,
+						  albumImageUrl : recommendedTracksResponse[i].album.images[0].url,
+						  uri : recommendedTracksResponse[i].uri
+						}
+					  );
+					  artistsAppearingInResponse.push(recommendedTracksResponse[i].artists[0].name);
+					}
+				}
+			}
+			
 
 			var longTermAudioFeatures = {
 				'danceability' : 0,
@@ -184,6 +226,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				responseToTheFrontEnd.audioFeatureAverages = audioFeatureAndObscurifyDataResponse[2].audioFeatureAverages;
 				responseToTheFrontEnd.longTermAudioFeatures = longTermAudioFeatures;
 				responseToTheFrontEnd.shortTermAudioFeatures = shortTermAudioFeatures;
+				responseToTheFrontEnd.recommendedTracks = recommendedTracks;
 				res.send(responseToTheFrontEnd);
 				
 				//make a call to the database_server and toss this into MONGO!!!

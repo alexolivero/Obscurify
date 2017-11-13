@@ -107,7 +107,7 @@ app.get('/api/getObscurifyData', function(req, res) {
 	
 	MongoClient.connect(url, function(err, db) {
 	  if (err) throw err;
-	  var mySort = { obscurifyScore: 1 };
+	  var mySort = { obscurifyScore: -1 };
 	  db.collection("users").find({}, { 
 			//only supposed to specify what you DON'T want returned
 			_id: false,
@@ -134,26 +134,30 @@ app.get('/api/getObscurifyData', function(req, res) {
 		
 		for(var i = 0; i < result.length; i++){
 			globalAverageScore += result[i].obscurifyScore;
-			audioFeatureAverages.danceability += result[i].longTermAudioFeatures.danceability;
-			audioFeatureAverages.energy += result[i].longTermAudioFeatures.energy;
-			audioFeatureAverages.happiness += result[i].longTermAudioFeatures.happiness;
-			audioFeatureAverages.acousticness += result[i].longTermAudioFeatures.acousticness;
+			
 			if(result[i].country == req.query.country){
 				obscurifyScores.push(result[i].obscurifyScore);
+				
+				audioFeatureAverages.danceability += result[i].longTermAudioFeatures.danceability;
+				audioFeatureAverages.energy += result[i].longTermAudioFeatures.energy;
+				audioFeatureAverages.happiness += result[i].longTermAudioFeatures.happiness;
+				audioFeatureAverages.acousticness += result[i].longTermAudioFeatures.acousticness;
 			}			
 		}
 		globalAverageScore /= result.length;
-		audioFeatureAverages.danceability /= result.length;
-		audioFeatureAverages.energy /= result.length;
-		audioFeatureAverages.happiness /= result.length;
-		audioFeatureAverages.acousticness /= result.length;
+		
 		
 		if(obscurifyScores.length == 0){
 			percentileByCountry = 100;
+			audioFeatureAverages.danceability = 0.57;
+			audioFeatureAverages.energy = 0.65;
+			audioFeatureAverages.happiness = 0.45;
+			audioFeatureAverages.acousticness = 0.22; //values pulled from obscurify 1.0 global averages
+			
 		} else{
 			var scoreIndex = -1;
 			for(var i = 0; i < obscurifyScores.length; i++){
-				if(req.query.obscurifyScore < obscurifyScores[i]){
+				if(req.query.obscurifyScore >= obscurifyScores[i]){
 					scoreIndex = i;
 					break;
 				}
@@ -161,6 +165,11 @@ app.get('/api/getObscurifyData', function(req, res) {
 			if(scoreIndex != -1){
 				percentileByCountry = (scoreIndex/obscurifyScores.length)*100;
 			}
+			
+			audioFeatureAverages.danceability /= obscurifyScores.length;
+			audioFeatureAverages.energy /= obscurifyScores.length;
+			audioFeatureAverages.happiness /= obscurifyScores.length;
+			audioFeatureAverages.acousticness /= obscurifyScores.length;
 		}
 
 		res.send(
@@ -175,7 +184,7 @@ app.get('/api/getObscurifyData', function(req, res) {
 		db.close();
 	  });
 	});
-	
+	 
 });
 
 console.log('Listening on 8082');

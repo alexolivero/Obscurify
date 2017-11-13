@@ -1,9 +1,9 @@
 .track-list {
   background-color: #F2F1EF;
-  padding: 58px 0px;
+  padding: 58px 0px 32px;
 
   @media #{$tablet} {
-    padding: 108px 0px;
+    padding: 108px 0px 58px;
   }
 
   .track-list-header {
@@ -45,6 +45,13 @@
       display: flex;
     }
   }
+  
+  .obscurifyScore {
+	display:inline-flex;
+	padding-left:8px;
+	font-size: 14px;
+    font-weight: medium;
+  }
 
   .track-list-item-container {
     margin-left: 2px;
@@ -59,11 +66,11 @@
       display: inline-block;
       margin-right: 100px;
       position: relative;
-      margin-bottom: 2em;
+      margin-bottom: 10em;
       padding: 0;
 
       @media #{$tablet} {
-        
+
       }
 
       @media #{$desktop} {
@@ -77,6 +84,15 @@
         padding-top: 27px;
         padding-left: 5px;
         padding-right: 5px;
+      
+        @media #{$tablet} {
+          width: 500px;
+          margin: 0 auto;
+        }
+
+        @media #{$desktop} {
+          width: 100%;
+        }
 
         &::-webkit-scrollbar {
           display: none;
@@ -85,7 +101,7 @@
       }
 
       .overlay-gradient {
-        background-image: linear-gradient(-180deg, rgba(242, 241, 239, 0.5) 0%, #F2F1EF 100%);
+        background-image: linear-gradient(-180deg, rgba(242, 241, 239, 0.0) 0%, #F2F1EF 100%);
         position: absolute;
         display: block;
         height: 100px;
@@ -101,9 +117,32 @@
     font-weight: bold;
     margin-bottom: 30px;
     color: $o-black;
+    display: inline-block;
 
     @media #{$tablet} {
       margin-bottom: 60px;
+    }
+  }
+
+  button {
+    color: $o-black;
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: medium;
+    margin-left: 8px;
+
+    &:after {
+      content: "";
+      display: inline-block;
+      margin-left:10px;
+      width: 7px;
+      height: 12px;
+      background: url("../images/chevron.svg") no-repeat center center;
+      transform: rotate(-90deg);
+      position: relative;
+      top: 1px;
+
     }
   }
 
@@ -126,10 +165,18 @@
         margin-left: 10px;
       }
 
+      a {
+        color: $o-black;
+
+        &:hover, &:focus {
+          text-decoration: underline;
+        }
+      }
+
       h3 {
         font-size: 12px;
         margin-bottom: 2px;
-        letter-spacing: 2px;
+        letter-spacing: 1.4px;
 
         @media #{$tablet} {
           font-size: 14px;
