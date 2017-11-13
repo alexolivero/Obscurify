@@ -106,7 +106,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 				$scope.longTermAcousticnessDescriptor = findMoodDescriptor(longTermAcousticnessRatio);
 			}
 			catch(error){
-				$window.location.href = 'http://67.205.147.250/#!/error';
+				$window.location.href = 'http://obscurifymusic.com/#!/error';
 			}
 			
 			$scope.doneLoading = true;					
@@ -115,7 +115,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 			$scope.doneLoading = true;
 			console.log(response);		  
 			//if it doesn't work, if your authorization code expired or anything, just go back to the start and log in again
-			$window.location.href = 'http://67.205.147.250';
+			$window.location.href = 'http://obscurifymusic.com';
         });
 
 	$scope.makePlaylist = function(allTimeSelected){
@@ -181,14 +181,14 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 	
 	var findBarCSSClass = function(ratio){
 		
-		if(ratio > 2.2){return "equalizer-container level-nine";}
-		else if(ratio > 1.7){return "equalizer-container level-eight";}
-		else if(ratio > 1.3){return "equalizer-container level-seven";}
-		else if(ratio > 1.1){return "equalizer-container level-six";}
-		else if(ratio > 0.9){return "equalizer-container level-five";}
-		else if(ratio > 0.6){return "equalizer-container level-four";}
-		else if(ratio > 0.4){return "equalizer-container level-three";}
-		else if(ratio > 0.2){return "equalizer-container level-two";}
+		if(ratio > 1.8){return "equalizer-container level-nine";}
+		else if(ratio > 1.4){return "equalizer-container level-eight";}
+		else if(ratio > 1.2){return "equalizer-container level-seven";}
+		else if(ratio > 1.05){return "equalizer-container level-six";}
+		else if(ratio > 0.95){return "equalizer-container level-five";}
+		else if(ratio > 0.8){return "equalizer-container level-four";}
+		else if(ratio > 0.6){return "equalizer-container level-three";}
+		else if(ratio > 0.4){return "equalizer-container level-two";}
 		else{ return "equalizer-container level-one";}
 		
 	}
