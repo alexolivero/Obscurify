@@ -42,7 +42,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 		
 	$http({
   			method : "get",
-  			url : 'http://67.205.147.250/spotifyData/' + $routeParams.token + '/getUserData'
+  			url : 'https://obscurifymusic.com/spotifyData/' + $routeParams.token + '/getUserData'
   		}).then(function (response) {
 			
 			console.log(response);
@@ -106,7 +106,8 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 				$scope.longTermAcousticnessDescriptor = findMoodDescriptor(longTermAcousticnessRatio);
 			}
 			catch(error){
-				$window.location.href = 'http://obscurifymusic.com/#!/error';
+				console.log(error);
+				$window.location.href = 'https://obscurifymusic.com/#!/error';
 			}
 			
 			$scope.doneLoading = true;					
@@ -115,7 +116,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 			$scope.doneLoading = true;
 			console.log(response);		  
 			//if it doesn't work, if your authorization code expired or anything, just go back to the start and log in again
-			$window.location.href = 'http://obscurifymusic.com';
+			$window.location.href = 'https://obscurifymusic.com';
         });
 
 	$scope.makePlaylist = function(allTimeSelected){

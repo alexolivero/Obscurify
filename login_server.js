@@ -6,6 +6,14 @@
  * For more information, read
  * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
  */
+ 
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('/etc/letsencrypt/live/obscurifymusic.com/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('/etc/letsencrypt/live/obscurifymusic.com/fullchain.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
 
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
@@ -14,7 +22,7 @@ var cookieParser = require('cookie-parser');
 
 var client_id = process.argv[2];
 var client_secret = process.argv[3];
-var redirect_uri = 'http://obscurifymusic.com/callback'; // Your redirect uri
+var redirect_uri = 'https://obscurifymusic.com/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
@@ -150,5 +158,10 @@ app.get('/refresh_token', function(req, res) {
 });
 
 
-console.log('Listening on 8080');
-app.listen(8080, '0.0.0.0');
+//console.log('Listening on 8080');
+//app.listen(8080, '0.0.0.0');
+
+var httpsServer = https.createServer(credentials, app);
+console.log('Listening on 8443');
+httpsServer.listen(8443);
+

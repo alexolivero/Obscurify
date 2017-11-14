@@ -1,8 +1,16 @@
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('/etc/letsencrypt/live/obscurifymusic.com/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('/etc/letsencrypt/live/obscurifymusic.com/fullchain.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
-const async = require('async');
+const async = require('async'); 
 
 var obscurify_secret = process.argv[2];
 
@@ -113,7 +121,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		const audioFeatureAndObscurifyUrls= [			  
 		  "https://api.spotify.com/v1/audio-features?ids=" + longTermTrackIDs.join(),
 		  "https://api.spotify.com/v1/audio-features?ids=" + shortTermTrackIDs.join(),
-		  "http://67.205.147.250/api/getObscurifyData?obscurifyScore=" + obscurifyScore + "&country=" + response[4].country,
+		  "https://obscurifymusic.com/api/getObscurifyData?obscurifyScore=" + obscurifyScore + "&country=" + response[4].country,
 		  "https://api.spotify.com/v1/recommendations?seed_artists=" 
 				+ longTermArtistIDs[Math.floor(Math.random() * longTermArtistIDs.length)] + ","
 				+ shortTermArtistIDs[Math.floor(Math.random() * shortTermArtistIDs.length)] + "&seed_tracks="
@@ -149,6 +157,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		async.map(audioFeatureAndObscurifyUrls, httpGet, function (err, audioFeatureAndObscurifyDataResponse){
 			if (err || audioFeatureAndObscurifyDataResponse[0].error){
 				//so if something went wrong, just send what we've already got back to the client
+				console.log(err);
 				return res.send(responseToTheFrontEnd);
 			}
 			
@@ -240,7 +249,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 					longTermAudioFeatures.acousticness > 0
 				){
 					request({
-						url: 'http://67.205.147.250/api/saveUserHistory',
+						url: 'https://obscurifymusic.com/api/saveUserHistory',
 						method: "POST",
 						json: true,
 						body: {
@@ -255,7 +264,8 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 								'shortTermTrackIDs' : shortTermTrackIDs,
 								'obscurify_secret' : obscurify_secret // so ya'll aint be cheatin
 							} 
-					}, function (error, response, body){});
+					}, function (error, response, body){
+					});
 				}
 				
 			}
@@ -313,5 +323,9 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 });
 
 
-console.log('Listening on 8081');
-app.listen(8081, '0.0.0.0');
+//console.log('Listening on 8081');
+//app.listen(8081, '0.0.0.0');
+
+var httpsServer = https.createServer(credentials, app);
+console.log('Listening on 8444');
+httpsServer.listen(8444);

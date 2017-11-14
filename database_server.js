@@ -1,3 +1,11 @@
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('/etc/letsencrypt/live/obscurifymusic.com/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('/etc/letsencrypt/live/obscurifymusic.com/fullchain.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
@@ -187,5 +195,10 @@ app.get('/api/getObscurifyData', function(req, res) {
 	 
 });
 
-console.log('Listening on 8082');
-app.listen(8082, '0.0.0.0');
+//console.log('Listening on 8082');
+//app.listen(8082, '0.0.0.0');
+
+var httpsServer = https.createServer(credentials, app);
+console.log('Listening on 8445');
+httpsServer.listen(8445);
+
