@@ -1,0 +1,23 @@
+<div class="container country-breakdown">
+  <h1>Most Loved</h1>
+  <div class="row">
+    <div class="col-md-4">
+      <select ng-model="selectedCountry" ng-change="getCountryBreakdown(selectedCountry.code)" ng-options="country as country.text for country in countries"></select>
+	  <p class="country-breakdown-description">These artists appear in more Top 10 All-Time Obscurify results than any others in {{selectedCountry.text}}</p>
+	</div>
+    <div class="col-md-4">
+      <ul class="artist-list">
+        <li ng-repeat="n in [0,1,2,3,4] track by $index">
+			<a ng-href="{{countryBreakdown.topArtists[n].uri}}">{{n+1}} / {{countryBreakdown.topArtists[n].name}}</a>
+		</li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <ul class="artist-list">
+        <li ng-repeat="n in [5,6,7,8,9] track by $index">
+			<a ng-href="{{countryBreakdown.topArtists[n].uri}}">{{n+1}} / {{countryBreakdown.topArtists[n].name}}</a>
+		</li>
+      </ul>
+    </div>
+  </div>
+</div>

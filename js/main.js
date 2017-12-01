@@ -40,6 +40,27 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 	var recommendedTracks = [];
 	$scope.recommendedTrackDisplayGroup = []; //should have max size of 6
 		
+	$scope.countries = [
+		{code: 'AU',	text: 'Australia', demonym: 'Australian'}, 
+		{code: 'BR',	text: 'Brazil',	demonym: 'Brazilian'},
+		{code: 'CA',	text: 'Canada',	demonym: 'Canadian' }, 
+		{code: 'DK',	text: 'Denmark', demonym: 'Danish'}, 
+		{code: 'FR',	text: 'France',	demonym: 'French'}, 
+		{code: 'DE',	text: 'Germany', demonym: 'German'}, 
+		{code: 'IT',	text: 'Italy', demonym: 'Italian'}, 
+		{code: 'MX',	text: 'Mexico',	demonym: 'Mexican'}, 
+		{code: 'NL',	text: 'Netherlands', demonym: 'Dutch'}, 
+		{code: 'NZ',	text: 'New Zealand', demonym: 'New Zealand'}, 
+		{code: 'NO',	text: 'Norway',	demonym: 'Norwegian'},
+		{code: 'PL',	text: 'Poland',	demonym: 'Polish'}, 
+		{code: 'PT',	text: 'Portugal', demonym: 'Portuguese'},
+		{code: 'ES',	text: 'Spain', demonym: 'Spanish'}, 
+		{code: 'SE',	text: 'Sweden',	demonym: 'Swedish'}, 
+		{code: 'TR',	text: 'Turkey', demonym: 'Turkish'},
+		{code: 'US',	text: 'United States',	demonym: 'US' }, 
+		{code: 'GB',	text: 'United Kingdom',	demonym: 'UK' }
+	];
+		
 	$http({
   			method : "get",
   			url : 'https://obscurifymusic.com/spotifyData/' + $routeParams.token + '/getUserData'
@@ -48,16 +69,20 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 			console.log(response);
 			
 			if(response.data.displayName != null && response.data.displayName.indexOf(' ') > 0){
-				response.data.displayName = response.data.displayName.substring(0, response.data.displayName.indexOf(' '));
+				$scope.displayName = " " + response.data.displayName.substring(0, response.data.displayName.indexOf(' '));
 			}
-			$scope.displayName = response.data.displayName;
+			else if(response.data.displayName == null){
+				$scope.displayName = "";
+			}
 			if(response.data.imageURL.length > 0){
 				$scope.imageURL = response.data.imageURL[0].url;
+			} else{
+				$scope.imageURL = null;
 			}			
-			$scope.longTermArtists = response.data.longTermArtists;
-			$scope.shortTermArtists = response.data.shortTermArtists;
-			$scope.longTermTracks = response.data.longTermTracks;
-			$scope.shortTermTracks = response.data.shortTermTracks;
+			$scope.longTermArtists = response.data.longTermArtists.items;
+			$scope.shortTermArtists = response.data.shortTermArtists.items;
+			$scope.longTermTracks = response.data.longTermTracks.items;
+			$scope.shortTermTracks = response.data.shortTermTracks.items;
 			$scope.obscurifyScore = response.data.obscurifyScore;
 			$scope.recentObscurifyScore = response.data.recentObscurifyScore;
 			$scope.topGenres = response.data.topGenres;
@@ -69,11 +94,15 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 			$scope.percentileByCountry = Math.trunc(response.data.percentileByCountry);
 			$scope.globalAverageScore = Math.round(response.data.globalAverageScore);
 			$scope.totalUserCount = response.data.totalUserCount;
-			$scope.country = response.data.country;
-			recommendedTracks = response.data.recommendedTracks;
+			$scope.shortTermHeader = "Current";
+			var country = response.data.country;
+			$scope.countryDemonym = findCountryDemonymFromCode(response.data.country);
+			$scope.countryBreakdown = null;
+			recommendedTracks = response.data.recommendedTracks;			
 			if(recommendedTracks != null && recommendedTracks.length > 0){
 				$scope.showMoreClicked();
 			}			
+			$scope.userHistory = response.data.userHistory;
 			
 			try{
 				var longTermHappinessRatio = longTermAudioFeatures.happiness / audioFeatureAverages.happiness;
@@ -81,15 +110,23 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 				var longTermDanceabilityRatio = longTermAudioFeatures.danceability / audioFeatureAverages.danceability;
 				var longTermAcousticnessRatio = longTermAudioFeatures.acousticness / audioFeatureAverages.acousticness;
 				
-				var shortTermHappinessRatio = shortTermAudioFeatures.happiness / audioFeatureAverages.happiness;
-				var shortTermEnergyRatio = shortTermAudioFeatures.energy / audioFeatureAverages.energy;
-				var shortTermDanceabilityRatio = shortTermAudioFeatures.danceability / audioFeatureAverages.danceability;
-				var shortTermAcousticnessRatio = shortTermAudioFeatures.acousticness / audioFeatureAverages.acousticness;
-				
 				$scope.longTermHappinessLevel = findBarCSSClass(longTermHappinessRatio);
 				$scope.longTermAcousticnessLevel = findBarCSSClass(longTermAcousticnessRatio);
 				$scope.longTermDanceabilityLevel = findBarCSSClass(longTermDanceabilityRatio);
 				$scope.longTermEnergyLevel = findBarCSSClass(longTermEnergyRatio);
+				
+				$scope.longTermHappinessDescriptor = findMoodDescriptor(longTermHappinessRatio);
+				$scope.longTermEnergyDescriptor = findMoodDescriptor(longTermEnergyRatio);
+				$scope.longTermDanceabilityDescriptor = findMoodDescriptor(longTermDanceabilityRatio);
+				$scope.longTermAcousticnessDescriptor = findMoodDescriptor(longTermAcousticnessRatio);
+			}
+			catch(error){}
+				
+			try{
+				var shortTermHappinessRatio = shortTermAudioFeatures.happiness / audioFeatureAverages.happiness;
+				var shortTermEnergyRatio = shortTermAudioFeatures.energy / audioFeatureAverages.energy;
+				var shortTermDanceabilityRatio = shortTermAudioFeatures.danceability / audioFeatureAverages.danceability;
+				var shortTermAcousticnessRatio = shortTermAudioFeatures.acousticness / audioFeatureAverages.acousticness;
 				
 				$scope.shortTermHappinessLevel = findBarCSSClass(shortTermHappinessRatio);
 				$scope.shortTermAcousticnessLevel = findBarCSSClass(shortTermAcousticnessRatio);
@@ -100,15 +137,20 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 				$scope.shortTermEnergyDescriptor = findMoodDescriptor(shortTermEnergyRatio);
 				$scope.shortTermDanceabilityDescriptor = findMoodDescriptor(shortTermDanceabilityRatio);
 				$scope.shortTermAcousticnessDescriptor = findMoodDescriptor(shortTermAcousticnessRatio);
-				$scope.longTermHappinessDescriptor = findMoodDescriptor(longTermHappinessRatio);
-				$scope.longTermEnergyDescriptor = findMoodDescriptor(longTermEnergyRatio);
-				$scope.longTermDanceabilityDescriptor = findMoodDescriptor(longTermDanceabilityRatio);
-				$scope.longTermAcousticnessDescriptor = findMoodDescriptor(longTermAcousticnessRatio);
 			}
-			catch(error){
-				console.log(error);
-				$window.location.href = 'https://obscurifymusic.com/#!/error';
+			catch(error){}
+			
+			//get country breakdown
+			var countryCode = 'US';
+			$scope.selectedCountry = $scope.countries[ $scope.countries.length - 2]; // US is default, and its second from last
+			for(var i = 0 ; i < $scope.countries.length; i++){
+				if(country == $scope.countries[i].code){
+					countryCode = country;
+					$scope.selectedCountry = $scope.countries[i];
+					break;
+				}
 			}
+			$scope.getCountryBreakdown(countryCode);
 			
 			$scope.doneLoading = true;					
 
@@ -120,17 +162,23 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
         });
 
 	$scope.makePlaylist = function(allTimeSelected){
+		var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+			"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+		];
 	
 		var playlistName = "";
 		if(allTimeSelected){
 			playlistName = "All Time Top Tracks // Obscurify";
 		}
+		else if($scope.shortTermHeader != "Current"){
+			playlistName = $scope.shortTermHeader + ' // Obscurify';
+		}
 		else{
 			var dateObj = new Date();
-			var month = dateObj.getMonth() + 1; //months from 1-12
+			var month = monthNames[dateObj.getMonth()]; //months from 1-12
 			var day = dateObj.getDay();
-			var year = dateObj.getFullYear();
-			var newdate = month + "." + day + "." + year;
+			var year = dateObj.getFullYear() % 100;
+			var newdate = month + " " + day + " " + year;
 			playlistName = newdate + ' // Obscurify';
 		}
   		$http({
@@ -153,8 +201,8 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 			else{
 				tracksSelected = $scope.shortTermTracks;
 			}
-  			for(var i = 0; i < tracksSelected.items.length; i++){
-  				uri_array.push(tracksSelected.items[i].uri);
+  			for(var i = 0; i < tracksSelected.length; i++){
+  				uri_array.push(tracksSelected[i].uri);
   			}
   			$http({
   			method : "post",
@@ -171,6 +219,22 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
   		});
     }
 	
+	$scope.historySelected = function(history){
+		$http({
+  			method : "get",
+  			url : 'https://obscurifymusic.com/spotifyData/getHistoryItems?artistIDs=' +
+				history.shortTermArtistIDs.join() + 
+				"&trackIDs=" + history.shortTermTrackIDs.join() +
+				"&accessToken=" + $routeParams.token
+  			}).then(function (response) {
+				$scope.shortTermHeader = history.formattedDate;
+				$scope.shortTermArtists = response.data.artists;
+				$scope.shortTermTracks = response.data.tracks;
+				$scope.recentObscurifyScore = response.data.recentObscurifyScore;
+  				console.log(response);
+  			});
+	}
+	
 	$scope.showMoreClicked = function(){
 		$scope.recommendedTrackDisplayGroup = [];
 		for(var i = 0; i < 6; i++){
@@ -180,14 +244,27 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 		}
 	}
 	
+	$scope.getCountryBreakdown = function(code){
+		$scope.countryBreakdown = [];
+		$http({
+			method : "get",
+			url : 'https://obscurifymusic.com/api/getCountryBreakdown/' + code + '/' + $routeParams.token
+		}).then(function (response) {
+			$scope.countryBreakdown = response.data;
+			console.log(response.data);
+		}, function myError(err) {
+			console.log(err);
+		});	
+	}
+	
 	var findBarCSSClass = function(ratio){
 		
 		if(ratio > 1.8){return "equalizer-container level-nine";}
 		else if(ratio > 1.4){return "equalizer-container level-eight";}
-		else if(ratio > 1.2){return "equalizer-container level-seven";}
+		else if(ratio > 1.15){return "equalizer-container level-seven";}
 		else if(ratio > 1.05){return "equalizer-container level-six";}
 		else if(ratio > 0.95){return "equalizer-container level-five";}
-		else if(ratio > 0.8){return "equalizer-container level-four";}
+		else if(ratio > 0.85){return "equalizer-container level-four";}
 		else if(ratio > 0.6){return "equalizer-container level-three";}
 		else if(ratio > 0.4){return "equalizer-container level-two";}
 		else{ return "equalizer-container level-one";}
@@ -196,11 +273,11 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 	
 	var findMoodDescriptor = function(ratio){
 		
-		if(ratio > 1.009){
+		if(ratio > 1.01){
 			var percentDifference = ratio*100 - 100;
 			return percentDifference.toFixed(1) + "% higher than";
 		}
-		else if(ratio < 0.999){
+		else if(ratio < 0.99){
 			var percentDifference = 100 - ratio*100;
 			return percentDifference.toFixed(1) + "% lower than";
 		}
@@ -209,6 +286,19 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 		}
 		
 	}
+	
+	var findCountryDemonymFromCode = function(code){		
+			
+		for(var i = 0 ; i < $scope.countries.length; i++){
+			if(code == $scope.countries[i].code){
+				return $scope.countries[i].demonym;
+				break;
+			}
+		}
+		return code;
+	}
+	
+	
 	
 	  
 

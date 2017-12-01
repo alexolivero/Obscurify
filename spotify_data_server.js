@@ -41,7 +41,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		}
 	  );
 	}
-
+	
 	//these are the urls we gotta hit in no particular order to find the users top artists/tracks
 	//for long and short time ranges. and the last one is to get profile data such as your image URL
 	const urls= [			  
@@ -54,6 +54,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 
 	async.map(urls, httpGet, function (err, response){
 		if (err || response[0].error){
+			//console.log(response[0].error);
 			return res.status(404).send("OMG NO :(");
 		}
 		var obscurifyScore = 0;
@@ -119,15 +120,17 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		//also find recommended tracks
 		//and also query the Obscurify database to get user averages and whatnot
 		const audioFeatureAndObscurifyUrls= [			  
-		  "https://api.spotify.com/v1/audio-features?ids=" + longTermTrackIDs.join(),
-		  "https://api.spotify.com/v1/audio-features?ids=" + shortTermTrackIDs.join(),
-		  "https://obscurifymusic.com/api/getObscurifyData?obscurifyScore=" + obscurifyScore + "&country=" + response[4].country,
-		  "https://api.spotify.com/v1/recommendations?seed_artists=" 
+		    "https://api.spotify.com/v1/audio-features?ids=" + longTermTrackIDs.join(),
+		    "https://api.spotify.com/v1/audio-features?ids=" + shortTermTrackIDs.join(),
+		    "https://obscurifymusic.com/api/getObscurifyData?obscurifyScore=" + obscurifyScore +
+				"&country=" + response[4].country + "&obscurify_secret=" + obscurify_secret,
+		    "https://api.spotify.com/v1/recommendations?seed_artists=" 
 				+ longTermArtistIDs[Math.floor(Math.random() * longTermArtistIDs.length)] + ","
 				+ shortTermArtistIDs[Math.floor(Math.random() * shortTermArtistIDs.length)] + "&seed_tracks="
 				+ longTermTrackIDs[Math.floor(Math.random() * longTermTrackIDs.length)] + "," 
 				+ shortTermTrackIDs[Math.floor(Math.random() * shortTermTrackIDs.length)]
-				+ "&max_popularity=55" + "&min_popularity=35" + "&limit=40"
+				+ "&max_popularity=55" + "&min_popularity=35" + "&limit=40",
+			"https://obscurifymusic.com/api/getUserHistory?&userID=" + response[4].id + "&obscurify_secret=" + obscurify_secret
 		  
 		];
 		
@@ -151,7 +154,8 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 						'globalAverageScore':null,
 						'userCountByCountry':null,
 						'audioFeatureAverages':null,
-						'recommendedTracks':null
+						'recommendedTracks':null,
+						'userHistory':null
 					};
 
 		async.map(audioFeatureAndObscurifyUrls, httpGet, function (err, audioFeatureAndObscurifyDataResponse){
@@ -164,28 +168,30 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 			var recommendedTracksResponse = audioFeatureAndObscurifyDataResponse[3].tracks;
 			var recommendedTracks = [];
 			var artistsAppearingInResponse = [];
-			if(recommendedTracksResponse != undefined ){
-				for(var i = 0; i < recommendedTracksResponse.length; i++){
-					if(
-						artistsAppearingInResponse.indexOf(recommendedTracksResponse[i].artists[0].name) < 0 &&
-						longTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0 &&
-						shortTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0
-						){
-					  recommendedTracks.push(
-						{
-						  trackName : recommendedTracksResponse[i].name,
-						  popularity : recommendedTracksResponse[i].popularity,
-						  artistName : recommendedTracksResponse[i].artists[0].name,
-						  albumName : recommendedTracksResponse[i].album.name,
-						  albumImageUrl : recommendedTracksResponse[i].album.images[0].url,
-						  uri : recommendedTracksResponse[i].uri
+			try{
+				if(recommendedTracksResponse != undefined ){
+					for(var i = 0; i < recommendedTracksResponse.length; i++){
+						if(
+							artistsAppearingInResponse.indexOf(recommendedTracksResponse[i].artists[0].name) < 0 &&
+							longTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0 &&
+							shortTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0
+							){
+						  recommendedTracks.push(
+							{
+							  trackName : recommendedTracksResponse[i].name,
+							  popularity : recommendedTracksResponse[i].popularity,
+							  artistName : recommendedTracksResponse[i].artists[0].name,
+							  albumName : recommendedTracksResponse[i].album.name,
+							  albumImageUrl : recommendedTracksResponse[i].album.images[0].url,
+							  uri : recommendedTracksResponse[i].uri
+							}
+						  );
+						  artistsAppearingInResponse.push(recommendedTracksResponse[i].artists[0].name);
 						}
-					  );
-					  artistsAppearingInResponse.push(recommendedTracksResponse[i].artists[0].name);
 					}
 				}
 			}
-			
+			catch(err){}
 
 			var longTermAudioFeatures = {
 				'danceability' : 0,
@@ -215,6 +221,12 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				longTermAudioFeatures.happiness /= audioFeatureAndObscurifyDataResponse[0].audio_features.length;
 				longTermAudioFeatures.acousticness /= audioFeatureAndObscurifyDataResponse[0].audio_features.length;
 				
+				responseToTheFrontEnd.longTermAudioFeatures = longTermAudioFeatures;
+			}
+			catch(err){
+				//console.log(err);
+			}
+			try{
 				//now do it for short term tracks baby!!!
 				for(var i = 0; i < audioFeatureAndObscurifyDataResponse[1].audio_features.length; i++){
 					shortTermAudioFeatures.danceability += audioFeatureAndObscurifyDataResponse[1].audio_features[i].danceability;
@@ -225,52 +237,52 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				shortTermAudioFeatures.danceability /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
 				shortTermAudioFeatures.energy /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
 				shortTermAudioFeatures.happiness /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
-				shortTermAudioFeatures.acousticness /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
-				
-				//aww yeah look at this fat payload! to angular we go!
-				responseToTheFrontEnd.totalUserCount = audioFeatureAndObscurifyDataResponse[2].totalUserCount;
-				responseToTheFrontEnd.percentileByCountry = audioFeatureAndObscurifyDataResponse[2].percentileByCountry;
-				responseToTheFrontEnd.globalAverageScore = audioFeatureAndObscurifyDataResponse[2].globalAverageScore;
-				responseToTheFrontEnd.userCountByCountry = audioFeatureAndObscurifyDataResponse[2].userCountByCountry;
-				responseToTheFrontEnd.audioFeatureAverages = audioFeatureAndObscurifyDataResponse[2].audioFeatureAverages;
-				responseToTheFrontEnd.longTermAudioFeatures = longTermAudioFeatures;
+				shortTermAudioFeatures.acousticness /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;	
+
 				responseToTheFrontEnd.shortTermAudioFeatures = shortTermAudioFeatures;
-				responseToTheFrontEnd.recommendedTracks = recommendedTracks;
-				res.send(responseToTheFrontEnd);
-				
-				//make a call to the database_server and toss this into MONGO!!!
-				if(
-					longTermArtists.items.length > 19 && //only post data for users who have significant Spotify history
-					longTermTracks.items.length > 19 &&
-					obscurifyScore > 39 && //arbitrary number, but if your score is below 40 then something is likely wrong
-					longTermAudioFeatures.happiness > 0 &&
-					longTermAudioFeatures.energy > 0 &&
-					longTermAudioFeatures.danceability > 0 &&
-					longTermAudioFeatures.acousticness > 0
-				){
-					request({
-						url: 'https://obscurifymusic.com/api/saveUserHistory',
-						method: "POST",
-						json: true,
-						body: {
-								'userID' : response[4].id,
-								'email':response[4].email,
-								'country':response[4].country,
-								'longTermArtistIDs':longTermArtistIDs,
-								'longTermTrackIDs':longTermTrackIDs,
-								'obscurifyScore':obscurifyScore,
-								'longTermAudioFeatures':longTermAudioFeatures,
-								'shortTermArtistIDs' : shortTermArtistIDs,
-								'shortTermTrackIDs' : shortTermTrackIDs,
-								'obscurify_secret' : obscurify_secret // so ya'll aint be cheatin
-							} 
-					}, function (error, response, body){
-					});
-				}
-				
 			}
 			catch(err){
-				return res.send(responseToTheFrontEnd);
+				//console.log(err);
+			}
+				
+			//aww yeah look at this fat payload! to angular we go!
+			responseToTheFrontEnd.totalUserCount = audioFeatureAndObscurifyDataResponse[2].totalUserCount;
+			responseToTheFrontEnd.percentileByCountry = audioFeatureAndObscurifyDataResponse[2].percentileByCountry;
+			responseToTheFrontEnd.globalAverageScore = audioFeatureAndObscurifyDataResponse[2].globalAverageScore;
+			responseToTheFrontEnd.userCountByCountry = audioFeatureAndObscurifyDataResponse[2].userCountByCountry;
+			responseToTheFrontEnd.audioFeatureAverages = audioFeatureAndObscurifyDataResponse[2].audioFeatureAverages;
+			responseToTheFrontEnd.recommendedTracks = recommendedTracks;
+			responseToTheFrontEnd.userHistory = audioFeatureAndObscurifyDataResponse[4].userHistory;
+			res.send(responseToTheFrontEnd);
+			
+			//make a call to the database_server and toss this into MONGO!!!
+			if(
+				longTermArtists.items.length > 14 && //only post data for users who have significant Spotify history
+				longTermTracks.items.length > 14 &&
+				obscurifyScore > 39 && //arbitrary number, but if your score is below 40 then something is likely wrong
+				longTermAudioFeatures.happiness > 0 &&
+				longTermAudioFeatures.energy > 0 &&
+				longTermAudioFeatures.danceability > 0 &&
+				longTermAudioFeatures.acousticness > 0
+			){
+				request({
+					url: 'https://obscurifymusic.com/api/saveUserHistory',
+					method: "POST",
+					json: true,
+					body: {
+							'userID' : response[4].id,
+							'email':response[4].email,
+							'country':response[4].country,
+							'longTermArtistIDs':longTermArtistIDs,
+							'longTermTrackIDs':longTermTrackIDs,
+							'obscurifyScore':obscurifyScore,
+							'longTermAudioFeatures':longTermAudioFeatures,
+							'shortTermArtistIDs' : shortTermArtistIDs,
+							'shortTermTrackIDs' : shortTermTrackIDs,
+							'obscurify_secret' : obscurify_secret // so ya'll aint be cheatin
+						} 
+				}, function (error, response, body){
+				});
 			}
 			
 			
@@ -285,43 +297,99 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		return 0;
 	}
 	
-	function findStarRating(popularity){
-		if(popularity >= 90){ return "★★★★★"; }
-        else if(popularity >= 80){ return "★★★★"; }
-        else if(popularity >= 65){ return "★★★"; }
-        else if(popularity >= 50){ return "★★";  }
-        else if(popularity >= 35){ return "★"; }
-        else{ return ""; }
+});
+
+app.get('/spotifyData/getHistoryItems', function(req, res) {
+	
+	function httpGet(url, callback) {
+	  const options = {
+		url :  url,
+		headers : {
+				"Authorization" : "Bearer " + req.query.accessToken,
+				"Accept" : "application/json"
+			},
+		json : true
+	  };
+	  request(options,
+		function(err, res, body) {
+		  callback(err, body);
+		}
+	  );
 	}
 	
-	//will return up to two random genres out of the artist's array of all genres
-	function findRandomGenres(artist){
-		if(artist.genres.length > 1){
-			var random1 = Math.floor(Math.random() * artist.genres.length);
-			var random2 = Math.floor(Math.random() * artist.genres.length);
-			while (random1 == random2){
-				random2 = Math.floor(Math.random() * artist.genres.length);
-			}
-			var returnData = {randomGenre1 : artist.genres[random1], randomGenre2 : artist.genres[random2]};
-			//check to see if these genres contain the word "christmas", if so remove it
-			if(returnData.randomGenre1.indexOf("christmas") > -1){
-				returnData.randomGenre1 = returnData.randomGenre1.replace("christmas","");
-			}
-			if(returnData.randomGenre2.indexOf("christmas") > -1){
-				returnData.randomGenre2 = returnData.randomGenre2.replace("christmas","");
-			}
-			return returnData;
+	const urls= [			  
+		"https://api.spotify.com/v1/artists?ids=" + req.query.artistIDs,
+		"https://api.spotify.com/v1/tracks?ids=" + req.query.trackIDs	  
+	];
+
+	async.map(urls, httpGet, function (err, response){
+		if (err || response[0].error){
+			console.log(err);
+			return res.send({"error" : "darn it"});
 		}
-		else if(artist.genres.length == 1){
-			return {randomGenre1 : artist.genres[0], randomGenre2 : null}
+		
+		var artists = response[0].artists;
+		var tracks = response[1].tracks;
+		var recentObscurifyScore = 0;
+		
+		for(var i = 0; i < tracks.length; i++){
+			tracks[i].starRating = findStarRating(tracks[i].popularity);
 		}
-		else{
-			return {randomGenre1 : null, randomGenre2 : null}
+		
+		for(var i = 0; i < artists.length; i++){
+			artists[i].randomGenres = findRandomGenres(artists[i]);
+			artists[i].starRating = findStarRating(artists[i].popularity);
+			
+			//where the magic happens
+			recentObscurifyScore = recentObscurifyScore + (50/artists.length)*(parseInt(artists[i].popularity * (1 - i/artists.length)));
 		}
-	}
+		recentObscurifyScore = parseInt(recentObscurifyScore/10);
+		
+		res.send({
+			"artists" : artists,
+			"tracks" : tracks,
+			"recentObscurifyScore" : recentObscurifyScore
+		});
+		
+		
+	});
 	
 });
 
+function findStarRating(popularity){
+	if(popularity >= 90){ return "★★★★★"; }
+	else if(popularity >= 80){ return "★★★★"; }
+	else if(popularity >= 65){ return "★★★"; }
+	else if(popularity >= 50){ return "★★";  }
+	else if(popularity >= 35){ return "★"; }
+	else{ return ""; }
+}
+
+//will return up to two random genres out of the artist's array of all genres
+function findRandomGenres(artist){
+	if(artist.genres.length > 1){
+		var random1 = Math.floor(Math.random() * artist.genres.length);
+		var random2 = Math.floor(Math.random() * artist.genres.length);
+		while (random1 == random2){
+			random2 = Math.floor(Math.random() * artist.genres.length);
+		}
+		var returnData = {randomGenre1 : artist.genres[random1], randomGenre2 : artist.genres[random2]};
+		//check to see if these genres contain the word "christmas", if so remove it
+		if(returnData.randomGenre1.indexOf("christmas") > -1){
+			returnData.randomGenre1 = returnData.randomGenre1.replace("christmas","");
+		}
+		if(returnData.randomGenre2.indexOf("christmas") > -1){
+			returnData.randomGenre2 = returnData.randomGenre2.replace("christmas","");
+		}
+		return returnData;
+	}
+	else if(artist.genres.length == 1){
+		return {randomGenre1 : artist.genres[0], randomGenre2 : null}
+	}
+	else{
+		return {randomGenre1 : null, randomGenre2 : null}
+	}
+}
 
 //console.log('Listening on 8081');
 //app.listen(8081, '0.0.0.0');

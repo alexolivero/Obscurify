@@ -22,10 +22,19 @@
           <div class="col-sm-6 track-list-column">
             
               <div class="overlay-gradient"></div>
-              <h2>Current</h2><div class="obscurifyScore">Score : {{recentObscurifyScore}}</div>
+			  <div class="dropdown">
+				<h2>{{shortTermHeader}}</h2>
+				<div class="dropdown-content">
+					<div ng-repeat="history in userHistory" ng-click="historySelected(history)">
+						{{history.formattedDate}}
+					</div>
+				</div>
+			  </div>
+              
+			  <div class="obscurifyScore">Score : {{recentObscurifyScore}}</div>
               <div class="column-overflow">
               
-              <div ng-repeat="artist in shortTermArtists.items track by $index " class="track-list-item">
+              <div ng-repeat="artist in shortTermArtists track by $index " class="track-list-item">
                 <div class="track-list-item-info">
                   <img src="{{artist.images[1].url}}" alt="" />
 
@@ -54,7 +63,7 @@
               <div class="overlay-gradient"></div>
               <h2>All Time</h2><div class="obscurifyScore">Score : {{obscurifyScore}}</div>
               <div class="column-overflow">
-  			         <div ng-repeat="artist in longTermArtists.items track by $index" class="track-list-item">
+  			         <div ng-repeat="artist in longTermArtists track by $index" class="track-list-item">
                   <div class="track-list-item-info">
                     <img src="{{artist.images[1].url}}" alt="" />
 
@@ -85,11 +94,18 @@
           <div class="col-sm-6 track-list-column">
             
               <div class="overlay-gradient"></div>
-                <h2>Current</h2>
+                <div class="dropdown">
+					<h2>{{shortTermHeader}}</h2>
+					<div class="dropdown-content">
+						<div ng-repeat="history in userHistory" ng-click="historySelected(history)">
+							{{history.formattedDate}}
+						</div>
+					</div>
+				  </div>
                 <button ng-click="makePlaylist(false);">Export As Playlist</button>
             
               <div class="column-overflow">
-	      <div ng-repeat="track in shortTermTracks.items track by $index" class="track-list-item">
+	      <div ng-repeat="track in shortTermTracks track by $index" class="track-list-item">
                 <div class="track-list-item-info">
                   <img src="{{track.album.images[1].url}}" alt="" />
                   <a class="track-list-item-info-text" ng-href="{{track.uri}}">
@@ -116,7 +132,7 @@
               <div class="overlay-gradient"></div>
               <h2>All Time</h2><button ng-click="makePlaylist(true);">Export As Playlist</button>
               <div class="column-overflow">
-              <div ng-repeat="track in longTermTracks.items track by $index" class="track-list-item">
+              <div ng-repeat="track in longTermTracks track by $index" class="track-list-item">
                 <div class="track-list-item-info">
                   <img src="{{track.album.images[1].url}}" alt="" />
 

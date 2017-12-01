@@ -1,0 +1,49 @@
+.country-breakdown {
+  color: $o-white;
+  margin-top: 50px;
+  margin-bottom: 150px;
+
+  h1 {
+    font-size: 32px;
+	padding-bottom:25px;
+  }
+  @media #{$desktop} {
+    padding: 0;
+    h1 {
+      font-size: 48px;
+    }
+  }
+  
+  a{
+	color:$o-white;
+  }
+  
+  .country-breakdown-description{
+	opacity: 0.9;
+	padding-top: 10px;
+  }
+  
+  select {
+	background : black;
+	font-size: 18px;
+  }
+
+  .artist-list {
+    text-decoration: none;
+    font-size: 18px;
+    margin-top: 15px;
+    padding: 0;
+
+    li {
+      padding: 16px 0;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      list-style: none;
+      font-weight: bold;
+
+      &:last-child {
+        border: none;
+      }
+    }
+  }
+}

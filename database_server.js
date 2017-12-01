@@ -109,13 +109,16 @@ app.get('/api/getObscurifyData', function(req, res) {
 	var MongoClient = require('mongodb').MongoClient;
 	var url = "mongodb://127.0.0.1:27017/obscurify";
 	
-	if(req.query.obscurifyScore == undefined || req.query.obscurifyScore == undefined){
+	if(req.query.obscurifyScore == undefined ||
+		req.query.country == undefined ||
+		req.query.obscurify_secret != obscurify_secret
+		){
 		return res.send({"status" : "uh oh"});
 	}
 	
 	MongoClient.connect(url, function(err, db) {
 	  if (err) throw err;
-	  var mySort = { obscurifyScore: -1 };
+	  
 	  db.collection("users").find({}, { 
 			//only supposed to specify what you DON'T want returned
 			_id: false,
@@ -127,7 +130,7 @@ app.get('/api/getObscurifyData', function(req, res) {
 			//obscurifyScore:true,
 			//longTermAudioFeatures:true,
 			userHistory:false
-		}).sort(mySort).toArray(function(err, result) {
+		}).toArray(function(err, result) {
 		if (err) throw err;
 		
 		var obscurifyScores = []; //only includes scores from the user's country
@@ -163,6 +166,7 @@ app.get('/api/getObscurifyData', function(req, res) {
 			audioFeatureAverages.acousticness = 0.22; //values pulled from obscurify 1.0 global averages
 			
 		} else{
+			obscurifyScores.sort(function(a, b){return b - a});
 			var scoreIndex = -1;
 			for(var i = 0; i < obscurifyScores.length; i++){
 				if(req.query.obscurifyScore >= obscurifyScores[i]){
@@ -192,6 +196,138 @@ app.get('/api/getObscurifyData', function(req, res) {
 		db.close();
 	  });
 	});
+	 
+});
+
+app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res) {
+
+	if(req.params.countryCode == undefined){
+		return res.send({"status" : "we need a country code dog"});
+	}
+	
+	var MongoClient = require('mongodb').MongoClient;
+	var url = "mongodb://127.0.0.1:27017/obscurify";
+	
+	MongoClient.connect(url, function(err, db) {
+	    if (err) throw err;
+	  
+	    db.collection("users").find({country : req.params.countryCode}, { 
+			//only supposed to specify what you DON'T want returned
+			_id: false,
+			userID: false,
+			email: false,
+			country: false,
+			//longTermArtistIDs:true,
+			longTermTrackIDs:false,
+			//obscurifyScore:true,
+			longTermAudioFeatures:false,
+			userHistory:false
+		}).toArray(function(err, result) {
+			if (err) throw err;
+			
+			artists = {};
+			topArtists = [];
+			var obscurifyScoreAverage = 0;
+			
+			for(var resultIndex = 0; resultIndex < result.length; resultIndex++){
+				obscurifyScoreAverage += result[resultIndex].obscurifyScore;
+				for(var artistIndex = 0; artistIndex < 10; artistIndex++){ //just consider user's top 10 all-time artists
+					var artistID = result[resultIndex].longTermArtistIDs[artistIndex];
+					if(artistID in artists){
+						artists[artistID] = artists[artistID] + 1;
+					}
+					else{
+						artists[artistID] = 1;
+					}
+				}
+			}
+			
+			obscurifyScoreAverage /= result.length;
+			
+			for(var a in artists){
+			  topArtists.push([a,artists[a]]);
+			}
+
+			topArtists.sort(Comparator);
+			topArtists = topArtists.splice(0,10);
+			var topArtistIDs = [];
+			for(var i = 0; i < topArtists.length; i++){
+				topArtistIDs.push(topArtists[i][0]);
+			}
+			
+			request({
+				url: 'https://api.spotify.com/v1/artists?ids=' + topArtistIDs.join(),
+				method: "GET",
+				headers : {
+				"Authorization" : "Bearer " + req.params.accessToken,
+				"Accept" : "application/json"
+				},
+				json: true
+			}, function (error, response, body){
+				res.send(
+					{
+						"country" : req.params.countryCode,
+						"userCount" : result.length,
+						"obscurifyScoreAverage" : Math.round(obscurifyScoreAverage),
+						"topArtists" : response.body.artists //the 10 artists that appear on the most Top 10 all-time artist lists
+					}
+				);
+			});
+			
+			db.close();
+	    });
+	});
+	
+	//this is just used to sort the topGenres so the client doesn't have to
+	function Comparator(a, b) {
+		if (a[1] > b[1]) return -1;
+		if (a[1] < b[1]) return 1;
+		return 0;
+	}
+	 
+});
+
+app.get('/api/getUserHistory', function(req, res) {
+	
+	var MongoClient = require('mongodb').MongoClient;
+	var url = "mongodb://127.0.0.1:27017/obscurify";
+	
+	if(req.query.userID == undefined ||	req.query.obscurify_secret != obscurify_secret){
+		return res.send({"status" : "uh oh"});
+	}
+	
+	MongoClient.connect(url, function(err, db) {
+	    if (err) throw err;
+	  
+	    db.collection("users").find({userID : req.query.userID}, { 
+			//only supposed to specify what you DON'T want returned
+			_id: false,
+			//userID: true,
+			email: false,
+			country: false,
+			longTermArtistIDs:false,
+			longTermTrackIDs:false,
+			obscurifyScore:false,
+			longTermAudioFeatures:false
+			//userHistory:true
+		}).toArray(function(err, result) {
+			if (err) throw err;
+			if(result[0] == undefined){
+				res.send({
+					'userID' : req.query.userID,
+					'userHistory' : null
+				});	
+			}else{
+				res.send({
+					'userID' : req.query.userID,
+					'userHistory' : result[0].userHistory 
+				});	
+			}
+			db.close();
+	    });
+	});
+	
+	
 	 
 });
 
