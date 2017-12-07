@@ -25,7 +25,7 @@
 			  <div class="dropdown">
 				<h2>{{shortTermHeader}}</h2>
 				<div class="dropdown-content">
-					<div ng-repeat="history in userHistory" ng-click="historySelected(history)">
+					<div class="dropdown-item" ng-repeat="history in userHistory" ng-click="historySelected(history)">
 						{{history.formattedDate}}
 					</div>
 				</div>
@@ -97,7 +97,7 @@
                 <div class="dropdown">
 					<h2>{{shortTermHeader}}</h2>
 					<div class="dropdown-content">
-						<div ng-repeat="history in userHistory" ng-click="historySelected(history)">
+						<div class="dropdown-item" ng-repeat="history in userHistory" ng-click="historySelected(history)">
 							{{history.formattedDate}}
 						</div>
 					</div>

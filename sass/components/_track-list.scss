@@ -20,6 +20,15 @@
 		padding: 12px 16px;
 		z-index: 1;
 		cursor: pointer;
+		
+		
+		.dropdown-item{
+		  padding:10px;
+		}
+		
+		.dropdown-item:hover{
+		  background-color: lightgoldenrodyellow;
+		}
 	}
 
 	.dropdown:hover .dropdown-content {

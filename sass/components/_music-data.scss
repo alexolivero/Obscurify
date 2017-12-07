@@ -1,8 +1,10 @@
 
 .music-data-section {
-	  background-color: #F2F1EF;
-	  padding-bottom: 68px;
+	  background-color: #303030;
+	  padding-top: 86px;
+	  padding-bottom: 86px;
 	  margin-top: -1px;
+	  color: $o-white;
 
 	  @media #{$desktop} {
 	  	padding-bottom: 108px;
@@ -13,7 +15,6 @@
 		    font-size: 44px;
 		    font-weight: bold;
 		    margin-bottom: 25px;
-		    color: $o-black;
 			letter-spacing: 1.4px;
 
 		    @media #{$tablet} {
@@ -23,13 +24,124 @@
 	    }
 	  }
 
+	  .music-data-carousel {
+	  	padding-top: 32px;
+	  }
+
+	  .music-data-row, .music-data-row-right {
+	  	background-color: rgba(216, 216, 216, 0.25);
+	  	padding: 0 46px;
+	  	margin-bottom: 72px;
+	  	margin-top: 24px;
+    	min-height: 234px;
+    	display: flex;
+    	flex-wrap: wrap;
+    	justify-content: center;
+    	text-align: center;
+
+    	@media #{$tablet} {
+    		text-align: left;
+    		flex-wrap: no-wrap;
+    		justify-content: space-between;
+    	}
+
+    	&.green {
+
+    		h3 {
+    			background: rgba(29,185,84,0.50);
+    		}
+
+			.bar {
+				background-image: linear-gradient(-180deg, #3EDD8A 0%, #1DB952 100%);
+			}
+	  	}
+
+	  	&.red {
+
+	  		h3 {
+				background: rgba(253,73,40,0.50);
+			}
+
+			.bar {
+				background-image: linear-gradient(-180deg, #FF8051 0%, #FD4928 100%);
+			}
+	  	}
+
+	  	&.blue {
+
+	  		h3 {
+	  			background: rgba(30,126,158,0.50);	
+	  		}
+			
+			.bar {
+				background-image: linear-gradient(-180deg, #1E7E9E 0%, #62ACC5 98%);			
+			}
+	  	}
+
+	  	&.yellow {
+
+	  		h3 {
+	  			background: rgba(255,190,122,0.50);	
+	  		}
+
+			.bar {
+				background-image: linear-gradient(-180deg, #FFBE7A 0%, #FD9528 100%);
+			}
+	  	}
+
+
+    	.music-data-description {
+		  	width: 100%;
+		  	padding-left: 16px;
+
+		  	@media #{$tablet} {
+	  			width: 50%;
+    		}
+		  }
+	  }
+
+	  .music-data-row-right {
+	  	text-align: center;
+	  	flex-direction: row-reverse;
+
+	  	@media #{$tablet} {
+	  		text-align: right;
+
+    	}
+
+	  	.music-data-description {
+	  		display: flex;
+	  		justify-content: flex-end;
+	  		flex-wrap: wrap;
+	  		align-content: flex-start;
+	  		padding-right: 16px;
+	  	}
+	  }
+
 	  .moodTitle {
 	  	margin-bottom: 12px;
+		font-family: HelveticaNeue-Bold;
+		font-size: 24px;
+		letter-spacing: 1.33px;
+		padding-top: 14px;
+		padding-left: 16px;
+		padding-right: 16px;
+		padding-bottom: 8px;
+		width: 219px;
 	  }
 	  
 	  .moodDescription{
-		color:gray;
-		padding-top:10px;
+		padding-top: 10px;
+
+		h4 {
+			font-size: 38px;
+			letter-spacing: 2px;
+			margin-bottom: 16px;
+		}
+
+		span {
+			font-size: 18px;
+		}
 	  }
 	  
 	  .time-range {
@@ -45,7 +157,7 @@
 		}
 
 		a {
-		  color: $o-black;
+		  color: $o-white;
 		  text-decoration: line-through;
 
 		  &.active {
@@ -53,14 +165,29 @@
 		  }
 
 		  &:hover {
-			color: rgba(0,0,0,0.4);
+			color: rgba(255,255,255,0.4);
 		  }
 		}
 	  }
 
+	.music-data-graph-container {
+		background: #fff;
+		width: 300px;
+		display: flex;
+		justify-content: center;
+		position: relative;
+		bottom: -24px;
+		box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+
+		@media #{$tablet} {
+    		flex-wrap: no-wrap;
+    		bottom: 24px;
+    	}
+	}
+
 	.equalizer-container {
 	    margin: 12px auto 48px;
-	    width: 80%;
+	    width: 85%;
 	    height: 200px;
 	    display: flex;
 	    align-items: flex-end;
@@ -68,30 +195,21 @@
 
 	    .avg-line {
     	    position: absolute;
-		    width: 233px;
-		    background: repeating-linear-gradient(
-				45deg,
-				#606dbc,
-				#606dbc 10px,
-				#465298 10px,
-				#465298 20px
-				);
+		    width: 100%;
+		    background: $o-black;
 		    display: block;
 		    height: 2px;
 		    z-index: 0;
 		    top: 100px;
 		    font-size: 12px;
-			
-			@media #{$tablet} {
-				width: 243px;
-			  }
 
 		    &:before {
 		    	content:'avg';
 		    	display: inline-block;
 		    	position: absolute;
-		    	top: -10px;
-    			left: -27px;
+		    	top: -20px;
+    			left: 0px;
+    			color: $o-black;
 
 		    }
 		
@@ -110,7 +228,6 @@
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
-			        background-color: hsla(140, 73%, 42%, 1);
 			        animation: grow-one#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
@@ -128,7 +245,6 @@
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
-			        background-color: hsla(140, 73%, 42%, 1);
 			        animation: grow-two#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
@@ -146,7 +262,6 @@
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
-			        background-color: hsla(140, 73%, 42%, 1);
 			        animation: grow-three#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
@@ -164,7 +279,6 @@
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
-			        background-color: hsla(140, 73%, 42%, 1);
 			        animation: grow-four#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
@@ -182,7 +296,6 @@
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
-			        background-color: hsla(140, 73%, 42%, 1);
 			        animation: grow-five#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
@@ -200,7 +313,6 @@
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
-			        background-color: hsla(140, 73%, 42%, 1);
 			        animation: grow-six#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
@@ -218,7 +330,6 @@
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
-			        background-color: hsla(140, 73%, 42%, 1);
 			        animation: grow-seven#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
@@ -236,7 +347,6 @@
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
-			        background-color: hsla(140, 73%, 42%, 1);
 			        animation: grow-eight#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    
@@ -254,7 +364,6 @@
 			@for $i from 0 through $bars {
 			    .bar:nth-child(#{$i}) {
 			        $saturation: 100 - (($i + 1) * $multiplier);
-			        background-color: hsla(140, 73%, 42%, 1);
 			        animation: grow-nine#{$i} #{random(700) + 1500}ms alternate infinite;
 			    }
 			    

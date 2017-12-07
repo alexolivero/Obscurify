@@ -275,11 +275,11 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 		
 		if(ratio > 1.01){
 			var percentDifference = ratio*100 - 100;
-			return percentDifference.toFixed(1) + "% higher than";
+			return percentDifference.toFixed(1) + "% higher";
 		}
 		else if(ratio < 0.99){
 			var percentDifference = 100 - ratio*100;
-			return percentDifference.toFixed(1) + "% lower than";
+			return percentDifference.toFixed(1) + "% lower";
 		}
 		else{
 			return "right at the"

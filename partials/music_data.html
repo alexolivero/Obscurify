@@ -12,198 +12,216 @@
         </div>
 	</div>
 	  
-	<div id="carousel-music-data" class="carousel slide" data-ride="carousel" data-interval='false'>
+	<div id="carousel-music-data" class="music-data-carousel carousel slide" data-ride="carousel" data-interval='false'>
 	  <!-- Wrapper for slides -->
 	  <div class="carousel-inner" role="listbox">			
 			<div class="item active">
 
 				<div class="row">
-					<div class="col-md-offset-1 col-md-4 col-xs-12">
-						
-						<h3 class="moodTitle">Happiness</h3>
-						<p class="moodDescription">
-							Tracks with a high happiness score sound more positive (e.g. happy, cheerful), while tracks
-							with a low score sound more negative (e.g. sad, angry).
-						</p>
-						<p class="moodDescription">
-							The happiness of your current music is {{shortTermHappinessDescriptor}} the {{countryDemonym}} average.
-						</p>
-						<div ng-class="shortTermHappinessLevel">
-							<div class="avg-line"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
+					<div class="col-md-9 col-xs-12 music-data-row green">
+						<div class="music-data-description">
+							<h3 class="moodTitle">Happiness</h3>
+
+							<div class="moodDescription">
+							<h4>{{shortTermHappinessDescriptor}}</h4>
+								Tracks with a high happiness score sound more positive (e.g. happy, cheerful), while tracks
+								with a low score sound more negative (e.g. sad, angry).
+							</div>
+	
+						</div>
+						<div class="music-data-graph-container">
+							<div ng-class="shortTermHappinessLevel">
+								<div class="avg-line"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+							</div>
 						</div>
 					</div>
+				</div>
 
-					<div class="col-md-offset-1 col-md-4 col-xs-12">
-						
-						<h3 class="moodTitle">Energy</h3>
-						
-						<div class="moodDescription">
-							Energetic tracks feel fast, loud and noisy. For example, death metal has high energy while
-							Bach would lie on the other side of the scale.
+				<div class="row">
+					<div class="col-md-offset-3 col-md-9 col-xs-12 music-data-row-right red">
+						<div class="music-data-description">
+							<h3 class="moodTitle">Energy</h3>
+							
+							<div class="moodDescription">
+								<h4> {{shortTermHappinessDescriptor}}</h4>
+								Energetic tracks feel fast, loud and noisy. For example, death metal has high energy while
+								Bach would lie on the other side of the scale.
+							</div>
 						</div>
-						<div class="moodDescription">
-							The energy of your current music is {{shortTermEnergyDescriptor}} the {{countryDemonym}} average.
+
+						<div class="music-data-graph-container">
+							<div ng-class="shortTermEnergyLevel">
+								<div class="avg-line"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+							</div>
 						</div>
-						<div ng-class="shortTermEnergyLevel">
-							<div class="avg-line"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-						</div>
-					
 					</div>
 
 					
 				</div>
 					
 				<div class="row">
-					<div class="col-md-offset-1 col-md-4 col-xs-12">
+					<div class="col-md-9 col-xs-12 music-data-row blue">
 						
-						<h3 class="moodTitle">Danceability</h3>
-						<div class="moodDescription">
-							The danceability of tracks is judged by musical elements
-							such as tempo, rhythm stability, and beat strength.
-						</div>	
-						<div class="moodDescription">
-							The danceability of your current music is {{shortTermDanceabilityDescriptor}} the {{countryDemonym}} average.
-						</div>	
-						<div ng-class="shortTermDanceabilityLevel">
-							<div class="avg-line"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
+						<div class="music-data-description">
+							<h3 class="moodTitle">Danceability</h3>
+							<div class="moodDescription">
+								<h4> {{shortTermDanceabilityDescriptor}}</h4>
+								The danceability of tracks is judged by musical elements
+								such as tempo, rhythm stability, and beat strength.
+							</div>	
 						</div>
-								
-					</div>
 
-					<div class="col-md-offset-1 col-md-4 col-xs-12">
+						<div class="music-data-graph-container">
+							<div ng-class="shortTermDanceabilityLevel">
+								<div class="avg-line"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+							</div>
+						</div>	
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="col-md-offset-3 col-md-9 col-xs-12 music-data-row-right yellow">
 						
-						<h3 class="moodTitle">Acousticness</h3>
-						<div class="moodDescription">
-							Tracks with higher acousticness have more acoustic elements than electric.
-						</div>	
-						<div class="moodDescription">
-							The acousticness of your current music is {{shortTermAcousticnessDescriptor}} the {{countryDemonym}} average.
-						</div>	
-						<div ng-class="shortTermAcousticnessLevel">
-							<div class="avg-line"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
+						<div class="music-data-description">
+							<h3 class="moodTitle">Acousticness</h3>
+							<div class="moodDescription">
+								<h4> {{shortTermAcousticnessDescriptor}}</h4>
+								Tracks with higher acousticness have more acoustic elements than electric.
+							</div>	
+						</div>
+
+						<div class="music-data-graph-container">
+							<div ng-class="shortTermAcousticnessLevel">
+								<div class="avg-line"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+							</div>
 						</div>
 								
 					</div>
-					
-				</div>
-				
+				</div>				
 			</div>
 			
 			<div class="item">
 
 				<div class="row">
-					<div class="col-md-offset-1 col-md-4 col-xs-12">
+					<div class="col-md-9 col-xs-12 music-data-row green">
 						
-						<h3 class="moodTitle">Happiness</h3>
-						<div class="moodDescription">
-							Tracks with a high happiness score sound more positive (e.g. happy, cheerful), while tracks
-							with a low score sound more negative (e.g. sad, angry).
+						<div class="music-data-description">
+							<h3 class="moodTitle">Happiness</h3>
+							<div class="moodDescription">
+								<h4> {{longTermHappinessDescriptor}}</h4>
+								Tracks with a high happiness score sound more positive (e.g. happy, cheerful), while tracks
+								with a low score sound more negative (e.g. sad, angry).
+							</div>
 						</div>
-						<div class="moodDescription">
-							The happiness of your all-time music is {{longTermHappinessDescriptor}} the {{countryDemonym}} average.
-						</div>
-						<div ng-class="longTermHappinessLevel">
-							<div class="avg-line"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
+
+						<div class="music-data-graph-container">
+							<div ng-class="longTermHappinessLevel">
+								<div class="avg-line"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+							</div>
 						</div>
 						
 
 					</div>
+				</div>
 
-					<div class="col-md-offset-1 col-md-4 col-xs-12">
+				<div class="row">
+					<div class="col-md-offset-3 col-md-9 col-xs-12 music-data-row-right red">
 						
-						<h3 class="moodTitle">Energy</h3>
-						<div class="moodDescription">
-							Energetic tracks feel fast, loud and noisy. For example, death metal has high energy while
-							Bach would lie on the other side of the scale.
+						<div class="music-data-description">
+							<h3 class="moodTitle">Energy</h3>
+							<div class="moodDescription">
+								<h4> {{longTermEnergyDescriptor}}</h4>
+								Energetic tracks feel fast, loud and noisy. For example, death metal has high energy while
+								Bach would lie on the other side of the scale.
+							</div>
 						</div>
-						<div class="moodDescription">
-							The energy of your all-time music is {{longTermEnergyDescriptor}} the {{countryDemonym}} average.
+
+						<div class="music-data-graph-container">
+							<div ng-class="longTermEnergyLevel">
+								<div class="avg-line"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+							</div>
 						</div>
-						<div ng-class="longTermEnergyLevel">
-							<div class="avg-line"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-						</div>
-						
-						
+					
 					</div>
-
 				</div>
 					
 				<div class="row">
-					<div class="col-md-offset-1 col-md-4 col-xs-12">
+					<div class="col-md-9 col-xs-12 music-data-row blue">
 						
-						<h3 class="moodTitle">Danceability</h3>
-						<div class="moodDescription">
-							The danceability of tracks is judged by musical elements
-							such as tempo, rhythm stability, and beat strength.
-						</div>	
-						<div class="moodDescription">
-							The danceability of your all-time music is {{longTermDanceabilityDescriptor}} the {{countryDemonym}} average.
-						</div>	
-						<div ng-class="longTermDanceabilityLevel">
-							<div class="avg-line"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-						</div>
-								
-					</div>
+						<div class="music-data-description">
 
-					<div class="col-md-offset-1 col-md-4 col-xs-12">
+							<h3 class="moodTitle">Danceability</h3>
+							<div class="moodDescription">
+								<h4>{{longTermDanceabilityDescriptor}}</h4>
+								The danceability of tracks is judged by musical elements
+								such as tempo, rhythm stability, and beat strength.
+							</div>		
+						</div>
+
+						<div class="music-data-graph-container">
+							<div ng-class="longTermDanceabilityLevel">
+								<div class="avg-line"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+							</div>
+						</div>		
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-offset-3 col-md-9 col-xs-12 music-data-row-right yellow">
 						
-						<h3 class="moodTitle">Acousticness</h3>
-						<div class="moodDescription">
-							Tracks with higher acousticness have more acoustic elements than electric.
+						<div class="music-data-description">
+							<h3 class="moodTitle">Acousticness</h3>
+							<div class="moodDescription">
+								<h4>{{longTermAcousticnessDescriptor}}</h4>
+								Tracks with higher acousticness have more acoustic elements than electric.
+							</div>
 						</div>
-						<div class="moodDescription">
-							The acousticness of your all-time music is {{longTermAcousticnessDescriptor}} the {{countryDemonym}} average.
-						</div>
-						<div ng-class="longTermAcousticnessLevel">
-							<div class="avg-line"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
-							<div class="bar"></div>
+
+						<div class="music-data-graph-container">						
+							<div ng-class="longTermAcousticnessLevel">
+								<div class="avg-line"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+							</div>
 						</div>
 									
 					</div>
@@ -213,6 +231,6 @@
 			
 		</div>
 	</div>
-
+	</div>
 
 </div>
