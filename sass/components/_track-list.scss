@@ -50,9 +50,11 @@
     a {
       color: $o-black;
       text-decoration: line-through;
+	  opacity: 0.5;
 
       &.active {
         text-decoration: none;
+		opacity: 1.0;
       }
 
       &:hover {
@@ -113,6 +115,8 @@
         padding-top: 27px;
         padding-left: 5px;
         padding-right: 5px;
+        -webkit-overflow-scrolling: touch;
+
       
         @media #{$tablet} {
           width: 500px;

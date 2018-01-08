@@ -96,7 +96,7 @@ app.post('/api/saveUserHistory', function(req, res) {
 	  
 	  
 	});
-	
+	db.close();
     return res.json(
 		{
 			"status" : "ok!"

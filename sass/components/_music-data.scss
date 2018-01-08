@@ -159,9 +159,11 @@
 		a {
 		  color: $o-white;
 		  text-decoration: line-through;
+		  opacity:0.5;
 
 		  &.active {
 			text-decoration: none;
+			opacity:1.0;
 		  }
 
 		  &:hover {

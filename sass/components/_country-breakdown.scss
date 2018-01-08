@@ -1,31 +1,37 @@
 .country-breakdown {
   color: $o-white;
-  margin-top: 50px;
-  margin-bottom: 150px;
+  padding-top: 50px;
+  padding-bottom: 150px;
+  background-image: linear-gradient(-223deg, #1E7E9E 0%, #62ACC5 100%);
 
   h1 {
-    font-size: 32px;
-	padding-bottom:25px;
+    font-size: 36px;
+	  padding-bottom:25px;
   }
+
   @media #{$desktop} {
-    padding: 0;
     h1 {
-      font-size: 48px;
+      font-size: 55px;
     }
   }
   
   a{
-	color:$o-white;
+	 color:$o-white;
   }
   
   .country-breakdown-description{
-	opacity: 0.9;
-	padding-top: 10px;
+	 opacity: 0.9;
+	 padding-top: 10px;
   }
   
   select {
-	background : black;
-	font-size: 18px;
+    background-color: transparent;
+    font-size: 18px;
+    border-radius: 0;
+    border: 3px solid $o-white;
+    min-width: 100px;
+    height: 45px;
+	color:black;
   }
 
   .artist-list {
