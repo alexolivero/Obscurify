@@ -12,17 +12,6 @@ Express (because I love JavaScript)<br />
 Angular (because I love JavaScript)<br />
 Node (because I love JavaScript)
 
-and by MEAN I mean....
-
-M-ongoDB (because I love JavaScript....Object Notation)
-
-E-xpress (because I love JavaScript)
-
-A-ngular (because I love JavaScript)
-
-N-ode (because I love JavaScript)
-
-
 We like to start our site off right using pm2
 by running the following commands (with --watch for auto-restart on file change) in the root folder:
 
