@@ -20,7 +20,7 @@ pm2 start spotify_data_server.js --'OBSCURIFY_SECRET' --watch<br />
 pm2 start database_server.js --'OBSCURIFY_SECRET' --watch<br />
 
 
-I have these running on ports 8080, 8081, and 8082 respectively, with an nginx reverse proxy (sounds fancier than it really is) routing urls to the right node app.
+I have these running on ports 8443, 8444, and 8445 respectively, with an nginx reverse proxy (sounds fancier than it really is) routing urls to the right node app.
 
 
 I got those tasty CLIENT codes from Spotify:
