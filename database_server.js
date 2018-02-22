@@ -27,11 +27,10 @@ app.use(express.static(__dirname ))
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         next();
       });
-	  
+
 app.post('/api/saveUserHistory', function(req, res) {
-	
-	if(req.body.email == null ||
-		req.body.country == null ||
+
+	if(req.body.country == null ||
 		req.body.longTermArtistIDs == null ||
 		req.body.longTermTrackIDs == null ||
 		req.body.obscurifyScore == null ||
@@ -40,10 +39,10 @@ app.post('/api/saveUserHistory', function(req, res) {
 		){
 			return res.send({"status" : "no WAY DUDE!!"});
 	}
-	
+
 	var MongoClient = require('mongodb').MongoClient;
 	var url = "mongodb://127.0.0.1:27017/obscurify";
-	
+
 	var historyInstance = {
 		'shortTermArtistIDs' : req.body.shortTermArtistIDs,
 		'shortTermTrackIDs' : req.body.shortTermTrackIDs,
@@ -51,18 +50,18 @@ app.post('/api/saveUserHistory', function(req, res) {
 		'dayOfYear' : moment().dayOfYear(),
 		'year' : moment().year()
 	};
-	
+
 	MongoClient.connect(url, function(err, db) {
 	  if (err) throw err;
-	  
-	  var userHistory = [];	  
+
+	  var userHistory = [];
 	  var query = { "userID" : req.body.userID };
 	  db.collection("users").find(query).toArray(function(err, result) {
 		if (err) throw err;
-		
+
 		if(result.length == 0){
 			userHistory.unshift(historyInstance);
-		} 
+		}
 		else{
 			userHistory = result[0].userHistory;
 			if(moment().year() > userHistory[0].year){
@@ -72,15 +71,14 @@ app.post('/api/saveUserHistory', function(req, res) {
 				var differenceInDays = moment().dayOfYear() - userHistory[0].dayOfYear;
 				if(differenceInDays > 21){
 					userHistory.unshift(historyInstance);
-				}				
+				}
 			}
 		}
-		
+
 		db.collection("users").update(
 			{userID : req.body.userID},
 			{$set:
 				{
-					'email' : req.body.email,
 					'country' : req.body.country,
 					'longTermArtistIDs' : req.body.longTermArtistIDs,
 					'longTermTrackIDs' : req.body.longTermTrackIDs,
@@ -91,35 +89,35 @@ app.post('/api/saveUserHistory', function(req, res) {
 			},
 			{ upsert: true}
 		)
-		
+
 	  });
-	  
-	  
+
+	  //db.close();
 	});
-	db.close();
+
     return res.json(
 		{
 			"status" : "ok!"
 		}
 	)
 });
-	  
+
 app.get('/api/getObscurifyData', function(req, res) {
-	
+
 	var MongoClient = require('mongodb').MongoClient;
 	var url = "mongodb://127.0.0.1:27017/obscurify";
-	
+
 	if(req.query.obscurifyScore == undefined ||
 		req.query.country == undefined ||
 		req.query.obscurify_secret != obscurify_secret
 		){
 		return res.send({"status" : "uh oh"});
 	}
-	
+
 	MongoClient.connect(url, function(err, db) {
 	  if (err) throw err;
-	  
-	  db.collection("users").find({}, { 
+
+	  db.collection("users").find({}, {
 			//only supposed to specify what you DON'T want returned
 			_id: false,
 			userID: false,
@@ -132,7 +130,7 @@ app.get('/api/getObscurifyData', function(req, res) {
 			userHistory:false
 		}).toArray(function(err, result) {
 		if (err) throw err;
-		
+
 		var obscurifyScores = []; //only includes scores from the user's country
 		var globalAverageScore = 0;
 		var percentileByCountry = 0;
@@ -142,29 +140,29 @@ app.get('/api/getObscurifyData', function(req, res) {
 			'happiness' : 0,
 			'acousticness' : 0
 		};
-		
+
 		for(var i = 0; i < result.length; i++){
 			globalAverageScore += result[i].obscurifyScore;
-			
+
 			if(result[i].country == req.query.country){
 				obscurifyScores.push(result[i].obscurifyScore);
-				
+
 				audioFeatureAverages.danceability += result[i].longTermAudioFeatures.danceability;
 				audioFeatureAverages.energy += result[i].longTermAudioFeatures.energy;
 				audioFeatureAverages.happiness += result[i].longTermAudioFeatures.happiness;
 				audioFeatureAverages.acousticness += result[i].longTermAudioFeatures.acousticness;
-			}			
+			}
 		}
 		globalAverageScore /= result.length;
-		
-		
+
+
 		if(obscurifyScores.length == 0){
 			percentileByCountry = 100;
 			audioFeatureAverages.danceability = 0.57;
 			audioFeatureAverages.energy = 0.65;
 			audioFeatureAverages.happiness = 0.45;
 			audioFeatureAverages.acousticness = 0.22; //values pulled from obscurify 1.0 global averages
-			
+
 		} else{
 			obscurifyScores.sort(function(a, b){return b - a});
 			var scoreIndex = -1;
@@ -177,7 +175,7 @@ app.get('/api/getObscurifyData', function(req, res) {
 			if(scoreIndex != -1){
 				percentileByCountry = (scoreIndex/obscurifyScores.length)*100;
 			}
-			
+
 			audioFeatureAverages.danceability /= obscurifyScores.length;
 			audioFeatureAverages.energy /= obscurifyScores.length;
 			audioFeatureAverages.happiness /= obscurifyScores.length;
@@ -193,10 +191,10 @@ app.get('/api/getObscurifyData', function(req, res) {
 				"audioFeatureAverages" : audioFeatureAverages
 			}
 		)
-		db.close();
+		//db.close();
 	  });
 	});
-	 
+
 });
 
 app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res) {
@@ -204,14 +202,14 @@ app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res)
 	if(req.params.countryCode == undefined){
 		return res.send({"status" : "we need a country code dog"});
 	}
-	
+
 	var MongoClient = require('mongodb').MongoClient;
 	var url = "mongodb://127.0.0.1:27017/obscurify";
-	
+
 	MongoClient.connect(url, function(err, db) {
 	    if (err) throw err;
-	  
-	    db.collection("users").find({country : req.params.countryCode}, { 
+
+	    db.collection("users").find({country : req.params.countryCode}, {
 			//only supposed to specify what you DON'T want returned
 			_id: false,
 			userID: false,
@@ -224,11 +222,11 @@ app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res)
 			userHistory:false
 		}).toArray(function(err, result) {
 			if (err) throw err;
-			
+
 			artists = {};
 			topArtists = [];
 			var obscurifyScoreAverage = 0;
-			
+
 			for(var resultIndex = 0; resultIndex < result.length; resultIndex++){
 				obscurifyScoreAverage += result[resultIndex].obscurifyScore;
 				for(var artistIndex = 0; artistIndex < 10; artistIndex++){ //just consider user's top 10 all-time artists
@@ -241,9 +239,9 @@ app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res)
 					}
 				}
 			}
-			
+
 			obscurifyScoreAverage /= result.length;
-			
+
 			for(var a in artists){
 			  topArtists.push([a,artists[a]]);
 			}
@@ -254,7 +252,7 @@ app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res)
 			for(var i = 0; i < topArtists.length; i++){
 				topArtistIDs.push(topArtists[i][0]);
 			}
-			
+
 			request({
 				url: 'https://api.spotify.com/v1/artists?ids=' + topArtistIDs.join(),
 				method: "GET",
@@ -273,33 +271,33 @@ app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res)
 					}
 				);
 			});
-			
-			db.close();
+
+			//db.close();
 	    });
 	});
-	
+
 	//this is just used to sort the topGenres so the client doesn't have to
 	function Comparator(a, b) {
 		if (a[1] > b[1]) return -1;
 		if (a[1] < b[1]) return 1;
 		return 0;
 	}
-	 
+
 });
 
 app.get('/api/getUserHistory', function(req, res) {
-	
+
 	var MongoClient = require('mongodb').MongoClient;
 	var url = "mongodb://127.0.0.1:27017/obscurify";
-	
+
 	if(req.query.userID == undefined ||	req.query.obscurify_secret != obscurify_secret){
 		return res.send({"status" : "uh oh"});
 	}
-	
+
 	MongoClient.connect(url, function(err, db) {
 	    if (err) throw err;
-	  
-	    db.collection("users").find({userID : req.query.userID}, { 
+
+	    db.collection("users").find({userID : req.query.userID}, {
 			//only supposed to specify what you DON'T want returned
 			_id: false,
 			//userID: true,
@@ -316,19 +314,19 @@ app.get('/api/getUserHistory', function(req, res) {
 				res.send({
 					'userID' : req.query.userID,
 					'userHistory' : null
-				});	
+				});
 			}else{
 				res.send({
 					'userID' : req.query.userID,
-					'userHistory' : result[0].userHistory 
-				});	
+					'userHistory' : result[0].userHistory
+				});
 			}
-			db.close();
+			//db.close();
 	    });
 	});
-	
-	
-	 
+
+
+
 });
 
 //console.log('Listening on 8082');
@@ -337,4 +335,3 @@ app.get('/api/getUserHistory', function(req, res) {
 var httpsServer = https.createServer(credentials, app);
 console.log('Listening on 8445');
 httpsServer.listen(8445);
-

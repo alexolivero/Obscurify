@@ -6,7 +6,7 @@
  * For more information, read
  * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
  */
- 
+
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
@@ -50,7 +50,7 @@ app.use(express.static(__dirname ))
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         next();
       });
-	  
+
 app.get('/', function(req, res) {
     res.sendFile('index.html', {root: __dirname })
 });
@@ -61,7 +61,7 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email user-top-read user-read-birthdate playlist-modify-public playlist-modify-private';
+  var scope = 'user-read-private user-top-read playlist-modify-public playlist-modify-private';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -77,7 +77,7 @@ app.get('/logout', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email user-top-read user-read-birthdate playlist-modify-public playlist-modify-private';
+  var scope = 'user-read-private user-top-read playlist-modify-public playlist-modify-private';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -119,7 +119,7 @@ app.get('/callback', function(req, res) {
 
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
-		
+
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
         res.redirect('/#!/home/' + access_token);
@@ -164,4 +164,3 @@ app.get('/refresh_token', function(req, res) {
 var httpsServer = https.createServer(credentials, app);
 console.log('Listening on 8443');
 httpsServer.listen(8443);
-

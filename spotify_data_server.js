@@ -10,7 +10,7 @@ var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
-const async = require('async'); 
+const async = require('async');
 
 var obscurify_secret = process.argv[2];
 
@@ -25,7 +25,7 @@ app.use(express.static(__dirname ))
       });
 
 app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
-	
+
 	function httpGet(url, callback) {
 	  const options = {
 		url :  url,
@@ -41,10 +41,10 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		}
 	  );
 	}
-	
+
 	//these are the urls we gotta hit in no particular order to find the users top artists/tracks
 	//for long and short time ranges. and the last one is to get profile data such as your image URL
-	const urls= [			  
+	const urls= [
 	  "https://api.spotify.com/v1/me/top/artists?limit=50&time_range=long_term",
 	  "https://api.spotify.com/v1/me/top/artists?limit=50&time_range=short_term",
 	  "https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=long_term",
@@ -65,36 +65,36 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		var shortTermArtistIDs = [];
 		var longTermTrackIDs = [];
 		var longTermArtistIDs = [];
-		
+
 		var longTermTracks = response[2];
 		var longTermArtists = response[0];
 		var shortTermTracks = response[3];
 		var shortTermArtists = response[1];
-		
+
 		for(var i = 0; i < longTermTracks.items.length; i++){
 			longTermTrackIDs.push(longTermTracks.items[i].id);
 			longTermTracks.items[i].starRating = findStarRating(longTermTracks.items[i].popularity);
 		}
-		
+
 		for(var i = 0; i < shortTermTracks.items.length; i++){
 			shortTermTrackIDs.push(shortTermTracks.items[i].id);
 			shortTermTracks.items[i].starRating = findStarRating(shortTermTracks.items[i].popularity);
 		}
-		
+
 		for(var i = 0; i < shortTermArtists.items.length; i++){
 			shortTermArtistIDs.push(shortTermArtists.items[i].id);
 			shortTermArtists.items[i].randomGenres = findRandomGenres(shortTermArtists.items[i]);
 			shortTermArtists.items[i].starRating = findStarRating(shortTermArtists.items[i].popularity);
-			
+
 			//where the magic happens
 			recentObscurifyScore = recentObscurifyScore + (50/shortTermArtists.items.length)*(parseInt(shortTermArtists.items[i].popularity * (1 - i/shortTermArtists.items.length)));
 		}
-	  
+
 		for(var i = 0; i < longTermArtists.items.length; i++){
 			longTermArtistIDs.push(longTermArtists.items[i].id);
 			longTermArtists.items[i].randomGenres = findRandomGenres(longTermArtists.items[i]);
 			longTermArtists.items[i].starRating = findStarRating(longTermArtists.items[i].popularity);
-			
+
 			//where the magic happens
 			obscurifyScore = obscurifyScore + (50/longTermArtists.items.length)*(parseInt(longTermArtists.items[i].popularity * (1 - i/longTermArtists.items.length)));
 
@@ -106,35 +106,35 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 					genres[longTermArtists.items[i].genres[genre]] = 1;
 				}
 			}
-		}		
+		}
 		for(var g in genres){
 		  topGenres.push([g,genres[g]]);
 		}
-		
+
 		obscurifyScore = parseInt(obscurifyScore/10);
 		recentObscurifyScore = parseInt(recentObscurifyScore/10);
 		topGenres.sort(Comparator);
-		      		
+
 		//now in this section we're trying to find the energy, happiness,
 		//acousticness, and danceability of your top 50 all-time/recent tracks
 		//also find recommended tracks
 		//and also query the Obscurify database to get user averages and whatnot
-		const audioFeatureAndObscurifyUrls= [			  
+		const audioFeatureAndObscurifyUrls= [
 		    "https://api.spotify.com/v1/audio-features?ids=" + longTermTrackIDs.join(),
 		    "https://api.spotify.com/v1/audio-features?ids=" + shortTermTrackIDs.join(),
 		    "https://obscurifymusic.com/api/getObscurifyData?obscurifyScore=" + obscurifyScore +
 				"&country=" + response[4].country + "&obscurify_secret=" + obscurify_secret,
-		    "https://api.spotify.com/v1/recommendations?seed_artists=" 
+		    "https://api.spotify.com/v1/recommendations?seed_artists="
 				+ longTermArtistIDs[Math.floor(Math.random() * longTermArtistIDs.length)] + ","
 				+ shortTermArtistIDs[Math.floor(Math.random() * shortTermArtistIDs.length)] + "&seed_tracks="
-				+ longTermTrackIDs[Math.floor(Math.random() * longTermTrackIDs.length)] + "," 
+				+ longTermTrackIDs[Math.floor(Math.random() * longTermTrackIDs.length)] + ","
 				+ shortTermTrackIDs[Math.floor(Math.random() * shortTermTrackIDs.length)]
 				+ "&max_popularity=55" + "&min_popularity=35" + "&limit=40",
 			"https://obscurifymusic.com/api/getUserHistory?&userID=" + response[4].id + "&obscurify_secret=" + obscurify_secret
-		  
+
 		];
-		
-		
+
+
 		var responseToTheFrontEnd = {
 						'displayName':response[4].display_name,
 						'userID':response[4].id,
@@ -161,10 +161,10 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 		async.map(audioFeatureAndObscurifyUrls, httpGet, function (err, audioFeatureAndObscurifyDataResponse){
 			if (err || audioFeatureAndObscurifyDataResponse[0].error){
 				//so if something went wrong, just send what we've already got back to the client
-				console.log(err);
+				console.log("we dun goofed: " + err);
 				return res.send(responseToTheFrontEnd);
 			}
-			
+
 			var recommendedTracksResponse = audioFeatureAndObscurifyDataResponse[3].tracks;
 			var recommendedTracks = [];
 			var artistsAppearingInResponse = [];
@@ -205,7 +205,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				'happiness' : 0,
 				'acousticness' : 0
 			};
-			
+
 			try{
 				//this is a little process I like to call "average the audio features for your top tracks"
 				//there's probably a smarter way to do this...?
@@ -220,7 +220,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				longTermAudioFeatures.energy /= audioFeatureAndObscurifyDataResponse[0].audio_features.length;
 				longTermAudioFeatures.happiness /= audioFeatureAndObscurifyDataResponse[0].audio_features.length;
 				longTermAudioFeatures.acousticness /= audioFeatureAndObscurifyDataResponse[0].audio_features.length;
-				
+
 				responseToTheFrontEnd.longTermAudioFeatures = longTermAudioFeatures;
 			}
 			catch(err){
@@ -237,14 +237,14 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				shortTermAudioFeatures.danceability /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
 				shortTermAudioFeatures.energy /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
 				shortTermAudioFeatures.happiness /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
-				shortTermAudioFeatures.acousticness /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;	
+				shortTermAudioFeatures.acousticness /= audioFeatureAndObscurifyDataResponse[1].audio_features.length;
 
 				responseToTheFrontEnd.shortTermAudioFeatures = shortTermAudioFeatures;
 			}
 			catch(err){
 				//console.log(err);
 			}
-				
+
 			//aww yeah look at this fat payload! to angular we go!
 			responseToTheFrontEnd.totalUserCount = audioFeatureAndObscurifyDataResponse[2].totalUserCount;
 			responseToTheFrontEnd.percentileByCountry = audioFeatureAndObscurifyDataResponse[2].percentileByCountry;
@@ -254,7 +254,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 			responseToTheFrontEnd.recommendedTracks = recommendedTracks;
 			responseToTheFrontEnd.userHistory = audioFeatureAndObscurifyDataResponse[4].userHistory;
 			res.send(responseToTheFrontEnd);
-			
+
 			//make a call to the database_server and toss this into MONGO!!!
 			if(
 				longTermArtists.items.length > 14 && //only post data for users who have significant Spotify history
@@ -271,7 +271,6 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 					json: true,
 					body: {
 							'userID' : response[4].id,
-							'email':response[4].email,
 							'country':response[4].country,
 							'longTermArtistIDs':longTermArtistIDs,
 							'longTermTrackIDs':longTermTrackIDs,
@@ -280,27 +279,27 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 							'shortTermArtistIDs' : shortTermArtistIDs,
 							'shortTermTrackIDs' : shortTermTrackIDs,
 							'obscurify_secret' : obscurify_secret // so ya'll aint be cheatin
-						} 
+						}
 				}, function (error, response, body){
 				});
 			}
-			
-			
-		});						
-		
+
+
+		});
+
 	});
-		
+
 	//this is just used to sort the topGenres so the client doesn't have to
 	function Comparator(a, b) {
 		if (a[1] > b[1]) return -1;
 		if (a[1] < b[1]) return 1;
 		return 0;
 	}
-	
+
 });
 
 app.get('/spotifyData/getHistoryItems', function(req, res) {
-	
+
 	function httpGet(url, callback) {
 	  const options = {
 		url :  url,
@@ -316,10 +315,10 @@ app.get('/spotifyData/getHistoryItems', function(req, res) {
 		}
 	  );
 	}
-	
-	const urls= [			  
+
+	const urls= [
 		"https://api.spotify.com/v1/artists?ids=" + req.query.artistIDs,
-		"https://api.spotify.com/v1/tracks?ids=" + req.query.trackIDs	  
+		"https://api.spotify.com/v1/tracks?ids=" + req.query.trackIDs
 	];
 
 	async.map(urls, httpGet, function (err, response){
@@ -327,33 +326,33 @@ app.get('/spotifyData/getHistoryItems', function(req, res) {
 			console.log(err);
 			return res.send({"error" : "darn it"});
 		}
-		
+
 		var artists = response[0].artists;
 		var tracks = response[1].tracks;
 		var recentObscurifyScore = 0;
-		
+
 		for(var i = 0; i < tracks.length; i++){
 			tracks[i].starRating = findStarRating(tracks[i].popularity);
 		}
-		
+
 		for(var i = 0; i < artists.length; i++){
 			artists[i].randomGenres = findRandomGenres(artists[i]);
 			artists[i].starRating = findStarRating(artists[i].popularity);
-			
+
 			//where the magic happens
 			recentObscurifyScore = recentObscurifyScore + (50/artists.length)*(parseInt(artists[i].popularity * (1 - i/artists.length)));
 		}
 		recentObscurifyScore = parseInt(recentObscurifyScore/10);
-		
+
 		res.send({
 			"artists" : artists,
 			"tracks" : tracks,
 			"recentObscurifyScore" : recentObscurifyScore
 		});
-		
-		
+
+
 	});
-	
+
 });
 
 function findStarRating(popularity){
