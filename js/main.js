@@ -66,7 +66,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
   			url : 'https://obscurifymusic.com/spotifyData/' + $routeParams.token + '/getUserData'
   		}).then(function (response) {
 
-			console.log(response);
+			//console.log(response);
 
 			if(response.data.displayName != null && response.data.displayName.indexOf(' ') > 0){
 				$scope.displayName = " " + response.data.displayName.substring(0, response.data.displayName.indexOf(' '));

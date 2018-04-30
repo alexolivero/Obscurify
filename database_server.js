@@ -114,88 +114,59 @@ app.get('/api/getObscurifyData', function(req, res) {
 		return res.send({"status" : "uh oh"});
 	}
 
+
 	MongoClient.connect(url, function(err, db) {
 	  if (err) throw err;
 
-	  db.collection("users").find({}, {
-			//only supposed to specify what you DON'T want returned
-			_id: false,
-			userID: false,
-			email: false,
-			//country: true,
-			longTermArtistIDs:false,
-			longTermTrackIDs:false,
-			//obscurifyScore:true,
-			//longTermAudioFeatures:true,
-			userHistory:false
-		}).toArray(function(err, result) {
-		if (err) throw err;
-
-		var obscurifyScores = []; //only includes scores from the user's country
-		var globalAverageScore = 0;
-		var percentileByCountry = 0;
-		var audioFeatureAverages = {
-			'danceability' : 0,
-			'energy' : 0,
-			'happiness' : 0,
-			'acousticness' : 0
-		};
-
-		for(var i = 0; i < result.length; i++){
-			globalAverageScore += result[i].obscurifyScore;
-
-			if(result[i].country == req.query.country){
-				obscurifyScores.push(result[i].obscurifyScore);
-
-				audioFeatureAverages.danceability += result[i].longTermAudioFeatures.danceability;
-				audioFeatureAverages.energy += result[i].longTermAudioFeatures.energy;
-				audioFeatureAverages.happiness += result[i].longTermAudioFeatures.happiness;
-				audioFeatureAverages.acousticness += result[i].longTermAudioFeatures.acousticness;
-			}
-		}
-		globalAverageScore /= result.length;
+    var audioFeatureAverages = {
+      'danceability' : 0,
+      'energy' : 0,
+      'happiness' : 0,
+      'acousticness' : 0
+    };
+    var percentileByCountry = 0;
 
 
-		if(obscurifyScores.length == 0){
-			percentileByCountry = 100;
-			audioFeatureAverages.danceability = 0.57;
-			audioFeatureAverages.energy = 0.65;
-			audioFeatureAverages.happiness = 0.45;
-			audioFeatureAverages.acousticness = 0.22; //values pulled from obscurify 1.0 global averages
+    db.collection("report").find({code : req.query.country}, {}).toArray(function(err, result) {
+      if (err) throw err;
+      if(result[0] == undefined){
+        percentileByCountry = 100;
+  			audioFeatureAverages.danceability = 0.57;
+  			audioFeatureAverages.energy = 0.65;
+  			audioFeatureAverages.happiness = 0.45;
+  			audioFeatureAverages.acousticness = 0.22; //values pulled from obscurify 1.0 global averages
+      }
+      else{
 
-		} else{
-			obscurifyScores.sort(function(a, b){return b - a});
-			var scoreIndex = -1;
-			for(var i = 0; i < obscurifyScores.length; i++){
-				if(req.query.obscurifyScore >= obscurifyScores[i]){
-					scoreIndex = i;
-					break;
-				}
-			}
-			if(scoreIndex != -1){
-				percentileByCountry = (scoreIndex/obscurifyScores.length)*100;
-			}
+        var usersBelow = 0;
 
-			audioFeatureAverages.danceability /= obscurifyScores.length;
-			audioFeatureAverages.energy /= obscurifyScores.length;
-			audioFeatureAverages.happiness /= obscurifyScores.length;
-			audioFeatureAverages.acousticness /= obscurifyScores.length;
-		}
+        var value;
+        Object.keys(result[0].breakdown).forEach(function(key) {
+            value = result[0].breakdown[key];
+            if( key < req.query.obscurifyScore.toString()){
+              usersBelow += value;
+            }
+        });
+        var usersAbove = result[0].userCount - usersBelow;
 
-		res.send(
-			{
-				"percentileByCountry" : percentileByCountry,
-				"globalAverageScore" : globalAverageScore,
-				"totalUserCount" : result.length,
-				"userCountByCountry" : obscurifyScores.length,
-				"audioFeatureAverages" : audioFeatureAverages
-			}
-		)
-		//db.close();
+  		  percentileByCountry = ( usersAbove / result[0].userCount ) * 100;
+
+        res.send(
+    			{
+    				"percentileByCountry" : percentileByCountry,
+    				"globalAverageScore" : result[0].globalAverageScore,
+    				"totalUserCount" : result[0].totalUserCount,
+    				"userCountByCountry" : result[0].userCount,
+    				"audioFeatureAverages" : result[0].audioFeatureAverages
+    			}
+    		)
+
+      }
+      });
+
 	  });
 	});
 
-});
 
 app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res) {
 
