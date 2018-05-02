@@ -1,7 +1,7 @@
 var cron = require('cron');
 
 //run this cron task every 2 hours
-//var cronJob = cron.job("0 */2 * * *", function(){
+var cronJob = cron.job("0 */2 * * *", function(){
 
   var MongoClient = require('mongodb').MongoClient;
   var url = "mongodb://localhost:27017/";
@@ -156,8 +156,8 @@ var cron = require('cron');
 
     console.info('cron job completed');
 
-//});
-//cronJob.start();
+});
+cronJob.start();
 
 
 
