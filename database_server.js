@@ -180,52 +180,11 @@ app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res)
 	MongoClient.connect(url, function(err, db) {
 	    if (err) throw err;
 
-	    db.collection("users").find({country : req.params.countryCode}, {
-			//only supposed to specify what you DON'T want returned
-			_id: false,
-			userID: false,
-			email: false,
-			country: false,
-			//longTermArtistIDs:true,
-			longTermTrackIDs:false,
-			//obscurifyScore:true,
-			longTermAudioFeatures:false,
-			userHistory:false
-		}).toArray(function(err, result) {
-			if (err) throw err;
-
-			artists = {};
-			topArtists = [];
-			var obscurifyScoreAverage = 0;
-
-			for(var resultIndex = 0; resultIndex < result.length; resultIndex++){
-				obscurifyScoreAverage += result[resultIndex].obscurifyScore;
-				for(var artistIndex = 0; artistIndex < 10; artistIndex++){ //just consider user's top 10 all-time artists
-					var artistID = result[resultIndex].longTermArtistIDs[artistIndex];
-					if(artistID in artists){
-						artists[artistID] = artists[artistID] + 1;
-					}
-					else{
-						artists[artistID] = 1;
-					}
-				}
-			}
-
-			obscurifyScoreAverage /= result.length;
-
-			for(var a in artists){
-			  topArtists.push([a,artists[a]]);
-			}
-
-			topArtists.sort(Comparator);
-			topArtists = topArtists.splice(0,10);
-			var topArtistIDs = [];
-			for(var i = 0; i < topArtists.length; i++){
-				topArtistIDs.push(topArtists[i][0]);
-			}
+    db.collection("report").find({code : req.params.countryCode}, {}).toArray(function(err, result) {
+    if (err) throw err;
 
 			request({
-				url: 'https://api.spotify.com/v1/artists?ids=' + topArtistIDs.join(),
+				url: 'https://api.spotify.com/v1/artists?ids=' + result[0].topArtistIDs.join(),
 				method: "GET",
 				headers : {
 				"Authorization" : "Bearer " + req.params.accessToken,
@@ -236,14 +195,11 @@ app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res)
 				res.send(
 					{
 						"country" : req.params.countryCode,
-						"userCount" : result.length,
-						"obscurifyScoreAverage" : Math.round(obscurifyScoreAverage),
 						"topArtists" : response.body.artists //the 10 artists that appear on the most Top 10 all-time artist lists
 					}
 				);
 			});
 
-			//db.close();
 	    });
 	});
 

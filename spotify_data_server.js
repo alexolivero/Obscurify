@@ -129,7 +129,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				+ shortTermArtistIDs[Math.floor(Math.random() * shortTermArtistIDs.length)] + "&seed_tracks="
 				+ longTermTrackIDs[Math.floor(Math.random() * longTermTrackIDs.length)] + ","
 				+ shortTermTrackIDs[Math.floor(Math.random() * shortTermTrackIDs.length)]
-				+ "&max_popularity=55" + "&min_popularity=35" + "&limit=40",
+				+ "&market=" + response[4].country + "&max_popularity=55" + "&min_popularity=35" + "&limit=40",
 			"https://obscurifymusic.com/api/getUserHistory?&userID=" + response[4].id + "&obscurify_secret=" + obscurify_secret
 
 		];

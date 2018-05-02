@@ -75,7 +75,6 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/mobile_login', function(req, res) {
-  console.log('test');
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 

@@ -1,5 +1,7 @@
 var cron = require('cron');
-var cronJob = cron.job("0 */2 * * *", function(){
+
+//run this cron task every 2 hours
+//var cronJob = cron.job("0 */2 * * *", function(){
 
   var MongoClient = require('mongodb').MongoClient;
   var url = "mongodb://localhost:27017/";
@@ -10,8 +12,8 @@ var cronJob = cron.job("0 */2 * * *", function(){
     var query = {  };
     dbo.collection("users").find(query, {
       //only supposed to specify what you DON'T want returned
-      _id: false, userID: false, email: false, longTermArtistIDs:false, longTermTrackIDs:false, userHistory:false
-      //country, obscurifyScore, longTermAudioFeatures are getting returned
+      _id: false, userID: false, email: false, longTermTrackIDs:false, userHistory:false
+      //country, obscurifyScore, longTermAudioFeatures, longTermArtistIDs are getting returned
     }).toArray(function(err, result) {
       if (err) throw err;
 
@@ -32,20 +34,38 @@ var cronJob = cron.job("0 */2 * * *", function(){
         for(var j = 0; j < countries.length; j++){
           if(result[i].country == countries[j].code){ index = j; }
         }
+
+
+
         if(index == -1){ //new country
-          breakdown = {};
+          var breakdown = {};
+          var topArtistIDs = {};
           var key = result[i].obscurifyScore.toString();
           breakdown[key] = 1;
+
+          for(var artistIndex = 0; artistIndex < 10; artistIndex++){ //just consider user's top 10 all-time artists
+            var artistID = result[i].longTermArtistIDs[artistIndex];
+            if(artistID in topArtistIDs){
+              topArtistIDs[artistID] = topArtistIDs[artistID] + 1;
+            }
+            else{
+              topArtistIDs[artistID] = 1;
+            }
+          }
+
+
           var country = {
             'code' : result[i].country,
             'breakdown' : breakdown,
             'averageScore' : result[i].obscurifyScore,
             'userCount' : 1,
-            'audioFeatureAverages' : result[i].longTermAudioFeatures
+            'audioFeatureAverages' : result[i].longTermAudioFeatures,
+            'topArtistIDs' : topArtistIDs
           }
           countries.push(country);
 
         }
+
         else{ //country is already in the countries array
 
           var newUserCount = countries[index].userCount + 1;
@@ -58,6 +78,7 @@ var cronJob = cron.job("0 */2 * * *", function(){
             'acousticness' : (oldAudioFeatureAverages.acousticness * countries[index].userCount + result[i].longTermAudioFeatures.acousticness) / newUserCount
           };
           var breakdown = countries[index].breakdown;
+          var topArtistIDs = countries[index].topArtistIDs;
           var key = result[i].obscurifyScore.toString();
           if(key in breakdown){
             breakdown[key] = breakdown[key] + 1;
@@ -66,12 +87,23 @@ var cronJob = cron.job("0 */2 * * *", function(){
             breakdown[key] = 1;
           }
 
+          for(var artistIndex = 0; artistIndex < 10; artistIndex++){ //just consider user's top 10 all-time artists
+            var artistID = result[i].longTermArtistIDs[artistIndex];
+            if(artistID in topArtistIDs){
+              topArtistIDs[artistID] = topArtistIDs[artistID] + 1;
+            }
+            else{
+              topArtistIDs[artistID] = 1;
+            }
+          }
+
           countries[index] = {
             "code" : result[i].country,
             "breakdown" : breakdown,
             "averageScore" : newTotalScore / newUserCount,
             "userCount" : newUserCount,
-            "audioFeatureAverages" : newAudioFeatureAverages
+            "audioFeatureAverages" : newAudioFeatureAverages,
+            "topArtistIDs" : topArtistIDs
           }
         }
       }
@@ -83,6 +115,21 @@ var cronJob = cron.job("0 */2 * * *", function(){
 
       for(var i = 0; i < countries.length; i++){
 
+        //narrow topArtistIDs "artist id : count" map down to topArtistIDsArray
+        var topArtistIDsArray = [];
+        for(var a in countries[i].topArtistIDs){
+          topArtistIDsArray.push([a,countries[i].topArtistIDs[a]]);
+        }
+
+  			topArtistIDsArray.sort(Comparator);
+  			topArtistIDsArray = topArtistIDsArray.splice(0,10);
+  			var topTenArtistIDsArray = [];
+  			for(var j = 0; j < topArtistIDsArray.length; j++){
+  				topTenArtistIDsArray.push(topArtistIDsArray[j][0]);
+  			}
+        console.log(topArtistIDsArray);
+
+
         dbo.collection("report").update(
           {code : countries[i].code},
           {$set:
@@ -92,7 +139,8 @@ var cronJob = cron.job("0 */2 * * *", function(){
               "userCount" : countries[i].userCount,
               "audioFeatureAverages" : countries[i].audioFeatureAverages,
               "totalUserCount" : result.length,
-              "globalAverageScore" : globalAverageScore
+              "globalAverageScore" : globalAverageScore,
+              "topArtistIDs" : topTenArtistIDsArray
             }
           },
           { upsert: true}
@@ -106,7 +154,17 @@ var cronJob = cron.job("0 */2 * * *", function(){
     });
   });
 
-
     console.info('cron job completed');
-});
-cronJob.start();
+
+//});
+//cronJob.start();
+
+
+
+
+//this is just used to sort the topGenres so the client doesn't have to
+function Comparator(a, b) {
+  if (a[1] > b[1]) return -1;
+  if (a[1] < b[1]) return 1;
+  return 0;
+}
