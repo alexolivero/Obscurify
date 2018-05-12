@@ -127,8 +127,6 @@ var cronJob = cron.job("0 */2 * * *", function(){
   			for(var j = 0; j < topArtistIDsArray.length; j++){
   				topTenArtistIDsArray.push(topArtistIDsArray[j][0]);
   			}
-        console.log(topArtistIDsArray);
-
 
         dbo.collection("report").update(
           {code : countries[i].code},

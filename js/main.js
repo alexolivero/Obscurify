@@ -251,7 +251,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
 			url : 'https://obscurifymusic.com/api/getCountryBreakdown/' + code + '/' + $routeParams.token
 		}).then(function (response) {
 			$scope.countryBreakdown = response.data;
-			console.log(response.data);
+			//console.log(response.data);
 		}, function myError(err) {
 			console.log(err);
 		});

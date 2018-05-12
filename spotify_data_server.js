@@ -183,7 +183,8 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 							  artistName : recommendedTracksResponse[i].artists[0].name,
 							  albumName : recommendedTracksResponse[i].album.name,
 							  albumImageUrl : recommendedTracksResponse[i].album.images[0].url,
-							  uri : recommendedTracksResponse[i].uri
+							  uri : recommendedTracksResponse[i].uri,
+                href : recommendedTracksResponse[i].external_urls.spotify
 							}
 						  );
 						  artistsAppearingInResponse.push(recommendedTracksResponse[i].artists[0].name);
