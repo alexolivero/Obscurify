@@ -159,7 +159,7 @@ app.get('/mobile_callback', function(req, res) {
   var storedState = req.cookies ? req.cookies[stateKey] : null;
 
   if (state === null || state !== storedState) {
-    res.redirect('obscurify://token#' +
+    res.redirect('https://m.obscurifymusic.com/#/error/' +
       querystring.stringify({
         error: 'state_mismatch'
       }));
@@ -183,11 +183,11 @@ app.get('/mobile_callback', function(req, res) {
 
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
-        res.redirect('obscurify://token#' + access_token);
+        res.redirect('https://m.obscurifymusic.com/#/home/' + access_token);
       } else {
         console.log("line 196: " + error);
         console.log(response.statusCode);
-        res.redirect('obscurify://token#' +
+        res.redirect('https://m.obscurifymusic.com/#/error/' +
           querystring.stringify({
             error: 'invalid_token'
           }));
