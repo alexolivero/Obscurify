@@ -167,34 +167,6 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 			}
 
       var recommendedTracks = processRecommendations(audioFeatureAndObscurifyDataResponse[3].tracks);
-			// var recommendedTracksResponse = audioFeatureAndObscurifyDataResponse[3].tracks;
-			// var recommendedTracks = [];
-			// var artistsAppearingInResponse = [];
-			// try{
-			// 	if(recommendedTracksResponse != undefined ){
-			// 		for(var i = 0; i < recommendedTracksResponse.length; i++){
-			// 			if(
-			// 				artistsAppearingInResponse.indexOf(recommendedTracksResponse[i].artists[0].name) < 0 &&
-			// 				longTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0 &&
-			// 				shortTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0
-			// 				){
-			// 			  recommendedTracks.push(
-			// 				{
-			// 				  trackName : recommendedTracksResponse[i].name,
-			// 				  popularity : recommendedTracksResponse[i].popularity,
-			// 				  artistName : recommendedTracksResponse[i].artists[0].name,
-			// 				  albumName : recommendedTracksResponse[i].album.name,
-			// 				  albumImageUrl : recommendedTracksResponse[i].album.images[0].url,
-			// 				  uri : recommendedTracksResponse[i].uri,
-      //           href : recommendedTracksResponse[i].external_urls.spotify
-			// 				}
-			// 			  );
-			// 			  artistsAppearingInResponse.push(recommendedTracksResponse[i].artists[0].name);
-			// 			}
-			// 		}
-			// 	}
-			// }
-			// catch(err){}
 
 			var longTermAudioFeatures = {
 				'danceability' : 0,
