@@ -183,7 +183,8 @@ app.get('/mobile_callback', function(req, res) {
 
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
-        res.redirect('https://m.obscurifymusic.com/#/home/' + access_token);
+        //res.redirect('https://m.obscurifymusic.com/#/home/' + access_token);
+        res.redirect('http://localhost:8100/#/home/' + access_token);
       } else {
         console.log("line 196: " + error);
         console.log(response.statusCode);

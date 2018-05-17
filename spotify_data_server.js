@@ -146,6 +146,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 						'shortTermTracks':shortTermTracks,
 						'obscurifyScore':obscurifyScore,
 						'recentObscurifyScore':recentObscurifyScore,
+            'averageScore':null,
 						'topGenres':topGenres,
 						'longTermAudioFeatures':null,
 						'shortTermAudioFeatures':null,
@@ -165,34 +166,35 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				return res.send(responseToTheFrontEnd);
 			}
 
-			var recommendedTracksResponse = audioFeatureAndObscurifyDataResponse[3].tracks;
-			var recommendedTracks = [];
-			var artistsAppearingInResponse = [];
-			try{
-				if(recommendedTracksResponse != undefined ){
-					for(var i = 0; i < recommendedTracksResponse.length; i++){
-						if(
-							artistsAppearingInResponse.indexOf(recommendedTracksResponse[i].artists[0].name) < 0 &&
-							longTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0 &&
-							shortTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0
-							){
-						  recommendedTracks.push(
-							{
-							  trackName : recommendedTracksResponse[i].name,
-							  popularity : recommendedTracksResponse[i].popularity,
-							  artistName : recommendedTracksResponse[i].artists[0].name,
-							  albumName : recommendedTracksResponse[i].album.name,
-							  albumImageUrl : recommendedTracksResponse[i].album.images[0].url,
-							  uri : recommendedTracksResponse[i].uri,
-                href : recommendedTracksResponse[i].external_urls.spotify
-							}
-						  );
-						  artistsAppearingInResponse.push(recommendedTracksResponse[i].artists[0].name);
-						}
-					}
-				}
-			}
-			catch(err){}
+      var recommendedTracks = processRecommendations(audioFeatureAndObscurifyDataResponse[3].tracks);
+			// var recommendedTracksResponse = audioFeatureAndObscurifyDataResponse[3].tracks;
+			// var recommendedTracks = [];
+			// var artistsAppearingInResponse = [];
+			// try{
+			// 	if(recommendedTracksResponse != undefined ){
+			// 		for(var i = 0; i < recommendedTracksResponse.length; i++){
+			// 			if(
+			// 				artistsAppearingInResponse.indexOf(recommendedTracksResponse[i].artists[0].name) < 0 &&
+			// 				longTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0 &&
+			// 				shortTermTrackIDs.indexOf(recommendedTracksResponse[i].id) < 0
+			// 				){
+			// 			  recommendedTracks.push(
+			// 				{
+			// 				  trackName : recommendedTracksResponse[i].name,
+			// 				  popularity : recommendedTracksResponse[i].popularity,
+			// 				  artistName : recommendedTracksResponse[i].artists[0].name,
+			// 				  albumName : recommendedTracksResponse[i].album.name,
+			// 				  albumImageUrl : recommendedTracksResponse[i].album.images[0].url,
+			// 				  uri : recommendedTracksResponse[i].uri,
+      //           href : recommendedTracksResponse[i].external_urls.spotify
+			// 				}
+			// 			  );
+			// 			  artistsAppearingInResponse.push(recommendedTracksResponse[i].artists[0].name);
+			// 			}
+			// 		}
+			// 	}
+			// }
+			// catch(err){}
 
 			var longTermAudioFeatures = {
 				'danceability' : 0,
@@ -250,6 +252,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 			responseToTheFrontEnd.totalUserCount = audioFeatureAndObscurifyDataResponse[2].totalUserCount;
 			responseToTheFrontEnd.percentileByCountry = audioFeatureAndObscurifyDataResponse[2].percentileByCountry;
 			responseToTheFrontEnd.globalAverageScore = audioFeatureAndObscurifyDataResponse[2].globalAverageScore;
+      responseToTheFrontEnd.averageScore = audioFeatureAndObscurifyDataResponse[2].averageScore;
 			responseToTheFrontEnd.userCountByCountry = audioFeatureAndObscurifyDataResponse[2].userCountByCountry;
 			responseToTheFrontEnd.audioFeatureAverages = audioFeatureAndObscurifyDataResponse[2].audioFeatureAverages;
 			responseToTheFrontEnd.recommendedTracks = recommendedTracks;
@@ -298,6 +301,55 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 	}
 
 });
+
+
+
+
+app.get('/spotifyData/getRecommendations', function(req, res) {
+
+	function httpGet(url, callback) {
+	  const options = {
+		url :  url,
+		headers : {
+				"Authorization" : "Bearer " + req.query.accessToken,
+				"Accept" : "application/json"
+			},
+		json : true
+	  };
+	  request(options,
+		function(err, res, body) {
+		  callback(err, body);
+		}
+	  );
+	}
+
+	const urls= [
+    "https://api.spotify.com/v1/recommendations?seed_artists=" + req.query.artistID
+    + "&market=" + req.query.country
+    + "&max_popularity=55"
+    + "&min_popularity=35"
+    + "&limit=40"
+	];
+
+	async.map(urls, httpGet, function (err, response){
+		if (err || response[0].error){
+			console.log(err);
+			return res.send({"error" : "darn it"});
+		}
+
+
+		res.send({
+			'recommendedTracks': processRecommendations(response[0].tracks)
+		});
+
+
+	});
+
+});
+
+
+
+
 
 app.get('/spotifyData/getHistoryItems', function(req, res) {
 
@@ -389,6 +441,39 @@ function findRandomGenres(artist){
 	else{
 		return {randomGenre1 : null, randomGenre2 : null}
 	}
+}
+
+
+
+function processRecommendations(rawRecommendations){
+  var recommendedTracks = [];
+  var artistsAppearingInResponse = [];
+  try{
+    if(rawRecommendations != undefined ){
+      for(var i = 0; i < rawRecommendations.length; i++){
+        if( artistsAppearingInResponse.indexOf(rawRecommendations[i].artists[0].name) < 0 ){
+          recommendedTracks.push(
+          {
+            trackName : rawRecommendations[i].name,
+            popularity : rawRecommendations[i].popularity,
+            artistName : rawRecommendations[i].artists[0].name,
+            artistID : rawRecommendations[i].artists[0].id,
+            albumName : rawRecommendations[i].album.name,
+            albumImageUrl : rawRecommendations[i].album.images[0].url,
+            uri : rawRecommendations[i].uri,
+            href : rawRecommendations[i].external_urls.spotify
+          }
+          );
+          artistsAppearingInResponse.push(rawRecommendations[i].artists[0].name);
+        }
+      }
+
+    }
+    return recommendedTracks;
+  }
+  catch(err){}
+
+
 }
 
 //console.log('Listening on 8081');

@@ -157,7 +157,8 @@ app.get('/api/getObscurifyData', function(req, res) {
     				"globalAverageScore" : result[0].globalAverageScore,
     				"totalUserCount" : result[0].totalUserCount,
     				"userCountByCountry" : result[0].userCount,
-    				"audioFeatureAverages" : result[0].audioFeatureAverages
+    				"audioFeatureAverages" : result[0].audioFeatureAverages,
+            "averageScore" : result[0].averageScore
     			}
     		)
 
