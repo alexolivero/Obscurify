@@ -298,8 +298,7 @@ app.get('/spotifyData/getRecommendations', function(req, res) {
 	const urls= [
     "https://api.spotify.com/v1/recommendations?seed_artists=" + req.query.artistID
     + "&market=" + req.query.country
-    + "&max_popularity=55"
-    + "&min_popularity=35"
+    + "&target_popularity=" + req.query.desiredObscurity
     + "&limit=40"
 	];
 
