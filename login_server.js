@@ -25,6 +25,7 @@ var client_id = process.argv[2];
 var client_secret = process.argv[3];
 var redirect_uri = 'https://obscurifymusic.com/callback'; // Your redirect uri
 var mobile_redirect_uri = 'https://obscurifymusic.com/mobile_callback';
+var mobile_local_redirect_uri = 'https://obscurifymusic.com/mobile_local_callback';
 
 /**
  * Generates a random string containing numbers and letters
@@ -58,7 +59,6 @@ app.get('/', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -86,6 +86,22 @@ app.get('/mobile_login', function(req, res) {
       client_id: client_id,
       scope: scope,
       redirect_uri: mobile_redirect_uri,
+      state: state
+    }));
+});
+
+app.get('/mobile_local_login', function(req, res) {
+  var state = generateRandomString(16);
+  res.cookie(stateKey, state);
+
+  // your application requests authorization
+  var scope = 'user-read-private user-top-read playlist-modify-public playlist-modify-private';
+  res.redirect('https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: client_id,
+      scope: scope,
+      redirect_uri: mobile_local_redirect_uri,
       state: state
     }));
 });
@@ -130,7 +146,7 @@ app.get('/callback', function(req, res) {
         grant_type: 'authorization_code'
       },
       headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+        'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
       },
       json: true
     };
@@ -173,7 +189,53 @@ app.get('/mobile_callback', function(req, res) {
         grant_type: 'authorization_code'
       },
       headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+        'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
+      },
+      json: true
+    };
+
+    request.post(authOptions, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+
+        var access_token = body.access_token,
+            refresh_token = body.refresh_token;
+        res.redirect('https://m.obscurifymusic.com/#/home/' + access_token);
+        //res.redirect('http://localhost:8100/#/home/' + access_token);
+      } else {
+        console.log("line 189: " + error);
+        console.log(response.statusCode);
+        res.redirect('https://m.obscurifymusic.com/#/error/' +
+          querystring.stringify({
+            error: 'invalid_token'
+          }));
+      }
+    });
+  }
+});
+
+app.get('/mobile_local_callback', function(req, res) {
+  // your application requests refresh and access tokens
+  // after checking the state parameter
+  var code = req.query.code || null;
+  var state = req.query.state || null;
+  var storedState = req.cookies ? req.cookies[stateKey] : null;
+
+  if (state === null || state !== storedState) {
+    res.redirect('https://m.obscurifymusic.com/#/error/' +
+      querystring.stringify({
+        error: 'state_mismatch'
+      }));
+  } else {
+    res.clearCookie(stateKey);
+    var authOptions = {
+      url: 'https://accounts.spotify.com/api/token',
+      form: {
+        code: code,
+        redirect_uri: mobile_local_redirect_uri,
+        grant_type: 'authorization_code'
+      },
+      headers: {
+        'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
       },
       json: true
     };
@@ -186,7 +248,7 @@ app.get('/mobile_callback', function(req, res) {
         //res.redirect('https://m.obscurifymusic.com/#/home/' + access_token);
         res.redirect('http://localhost:8100/#/home/' + access_token);
       } else {
-        console.log("line 196: " + error);
+        console.log("line 189: " + error);
         console.log(response.statusCode);
         res.redirect('https://m.obscurifymusic.com/#/error/' +
           querystring.stringify({
@@ -203,7 +265,7 @@ app.get('/refresh_token', function(req, res) {
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+    headers: { 'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64')) },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token

@@ -3,7 +3,8 @@ var app = angular.module('obscurify', ['ngRoute', 'ngAnimate']);
 app.config(function($routeProvider,$compileProvider) {
     $routeProvider
         .when("/", {
-            templateUrl : "partials/landing.html"
+            templateUrl : "partials/landing.html",
+            controller : "loginController"
         })
         .when("/faq", {
             templateUrl : "partials/faq.html"
@@ -263,5 +264,11 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
             return "right on";
         }
     };
+
+});
+
+app.controller('loginController', function($scope) {
+
+    $scope.mobileDetected = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 });

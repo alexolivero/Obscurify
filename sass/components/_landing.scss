@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1) ), url('../images/landing-bg.png') no-repeat;
+  background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1) ), url('../images/landing-bg.jpg') no-repeat;
   padding:0px 34px;
   color: $o-white;
 
@@ -59,11 +59,11 @@
       left: 28px;
     }
 
-    &:hover { 
+    &:hover {
       text-decoration: underline;
       color: $o-black;
       background-color: $o-white;
- 
+
     }
 
   }

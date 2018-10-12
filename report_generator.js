@@ -108,6 +108,7 @@ var cronJob = cron.job("0 */2 * * *", function(){
         }
       }
       globalAverageScore /= result.length;
+      console.log("total users: " + result.length + " // " + new Date());
 
       MongoClient.connect(url, function(err, db) {
       if (err) throw err;
