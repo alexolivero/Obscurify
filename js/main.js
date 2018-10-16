@@ -81,7 +81,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
         var shortTermAudioFeatures = response.data.shortTermAudioFeatures;
         var audioFeatureAverages = response.data.audioFeatureAverages;
         $scope.userCountByCountry = response.data.userCountByCountry;
-        $scope.percentileByCountry = Math.trunc(response.data.percentileByCountry);
+        $scope.percentileByCountry = Math.round(response.data.percentileByCountry);
         $scope.globalAverageScore = Math.round(response.data.globalAverageScore);
         $scope.totalUserCount = response.data.totalUserCount;
         $scope.shortTermHeader = "Current";

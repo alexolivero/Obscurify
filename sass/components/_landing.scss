@@ -6,6 +6,8 @@
   background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1) ), url('../images/landing-bg.jpg') no-repeat;
   padding:0px 34px;
   color: $o-white;
+  background-position: center;
+  background-size: cover;
 
   .landing-jumbotron {
     max-width: 827px;
