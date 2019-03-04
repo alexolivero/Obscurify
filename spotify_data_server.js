@@ -146,7 +146,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 						'shortTermTracks':shortTermTracks,
 						'obscurifyScore':obscurifyScore,
 						'recentObscurifyScore':recentObscurifyScore,
-            'averageScore':null,
+                        'averageScore':null,
 						'topGenres':topGenres,
 						'longTermAudioFeatures':null,
 						'shortTermAudioFeatures':null,
@@ -166,7 +166,11 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				return res.send(responseToTheFrontEnd);
 			}
 
-      var recommendedTracks = processRecommendations(audioFeatureAndObscurifyDataResponse[3].tracks);
+      var recommendationResponse = [];
+      if(audioFeatureAndObscurifyDataResponse[3] != undefined && audioFeatureAndObscurifyDataResponse[3] != null){
+        recommendationResponse = audioFeatureAndObscurifyDataResponse[3].tracks;
+      }
+      var recommendedTracks = processRecommendations(recommendationResponse);
 
 			var longTermAudioFeatures = {
 				'danceability' : 0,

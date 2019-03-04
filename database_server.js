@@ -103,7 +103,6 @@ app.post('/api/saveUserHistory', function(req, res) {
 });
 
 app.get('/api/getObscurifyData', function(req, res) {
-
 	var MongoClient = require('mongodb').MongoClient;
 	var url = "mongodb://127.0.0.1:27017/obscurify";
 
@@ -143,7 +142,7 @@ app.get('/api/getObscurifyData', function(req, res) {
         var value;
         Object.keys(result[0].breakdown).forEach(function(key) {
             value = result[0].breakdown[key];
-            if( key < req.query.obscurifyScore.toString()){
+            if( parseInt(key) < parseInt(req.query.obscurifyScore)){
               usersBelow += value;
             }
         });
@@ -214,7 +213,6 @@ app.get('/api/getCountryBreakdown/:countryCode/:accessToken', function(req, res)
 });
 
 app.get('/api/getUserHistory', function(req, res) {
-
 	var MongoClient = require('mongodb').MongoClient;
 	var url = "mongodb://127.0.0.1:27017/obscurify";
 
@@ -223,7 +221,10 @@ app.get('/api/getUserHistory', function(req, res) {
 	}
 
 	MongoClient.connect(url, function(err, db) {
-	    if (err) throw err;
+	    if (err){
+            console.log(err);
+            throw err;
+        }
 
 	    db.collection("users").find({userID : req.query.userID}, {
 			//only supposed to specify what you DON'T want returned
