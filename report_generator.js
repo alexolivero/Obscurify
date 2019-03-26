@@ -100,8 +100,8 @@ var cronJob = cron.job("0 */2 * * *", function(){
 
                     //narrow topArtistIDs "artist id : count" map down to topArtistIDsArray
                     var topArtistIDsArray = [];
-                    for(var a in country.topArtistIDs){
-                      topArtistIDsArray.push([a,country.topArtistIDs[a]]);
+                    for(var a in countries[country].topArtistIDs){
+                      topArtistIDsArray.push([a,countries[country].topArtistIDs[a]]);
                     }
 
           			topArtistIDsArray.sort(Comparator);
@@ -110,15 +110,14 @@ var cronJob = cron.job("0 */2 * * *", function(){
           			for(var j = 0; j < topArtistIDsArray.length; j++){
           				topTenArtistIDsArray.push(topArtistIDsArray[j][0]);
           			}
-
                     dbo.collection("report").update(
-                      {code : country.code},
+                      {code : countries[country].code},
                       {$set:
                         {
-                          "breakdown" : country.breakdown,
-                          "averageScore" : country.averageScore,
-                          "userCount" : country.userCount,
-                          "audioFeatureAverages" : country.audioFeatureAverages,
+                          "breakdown" : countries[country].breakdown,
+                          "averageScore" : countries[country].averageScore,
+                          "userCount" : countries[country].userCount,
+                          "audioFeatureAverages" : countries[country].audioFeatureAverages,
                           "totalUserCount" : globalUserCount,
                           "globalAverageScore" : globalAverageScore,
                           "topArtistIDs" : topTenArtistIDsArray
@@ -147,10 +146,6 @@ var cronJob = cron.job("0 */2 * * *", function(){
 cronJob.start();
 
 
-
-
-
-//this is just used to sort the topGenres so the client doesn't have to
 function Comparator(a, b) {
   if (a[1] > b[1]) return -1;
   if (a[1] < b[1]) return 1;
