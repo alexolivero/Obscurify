@@ -5,7 +5,7 @@ your Spotify listening history as possible, and to quantify
 how unique your taste is compared to everyone else.
 
 
-As of now, this project contains three elements: on the backend, a few Node.js apps; and two versions of the frontend: an Angular project for desktop browsers and an Ionic PWA used for mobile users.
+As of now, this project contains three elements: on the backend, a few Node.js apps; and two versions of the frontend: an Angular app for desktop browsers and an Ionic PWA used for mobile users.
 
 Obscurify uses three server-side node programs to function.
 
