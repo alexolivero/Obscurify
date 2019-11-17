@@ -15,6 +15,7 @@ module.exports = {
 var assert = require('assert-plus');
 var SSHBuffer = require('../ssh-buffer');
 var crypto = require('crypto');
+var Buffer = require('safer-buffer').Buffer;
 var algs = require('../algs');
 var Key = require('../key');
 var PrivateKey = require('../private-key');
@@ -50,7 +51,7 @@ function read(buf, options) {
 	var algo = parts[0];
 	var data = parts[1];
 
-	data = new Buffer(data, 'base64');
+	data = Buffer.from(data, 'base64');
 	return (fromBuffer(data, algo));
 }
 
@@ -121,8 +122,23 @@ function fromBuffer(data, algo, partial) {
 	cert.validFrom = int64ToDate(sshbuf.readInt64());
 	cert.validUntil = int64ToDate(sshbuf.readInt64());
 
-	cert.signatures.openssh.critical = sshbuf.readBuffer();
-	cert.signatures.openssh.exts = sshbuf.readBuffer();
+	var exts = [];
+	var extbuf = new SSHBuffer({ buffer: sshbuf.readBuffer() });
+	var ext;
+	while (!extbuf.atEnd()) {
+		ext = { critical: true };
+		ext.name = extbuf.readString();
+		ext.data = extbuf.readBuffer();
+		exts.push(ext);
+	}
+	extbuf = new SSHBuffer({ buffer: sshbuf.readBuffer() });
+	while (!extbuf.atEnd()) {
+		ext = { critical: false };
+		ext.name = extbuf.readString();
+		ext.data = extbuf.readBuffer();
+		exts.push(ext);
+	}
+	cert.signatures.openssh.exts = exts;
 
 	/* reserved */
 	sshbuf.readBuffer();
@@ -164,7 +180,7 @@ function dateToInt64(date) {
 	var i = Math.round(date.getTime() / 1000);
 	var upper = Math.floor(i / 4294967296);
 	var lower = Math.floor(i % 4294967296);
-	var buf = new Buffer(8);
+	var buf = Buffer.alloc(8);
 	buf.writeUInt32BE(upper, 0);
 	buf.writeUInt32BE(lower, 4);
 	return (buf);
@@ -277,16 +293,30 @@ function toBuffer(cert, noSig) {
 	buf.writeInt64(dateToInt64(cert.validFrom));
 	buf.writeInt64(dateToInt64(cert.validUntil));
 
-	if (sig.critical === undefined)
-		sig.critical = new Buffer(0);
-	buf.writeBuffer(sig.critical);
+	var exts = sig.exts;
+	if (exts === undefined)
+		exts = [];
 
-	if (sig.exts === undefined)
-		sig.exts = new Buffer(0);
-	buf.writeBuffer(sig.exts);
+	var extbuf = new SSHBuffer({});
+	exts.forEach(function (ext) {
+		if (ext.critical !== true)
+			return;
+		extbuf.writeString(ext.name);
+		extbuf.writeBuffer(ext.data);
+	});
+	buf.writeBuffer(extbuf.toBuffer());
+
+	extbuf = new SSHBuffer({});
+	exts.forEach(function (ext) {
+		if (ext.critical === true)
+			return;
+		extbuf.writeString(ext.name);
+		extbuf.writeBuffer(ext.data);
+	});
+	buf.writeBuffer(extbuf.toBuffer());
 
 	/* reserved */
-	buf.writeBuffer(new Buffer(0));
+	buf.writeBuffer(Buffer.alloc(0));
 
 	sub = rfc4253.write(cert.issuerKey);
 	buf.writeBuffer(sub);

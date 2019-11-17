@@ -13,9 +13,7 @@ var https = require('https');
 var url = require('url');
 var privateKey  = fs.readFileSync('/etc/letsencrypt/live/obscurifymusic.com/privkey.pem', 'utf8');
 var certificate = fs.readFileSync('/etc/letsencrypt/live/obscurifymusic.com/fullchain.pem', 'utf8');
-
 var credentials = {key: privateKey, cert: certificate};
-
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
@@ -55,13 +53,12 @@ app.use(express.static(__dirname ))
       });
 
 app.get('/', function(req, res) {
-    res.sendFile('index.html', {root: __dirname })
+    res.sendFile('desktop/index.html', {root: __dirname })
 });
 
 app.get('/login', function(req, res) {
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
-
   // your application requests authorization
   var scope = 'user-read-private user-top-read playlist-modify-public playlist-modify-private';
   res.redirect('https://accounts.spotify.com/authorize?' +
@@ -284,9 +281,9 @@ app.get('/refresh_token', function(req, res) {
 });
 
 
-//console.log('Listening on 8080');
-//app.listen(8080, '0.0.0.0');
+// console.log('Listening on 8001');
+// app.listen(8001);
 
 var httpsServer = https.createServer(credentials, app);
-console.log('Listening on 8443');
-httpsServer.listen(8443);
+console.log('Listening on 8001');
+httpsServer.listen(8001);

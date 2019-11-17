@@ -57,7 +57,7 @@ function RequestSigner(request, credentials) {
 }
 
 RequestSigner.prototype.matchHost = function(host) {
-  var match = (host || '').match(/([^\.]+)\.(?:([^\.]*)\.)?amazonaws\.com$/)
+  var match = (host || '').match(/([^\.]+)\.(?:([^\.]*)\.)?amazonaws\.com(\.cn)?$/)
   var hostParts = (match || []).slice(1, 3)
 
   // ES's hostParts are sometimes the other way round, if the value that is expected
@@ -233,8 +233,8 @@ RequestSigner.prototype.canonicalString = function() {
       if (normalizePath && piece === '..') {
         path.pop()
       } else if (!normalizePath || piece !== '.') {
-        if (decodePath) piece = querystring.unescape(piece)
-        path.push(encodeRfc3986(querystring.escape(piece)))
+        if (decodePath) piece = decodeURIComponent(piece)
+        path.push(encodeRfc3986(encodeURIComponent(piece)))
       }
       return path
     }, []).join('/')
@@ -303,7 +303,7 @@ RequestSigner.prototype.parsePath = function() {
   // So if there are non-reserved chars (and it's not already all % encoded), just encode them all
   if (/[^0-9A-Za-z!'()*\-._~%/]/.test(path)) {
     path = path.split('/').map(function(piece) {
-      return querystring.escape(querystring.unescape(piece))
+      return encodeURIComponent(decodeURIComponent(piece))
     }).join('/')
   }
 
