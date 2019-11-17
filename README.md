@@ -19,7 +19,7 @@ PM2 is great for running and automatically restarting these node apps, with the 
 > pm2 start spotify_data_server.js --'OBSCURIFY_SECRET' --watch<br />
 > pm2 start database_server.js --'OBSCURIFY_SECRET' --watch<br />
 
-In order to hit these node apps with HTTPS calls, I followed [a guide like this](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04#set-up-nginx-as-a-reverse-proxy-server) to set up reverse proxy, routing a request such as `GET https://obscurifymusic.com/login` through port 8443 where `login_server.js` is listening.
+In order to hit these node apps with HTTPS calls, I followed [a guide like this](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04#set-up-nginx-as-a-reverse-proxy-server) to set up reverse proxy, routing a request such as `GET https://obscurifymusic.com/login` through port 8001 where `login_server.js` is listening.
 
 `CLIENT_ID` and `CLIENT_SECRET` keys are from [Spotify's Developer site](https://developer.spotify.com/my-applications/), `OBSCURIFY_SECRET` is present to ensure that only spotify_data_server can access database_server. It's a string I made up, it doesn't matter what you make it, just use the same string in both commands.
 
