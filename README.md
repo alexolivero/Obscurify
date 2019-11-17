@@ -1,4 +1,4 @@
-# What's up ya'll, welcome to Obscurify
+## What's up ya'll, welcome to Obscurify
 
 The goal here is to show you as many interesting things about
 your Spotify listening history as possible, and to quantify
