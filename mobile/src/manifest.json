@@ -1,0 +1,14 @@
+{
+  "name": "Obscurify Music",
+  "short_name": "Obscurify",
+  "start_url": "https://m.obscurifymusic.com/",
+  "display": "standalone",
+  "scope": "/#/",
+  "icons": [{
+    "src": "mobile/assets/imgs/logo.png",
+    "sizes": "165x165",
+    "type": "image/png"
+  }],
+  "background_color": "#65d26e",
+  "theme_color": "#65d26e"
+}

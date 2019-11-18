@@ -1,0 +1,37 @@
+percentile {
+  display:flex;
+  justify-content: center;
+
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px 24px 74px;
+  }
+  h1 {
+    font-size: 16px;
+  }
+  h2 {
+    font-size: 80px;
+  }
+
+  p {
+    bottom: 34px;
+    left: 0;
+    text-align: left;
+  }
+
+  .percentile-card {
+    border-radius: 5px;
+    background-color: #fff;
+    height: 90%;
+    flex-wrap: wrap;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 16px;
+    box-shadow: 22px 21px 1px 0 rgba(0, 0, 0, 0.5);
+  }
+}

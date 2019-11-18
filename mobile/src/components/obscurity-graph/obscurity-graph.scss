@@ -1,0 +1,74 @@
+
+obscurity-graph {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 16px 0;
+
+
+  .obscurity-graph {
+    height: 263px;
+    min-width: 306px;
+    max-width: 350px;
+    width: 100%;
+    margin: 32px 0 70px;
+    padding: 0 9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    .obscurity-avg-bar {
+      // height: 263px;
+      will-change: height, opacity;
+
+      background: #FFFBFA;
+      box-shadow: 12px 12px 1px 0 rgba(0,0,0,0.25);
+      width: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+
+      &.active {
+          .bar-value {
+              opacity: 1;
+              visibility: visible;
+
+          }
+      }
+
+      .bar-value{
+         color: grey;
+         opacity: 0;
+         transition: all .5s cubic-bezier(0.645, 0.045, 0.355, 1) 1s;
+
+      }
+
+      .bar-title {
+        position: absolute;
+        bottom: -73px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+        font-size: 14px;
+        color: #000000;
+        letter-spacing: 0.87px;
+        text-align: center;
+        height: 35px;
+      }
+    }
+    $timeList: 0.5, 1, 1.5, 2;
+    $count: 1;
+
+    @each $time in $timeList {
+      .obscurity-avg-bar:nth-child(#{$count}) {
+        transition: all #{$time}s cubic-bezier(0.645, 0.045, 0.355, 1);
+      }
+      $count: $count + 1;
+    }
+  }
+
+  .graph-info {
+    text-align: left;
+    padding: 0 26px;
+  }
+}

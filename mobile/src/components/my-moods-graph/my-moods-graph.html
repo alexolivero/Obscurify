@@ -1,0 +1,49 @@
+<!-- Generated template for the MyMoodsGraphComponent component -->
+<div class="mood-container">
+  <h3>{{data.type | titlecase}}</h3>
+  <div class="mood-graph-card">
+    <h4>All-Time</h4>
+    <div class="mood-graph-card-content">
+      <p>{{allTime}}</p>
+
+      <div class="equalizer-container" [ngClass]="this.allTimeLevel">
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mood-graph-card">
+    <h4>Recent</h4>
+    <div class="mood-graph-card-content">
+
+      <div class="equalizer-container" [ngClass]="this.recentLevel">
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+        <div class="bar" [ngStyle]="{'background-color': bgColor[1]}"></div>
+      </div>
+      <p>{{recent}}</p>
+    </div>
+
+
+    </div>
+</div>

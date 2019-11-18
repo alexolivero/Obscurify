@@ -1,0 +1,152 @@
+<ion-slides class="my-music-slider" (ionSlideDidChange)="slideChanged()" style="height: auto" pager="true">
+    <ion-slide>
+
+      <div class="artist-container">
+        <div class="artist-container-header">
+        <h2>{{currentHeaderString}} Artists</h2>
+        <button id="filter-btn" class="filter-btn" (click)="toggleFilter()">
+          <i class="fas fa-sliders-h"></i>
+        </button>
+        </div>
+
+        <div class="card-list">
+            <div id="filter" class="filter-options-container" [ngClass]="{'active': filter}">
+
+                    <!-- <ion-list radio-group [(ngModel)]="relationship">
+                      <ion-item *ngFor="let history of userHistory">
+                        <ion-label>{{history.formattedDate}}</ion-label>
+                        <ion-radio value="" (click)="toggleFilter(); onChange(history);"></ion-radio>
+                      </ion-item>
+                    </ion-list> -->
+                    <form action="">
+                        <p *ngFor="let history of userHistory">
+                            <input type="radio" id="{{history.formattedDate}}" name="radio-group" [value]="history.formattedDate" (click)="toggleFilter(); onChange(history);" [(ngModel)]="relationship">
+                            <label for="{{history.formattedDate}}">{{history.formattedDate}}</label>
+                          </p>
+
+
+                    </form>
+
+              </div>
+          <div class="card-list-item" [ngClass]="{'active': artist.expanded}" *ngFor="let artist of shortTermArtists | slice:0:sliceLimit; let i = index;"
+            (click)="setActiveListItem(artist, shortTermArtists)">
+            <img src="{{artist.images.length > 0 ? artist.images[0].url : '' }}" />
+            <div class="info">
+              <span>{{i + 1}}</span>
+              <a [href]="this.sanitizer.bypassSecurityTrustResourceUrl(artist.uri)">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+              <p class="primary-info">{{artist.name}}</p>
+              <p class="secondary-info">{{artist.randomGenres.randomGenre1}} / {{artist.randomGenres.randomGenre2}}</p>
+              <div><button (click)="goToRecommendations(artist)" >More Like This</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="primary-button pb-light" (click)="toggleShowMore()">{{toggledButtonText}}</button>
+    </ion-slide>
+
+    <ion-slide>
+
+      <div class="artist-container">
+        <div class="artist-container-header">
+            <button id="filter-btn" class="filter-btn" (click)="toggleFilter()">
+                <i class="fas fa-sliders-h"></i>
+              </button>
+          <h2>{{currentHeaderString}} Songs</h2>
+
+          <button id="add-playlist-btn" class="add-playlist-btn" (click)="makePlaylist(shortTermTracks, 'Current')">
+            <span>Create Playlist</span>
+            <i class="fas fa-plus-circle"></i>
+          </button>
+        </div>
+        <div class="card-list">
+            <div id="filter" class="filter-options-container" [ngClass]="{'active': filter}">
+                <div class="content">
+                    <form action="">
+                      <p *ngFor="let history of userHistory">
+                        <input type="radio" id="{{history.formattedDate}}" name="radio-group" [value]="history.formattedDate" (click)="toggleFilter(); onChange(history);" [(ngModel)]="relationship">
+                        <label for="{{history.formattedDate}}">{{history.formattedDate}}</label>
+                      </p>
+                  </form>
+                </div>
+              </div>
+          <div class="card-list-item" [ngClass]="{'active': track.expanded}"
+            *ngFor="let track of shortTermTracks | slice:0:sliceLimit; let i = index;" (click)="setActiveListItem(track, shortTermTracks)">
+            <img src="{{track.album.images.length > 0 ? track.album.images[1].url : ''}}" />
+            <div class="info">
+              <span>{{i + 1}}</span>
+              <a [href]="this.sanitizer.bypassSecurityTrustResourceUrl(track.uri)">
+                  <i class="fas fa-external-link-alt"></i>
+                </a>
+              <p class="primary-info">{{(track.name.length < 30) ? (track.name):(track.name | slice:0:25)+'...'}}</p>
+              <p class="secondary-info">{{track.artists[0].name}}</p>
+              <div><button (click)="goToRecommendations(track.artists[0])" >More Like This</button></div>
+            </div>
+          </div>
+                  <!-- <div id="filter" class="filter-options-container" [ngClass]="{'active': filter}">
+          <div class="content">
+
+              <label range-left>Obscurity</label>
+              <ion-range min="0" max="100" [(ngModel)]="desiredObscurity" color="secondary" (ionChange)="getMore()" debounce="300">
+              </ion-range>
+          </div>
+        </div> -->
+        </div>
+      </div>
+      <button class="primary-button pb-light" (click)="toggleShowMore()">{{toggledButtonText}}</button>
+    </ion-slide>
+
+    <ion-slide>
+
+        <div class="artist-container">
+            <h2>My All Time Artists</h2>
+
+            <div class="card-list">
+              <div class="card-list-item" [ngClass]="{'active': artist.expanded}" *ngFor="let artist of longTermArtists | slice:0:sliceLimit; let i = index;"
+                (click)="setActiveListItem(artist, longTermArtists)">
+                <img src="{{artist.images.length > 0 ? artist.images[0].url : ''}}" />
+                <div class="info">
+                  <span>{{i + 1}}</span>
+                  <a [href]="this.sanitizer.bypassSecurityTrustResourceUrl(artist.uri)">
+                      <i class="fas fa-external-link-alt"></i>
+                    </a>
+                  <p class="primary-info">{{artist.name}}</p>
+                  <p class="secondary-info">{{artist.randomGenres.randomGenre1}} / {{artist.randomGenres.randomGenre2}}</p>
+                  <div><button (click)="goToRecommendations(artist)" >More Like This</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="primary-button pb-light" (click)="toggleShowMore()">{{toggledButtonText}}</button>
+
+      </ion-slide>
+
+      <ion-slide>
+
+          <div class="artist-container">
+            <h2>My All-Time Songs</h2>
+            <button id="add-playlist-btn" class="add-playlist-btn" (click)="makePlaylist(longTermTracks, 'All-Time Top Tracks // Obscurify')">
+              <span>Create Playlist</span>
+              <i class="fas fa-plus-circle"></i>
+            </button>
+            <div class="card-list">
+              <div class="card-list-item" [ngClass]="{'active': track.expanded}"
+                *ngFor="let track of longTermTracks | slice:0:sliceLimit; let i = index;" (click)="setActiveListItem(track, longTermTracks)">
+                <img src="{{track.album.images.length > 0 ? track.album.images[1].url : ''}}" />
+                <div class="info">
+                  <span>{{i + 1}}</span>
+                  <a [href]="this.sanitizer.bypassSecurityTrustResourceUrl(track.uri)">
+                      <i class="fas fa-external-link-alt"></i>
+                    </a>
+                  <p class="primary-info">{{(track.name.length < 30) ? (track.name):(track.name | slice:0:25)+'...'}}</p>
+                  <p class="secondary-info">{{track.artists[0].name}}</p>
+                  <div><button (click)="goToRecommendations(track.artists[0])" >More Like This</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="primary-button pb-light" (click)="toggleShowMore()">{{toggledButtonText}}</button>
+        </ion-slide>
+  </ion-slides>

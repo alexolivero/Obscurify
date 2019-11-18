@@ -1,0 +1,74 @@
+<ion-header></ion-header>
+<ion-content [class.loading-background]="!doneLoading">
+
+  <div class="loading loading-background" *ngIf="!doneLoading">
+
+      <h1>O<span>.</span></h1>
+      <ion-spinner name="crescent"></ion-spinner>
+
+
+
+  </div>
+
+  <div *ngIf="doneLoading">
+
+      <ion-navbar>
+        <ion-buttons end>
+          <button ion-button icon-only (click)="openAboutPage()">
+            <ion-icon name="more"></ion-icon>
+          </button>
+        </ion-buttons>
+      </ion-navbar>
+
+      <div class="avatar">
+      <img style="border-radius: 50%;" src="{{imageURL ? imageURL : '../assets/imgs/avatar.png'}}">
+      <h2>Hi{{displayName}}, check out your stats below</h2>
+      </div>
+
+      <!-- top genre section  -->
+      <div style="padding:15px;">
+        <div class="header">
+          <div class="line-break"></div>
+          <h1>Top Genres</h1>
+        </div>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-item *ngFor="let genre of topGenres | slice:0:5; let i = index">{{i+1}} / {{genre[0]}}</ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item *ngFor="let genre of topGenres | slice:5:10; let i = index">{{i+6}} / {{genre[0]}}</ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+      </div>
+
+
+      <div class="header">
+        <div class="line-break"></div>
+        <h1>Obscurity Rating</h1>
+
+      </div>
+      <div class="slate">
+        <div class="obscurity-info">
+          <ion-slides pager="true" (ionSlideDidChange)="slideChanged()">
+            <ion-slide>
+                <percentile [data]="percentileData"></percentile>
+
+            </ion-slide>
+            <ion-slide>
+                <obscurity-graph [data]="graphData" #graph></obscurity-graph>
+            </ion-slide>
+          </ion-slides>
+        </div>
+      </div>
+      <!--  -->
+
+      <div #myMusic>
+        <my-music (scrollBottomEmit)="scrollToBottom()"></my-music>
+      </div>
+        <my-moods></my-moods>
+        <my-recs></my-recs>
+
+  </div>
+</ion-content>

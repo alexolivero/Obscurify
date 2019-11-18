@@ -1,0 +1,23 @@
+<div class="obscurity-graph">
+  <div class="obscurity-avg-bar" style="height: 20px;" #globalAvgBar [ngClass]="{'active': barActive}">
+    <p class="bar-value">{{ globalAverageScore }}</p>
+    <p class="bar-title">Global Avg</p>
+  </div>
+  <div class="obscurity-avg-bar" style="height: 20px;" #countryAvgBar [ngClass]="{'active': barActive}">
+    <p class="bar-value">{{ countryAverageScore }}</p>
+    <p class="bar-title">{{data.label}} Avg</p>
+  </div>
+  <div class="obscurity-avg-bar" style="height: 20px;" #allTimeBar [ngClass]="{'active': barActive}">
+    <p class="bar-value">{{ allTimeObscurifyScore }}</p>
+    <p class="bar-title">My All-Time</p>
+  </div>
+
+  <div class="obscurity-avg-bar" style="height: 20px;" #recentBar [ngClass]="{'active': barActive}">
+    <p class="bar-value">{{ recentObscurifyScore }}</p>
+    <p class="bar-title">My Recent</p>
+  </div>
+</div>
+<div>
+  <p class="graph-info">The lower your score, the more obscure your music taste is. The higher, the more relatable.</p>
+  <p class="graph-info">Global Average is based on {{ data.userCount | number }} Obscurify users.</p>
+</div>
