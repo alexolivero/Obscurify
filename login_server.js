@@ -190,7 +190,6 @@ app.get('/mobile_callback', function(req, res) {
       },
       json: true
     };
-
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
 
@@ -199,8 +198,7 @@ app.get('/mobile_callback', function(req, res) {
         res.redirect('https://m.obscurifymusic.com/#/home/' + access_token);
         //res.redirect('http://localhost:8100/#/home/' + access_token);
       } else {
-        console.log("line 189: " + error);
-        console.log(response.statusCode);
+        // console.log(response.statusCode);
         res.redirect('https://m.obscurifymusic.com/#/error/' +
           querystring.stringify({
             error: 'invalid_token'

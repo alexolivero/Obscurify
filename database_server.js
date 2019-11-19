@@ -261,7 +261,7 @@ app.post('/api/saveUserHistory', function(req, res) {
         } else {
           let breakdown = countryData.breakdown.M;
           if (breakdown[oldObscurifyScore.toString()]) {
-              let newValue = parseInt(breakdown[obscurifyScore.toString()].N) - 1;
+              let newValue = parseInt(breakdown[oldObscurifyScore.toString()].N) - 1;
               breakdown[oldObscurifyScore.toString()] = { N: newValue.toString()};
           }
           if (breakdown[obscurifyScore.toString()]) {
