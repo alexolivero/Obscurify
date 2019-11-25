@@ -5,9 +5,9 @@ your Spotify listening history as possible, and to quantify
 how unique your taste is compared to everyone else.
 
 
-As of now, this project contains three elements: on the backend, a few Node.js apps; and two versions of the frontend: an Angular app for desktop browsers and an Ionic PWA used for mobile users.
+As of now, this project contains three elements: on the backend, a few Node.js apps; and two versions of the frontend: an Angular 1.6 app for desktop browsers under the `/desktop` folder, and an Ionic PWA for mobile users found under `/mobile`.
 
-Obscurify uses three server-side node programs to function.
+Obscurify uses three server-side node programs to function:
 
 * `login_server` handles authentication with Spotify. the "/login" endpoint is hit and the flow starts when you hit the big "sign in" button. Runs on port 8001
 * `spotify_data_server` handles the retrieval of user data from both Spotify's (ex. your top tracks/artists) and Obscurify's servers (ex. total user count, your "current" list history, your Obscurify score percentile). Runs on port 8002
