@@ -20,20 +20,20 @@
         <div class="track-list-item-container">
 
           <div class="col-sm-6 track-list-column">
-            
+
               <div class="overlay-gradient"></div>
 			  <div class="dropdown">
-				<h2>{{shortTermHeader}}</h2>
+				<h2><span ng-if="userHistory.length > 0">▾</span>{{shortTermHeader}}</h2>
 				<div class="dropdown-content">
 					<div class="dropdown-item" ng-repeat="history in userHistory" ng-click="historySelected(history)">
 						{{history.formattedDate}}
 					</div>
 				</div>
 			  </div>
-              
+
 			  <div class="obscurifyScore">Score : {{recentObscurifyScore}}</div>
               <div class="column-overflow">
-              
+
               <div ng-repeat="artist in shortTermArtists track by $index " class="track-list-item">
                 <div class="track-list-item-info">
                   <img src="{{artist.images[1].url}}" alt="" />
@@ -51,15 +51,15 @@
                   <p>{{$index + 1}}</p>
                 </div>
 
-              </div>  
-                     
-              
+              </div>
+
+
             </div>
           </div>
 
 
           <div class="col-sm-6 track-list-column">
-            
+
               <div class="overlay-gradient"></div>
               <h2>All Time</h2><div class="obscurifyScore">Score : {{obscurifyScore}}</div>
               <div class="column-overflow">
@@ -81,7 +81,7 @@
                   </div>
 
                   </div>
-          
+
               </div>
           </div>
         </div>
@@ -92,18 +92,18 @@
       <div class="track-list-item-container">
 
           <div class="col-sm-6 track-list-column">
-            
+
               <div class="overlay-gradient"></div>
                 <div class="dropdown">
-					<h2>{{shortTermHeader}}</h2>
-					<div class="dropdown-content">
+					<h2><span ng-if="userHistory.length > 0">▾</span>{{shortTermHeader}}</h2>
+					<div ng-if="userHistory.length > 0" class="dropdown-content">
 						<div class="dropdown-item" ng-repeat="history in userHistory" ng-click="historySelected(history)">
 							{{history.formattedDate}}
 						</div>
 					</div>
 				  </div>
                 <button ng-click="makePlaylist(false);">Export As Playlist</button>
-            
+
               <div class="column-overflow">
 	      <div ng-repeat="track in shortTermTracks track by $index" class="track-list-item">
                 <div class="track-list-item-info">
@@ -122,13 +122,13 @@
                 </div>
 
               </div>
-              
+
             </div>
           </div>
 
 
           <div class="col-sm-6 track-list-column">
-          
+
               <div class="overlay-gradient"></div>
               <h2>All Time</h2><button ng-click="makePlaylist(true);">Export As Playlist</button>
               <div class="column-overflow">
@@ -150,7 +150,7 @@
                 </div>
 
               </div>
-             
+
             </div>
           </div>
         </div>
