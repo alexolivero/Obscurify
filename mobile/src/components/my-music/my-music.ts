@@ -131,6 +131,12 @@ export class MyMusicComponent implements OnInit {
   }
 
   toggleFilter() {
+    if (this.userHistory.length == 1 && this.userHistory[0].formattedDate == "Current") {
+      let that = this;
+      this.restProvider.getHistoryIDs().then(function(results: any){
+        that.userHistory = results.userHistory;
+      });
+    }
     this.filter = !this.filter;
   }
 

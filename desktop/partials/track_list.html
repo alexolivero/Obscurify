@@ -23,8 +23,13 @@
 
               <div class="overlay-gradient"></div>
 			  <div class="dropdown">
-				<h2><span ng-if="userHistory.length > 0">▾</span>{{shortTermHeader}}</h2>
-				<div class="dropdown-content">
+				<h2 class="dropdown__header" ng-click="getUserHistory()"><span>▾</span>{{shortTermHeader}}</h2>
+        <div ng-class="noUserHistoryFlag ? 'active': ''" class="dropdown-content">
+					<div>
+						Obscurify saves your monthly history when you log in, come back soon!
+					</div>
+				</div>
+				<div ng-class="userHistory.length === 0 ? '': 'active'" class="dropdown-content">
 					<div class="dropdown-item" ng-repeat="history in userHistory" ng-click="historySelected(history)">
 						{{history.formattedDate}}
 					</div>
@@ -95,8 +100,13 @@
 
               <div class="overlay-gradient"></div>
                 <div class="dropdown">
-					<h2><span ng-if="userHistory.length > 0">▾</span>{{shortTermHeader}}</h2>
-					<div ng-if="userHistory.length > 0" class="dropdown-content">
+					<h2 class="dropdown__header" ng-click="getUserHistory()"><span>▾</span>{{shortTermHeader}}</h2>
+          <div ng-class="noUserHistoryFlag ? 'active': ''" class="dropdown-content">
+  					<div>
+  						Obscurify saves your monthly history when you log in, come back soon!
+  					</div>
+  				</div>
+					<div ng-class="userHistory.length === 0 ? '': 'active'" class="dropdown-content">
 						<div class="dropdown-item" ng-repeat="history in userHistory" ng-click="historySelected(history)">
 							{{history.formattedDate}}
 						</div>

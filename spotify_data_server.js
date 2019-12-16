@@ -123,8 +123,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 						'globalAverageScore':null,
 						'userCountByCountry':null,
 						'audioFeatureAverages':null,
-						'recommendedTracks':null,
-						'userHistory':null
+						'recommendedTracks':null
 					};
 		//now in this section we're trying to find the energy, happiness,
 		//acousticness, and danceability of your top 50 all-time/recent tracks, also recommended tracks,
@@ -139,8 +138,7 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 				        + shortTermArtistIDs[Math.floor(Math.random() * shortTermArtistIDs.length)] + "&seed_tracks="
 				            + longTermTrackIDs[Math.floor(Math.random() * longTermTrackIDs.length)] + ","
 				                + shortTermTrackIDs[Math.floor(Math.random() * shortTermTrackIDs.length)]
-				                    + "&market=" + spotifyUserInfo.country + "&max_popularity=55" + "&min_popularity=25" + "&limit=40",
-			  "https://obscurifymusic.com/api/getUserHistory?&userID=" + spotifyUserInfo.id + "&obscurify_secret=" + obscurify_secret
+				                    + "&market=" + spotifyUserInfo.country + "&max_popularity=55" + "&min_popularity=25" + "&limit=40"
 		];
     //var secondBatchStart = new Date();
 		async.map(audioFeatureAndObscurifyUrls, httpGet, function (err, audioFeatureAndObscurifyDataResponse) {
@@ -153,7 +151,6 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
       var shortTermAudioFeaturesResponse = audioFeatureAndObscurifyDataResponse[1];
       var obscurifyGetDataResponse = audioFeatureAndObscurifyDataResponse[2];
       var spotifyRecommendationResponse = audioFeatureAndObscurifyDataResponse[3];
-      var obscurifyGetHistoryResponse = audioFeatureAndObscurifyDataResponse[4];
       //var secondDifference = (new Date() - secondBatchStart) / 1000;
       //console.log("You waited: " + secondDifference + " seconds for the second round of calls");
       if (spotifyRecommendationResponse != undefined) {
@@ -217,7 +214,6 @@ app.get('/spotifyData/:accessToken/getUserData', function(req, res) {
 			responseToTheFrontEnd.userCountByCountry = obscurifyGetDataResponse.userCountByCountry;
 			responseToTheFrontEnd.audioFeatureAverages = obscurifyGetDataResponse.audioFeatureAverages;
 			responseToTheFrontEnd.recommendedTracks = recommendedTracks;
-			responseToTheFrontEnd.userHistory = obscurifyGetHistoryResponse.userHistory;
 			res.send(responseToTheFrontEnd);
 			if (longTermArtists.length > 14 && //only post data for users who have significant Spotify history
   				longTermTracks.length > 14 &&

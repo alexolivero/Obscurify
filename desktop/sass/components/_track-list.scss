@@ -11,6 +11,10 @@
 		display: inline-block;
 	}
 
+  .dropdown__header {
+    cursor: pointer;
+  }
+
 	.dropdown-content {
 		display: none;
 		position: absolute;
@@ -19,12 +23,13 @@
 		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 		padding: 12px 16px;
 		z-index: 1;
-		cursor: pointer;
 		overflow-y: auto;
     max-height: 400px;
+    top: 60px;
 
 		.dropdown-item{
 		  padding:10px;
+      cursor: pointer;
 		}
 
 		.dropdown-item:hover{
@@ -32,7 +37,7 @@
 		}
 	}
 
-	.dropdown:hover .dropdown-content {
+	.dropdown:hover .dropdown-content.active {
 		display: block;
 	}
 

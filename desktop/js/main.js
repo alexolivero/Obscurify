@@ -36,6 +36,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
     $scope.currentMoodNavClicked = function(){ $scope.currentMoodNav = "active"; $scope.allTimeMoodNav = "";};
     $scope.allTimeMoodNavClicked = function(){ $scope.currentMoodNav = ""; $scope.allTimeMoodNav = "active";};
     var recommendedTracks = [];
+    $scope.userHistory = [];
     $scope.recommendedTrackDisplayGroup = []; //should have max size of 6
     $http({
         method : "get",
@@ -75,7 +76,6 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
         if (recommendedTracks != null && recommendedTracks.length > 0) {
             $scope.showMoreClicked();
         }
-        $scope.userHistory = response.data.userHistory;
         try {
             var longTermHappinessRatio = longTermAudioFeatures.happiness / audioFeatureAverages.happiness;
             var longTermEnergyRatio = longTermAudioFeatures.energy / audioFeatureAverages.energy;
@@ -160,6 +160,20 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
             });
         });
     };
+
+    $scope.getUserHistory = function() {
+      if ($scope.userHistory.length == 0) {
+        $http({
+            method : "get",
+            url : "https://obscurifymusic.com/api/getUserHistory?&userID=" + userID
+        }).then(function (response) {
+            $scope.userHistory = response.data.userHistory;
+            if ($scope.userHistory.length == 0) {
+              $scope.noUserHistoryFlag = true;
+            }
+        });
+      }
+    }
 
     $scope.historySelected = function(history) {
         $http({

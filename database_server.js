@@ -386,8 +386,8 @@ app.post('/api/saveUserHistory', function(req, res) {
 
 
 app.get('/api/getUserHistory', function(req, res) {
-  	if (req.query.userID == undefined ||	req.query.obscurify_secret != obscurify_secret) {
-  		return res.send({"error" : "uh oh"});
+  	if (req.query.userID == undefined) {
+  		return res.send({"error" : "uh oh, no user ID"});
   	}
     //var initialTime = new Date();
     var params = {
