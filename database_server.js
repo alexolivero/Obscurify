@@ -13,6 +13,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const async = require('async');
 var moment = require('moment');
+var crypto = require("crypto");
 
 var obscurify_secret = process.argv[2];
 
@@ -134,7 +135,7 @@ app.post('/api/saveUserHistory', function(req, res) {
       Key: {
         'userID': { S: req.body.userID }
       },
-      ProjectionExpression: 'userHistory, obscurifyScore, longTermAudioFeatures'
+      ProjectionExpression: 'userHistory, obscurifyScore, longTermAudioFeatures, hex'
     };
     ddb.getItem(params, function(err, data) {
       if (err) {
@@ -155,7 +156,7 @@ app.post('/api/saveUserHistory', function(req, res) {
         formattedHistory.formattedDate = { "S" : historyInstance.formattedDate };
         formattedHistory.dayOfYear = { "N" : historyInstance.dayOfYear.toString() };
         formattedHistory.year = { "N" : historyInstance.year.toString() };
-        if (data.Item == undefined || data.Item.userHistory.L == undefined) {
+        if (data.Item == undefined || data.Item.userHistory == undefined || data.Item.userHistory.L == undefined) {
               //user not found in DB
               userHistory.unshift( { "M" : formattedHistory} );
               addOrUpdateUser(userHistory, longTermAudioFeatures, req.body.obscurifyScore.toString(),
@@ -170,15 +171,47 @@ app.post('/api/saveUserHistory', function(req, res) {
                                     longTermTrackIDs, longTermArtistIDs, req.body.country, req.body.userID,
                                     false, data.Item.longTermAudioFeatures.M, data.Item.obscurifyScore.N);
           	} else {
-                return res.json({"status" : "ok, no update"});
+                if (data.Item.hex == undefined) {
+                  addHexToExistingUser(req.body.userID);
+                } else {
+                  return res.json(
+                    {
+                      "status" : "ok, no update",
+                      "hex" : data.Item.hex.S
+                    }
+                  );
+                }
           	}
         }
       }
     });
 
+    function addHexToExistingUser(userID) {
+      let hex = crypto.randomBytes(20).toString('hex');
+      let userParams = {
+        TableName: 'users',
+        Item: {
+          'userID' : { S: userID },
+          'hex' : { S: hex }
+        }
+      };
+      ddb.putItem(userParams, function(err, userData) {
+          if (err) {
+            console.log("Error on user table insert for adding hex:", err);
+            return res.json({"error" : "failed on the user table insert for adding hex"});
+          } else {
+              return res.json({
+                "status" : "ok, added hex to exiting user",
+                "hex" : hex
+              })
+          }
+      });
+    }
+
     function addOrUpdateUser(userHistory, longTermAudioFeatures, obscurifyScore,
                             longTermTrackIDs, longTermArtistIDs, country, userID,
                             newUserFlag, oldLongTermAudioFeatures, oldObscurifyScore) {
+      let hex = crypto.randomBytes(20).toString('hex');
       let userParams = {
         TableName: 'users',
         Item: {
@@ -188,7 +221,8 @@ app.post('/api/saveUserHistory', function(req, res) {
           'longTermTrackIDs' : { L: longTermTrackIDs },
           'obscurifyScore' : { N: obscurifyScore },
           'longTermAudioFeatures' : { M: longTermAudioFeatures },
-          'userHistory' : { L: userHistory }
+          'userHistory' : { L: userHistory },
+          'hex' : { S: hex }
         }
       };
       ddb.putItem(userParams, function(err, userData) {
@@ -209,10 +243,10 @@ app.post('/api/saveUserHistory', function(req, res) {
                 return res.json({"error" : "failed on the country table get"});
               } else {
                   if (countryData.Item == undefined) {
-                      addNewCountry(country, longTermAudioFeatures, obscurifyScore);
+                      addNewCountry(country, longTermAudioFeatures, obscurifyScore, hex);
                   } else {
                       updateCountry(countryData.Item, longTermAudioFeatures, obscurifyScore,
-                        newUserFlag, oldLongTermAudioFeatures, oldObscurifyScore);
+                        newUserFlag, oldLongTermAudioFeatures, oldObscurifyScore, hex);
                   }
               }
             });
@@ -221,7 +255,7 @@ app.post('/api/saveUserHistory', function(req, res) {
     }
 
     function updateCountry(countryData, longTermAudioFeatures, obscurifyScore,
-                          newUserFlag, oldLongTermAudioFeatures, oldObscurifyScore) {
+                          newUserFlag, oldLongTermAudioFeatures, oldObscurifyScore, hex) {
         if (newUserFlag) {
             let breakdown = countryData.breakdown.M;
             if (breakdown[obscurifyScore.toString()]) {
@@ -255,7 +289,7 @@ app.post('/api/saveUserHistory', function(req, res) {
                   console.log("Error on country table update:", err);
                   return res.json({"error" : "failed on the country table update"});
                 } else {
-                  updateGlobalTable(true, obscurifyScore, null);
+                  updateGlobalTable(true, obscurifyScore, null, hex);
                 }
             });
         } else {
@@ -294,13 +328,13 @@ app.post('/api/saveUserHistory', function(req, res) {
                 console.log("Error on country table update:", err);
                 return res.json({"error" : "failed on the country table update"});
               } else {
-                updateGlobalTable(false, obscurifyScore, oldObscurifyScore);
+                updateGlobalTable(false, obscurifyScore, oldObscurifyScore, hex);
               }
           });
         }
     }
 
-    function addNewCountry(country, longTermAudioFeatures, obscurifyScore) {
+    function addNewCountry(country, longTermAudioFeatures, obscurifyScore, hex) {
         let breakdown = {};
         breakdown[obscurifyScore.toString()] = { N: "1" };
         if (longTermAudioFeatures["tracksCounted"]) { delete longTermAudioFeatures["tracksCounted"]; }
@@ -319,12 +353,12 @@ app.post('/api/saveUserHistory', function(req, res) {
               console.log("Error on country table insert:", err);
               return res.json({"error" : "failed on the country table insert, new user"});
             } else {
-              updateGlobalTable(true, obscurifyScore, null);
+              updateGlobalTable(true, obscurifyScore, null, hex);
             }
         });
     }
 
-    function updateGlobalTable(newUserFlag, obscurifyScore, oldObscurifyScore) {
+    function updateGlobalTable(newUserFlag, obscurifyScore, oldObscurifyScore, hex) {
         let params = {
           TableName: 'global',
           Key: {
@@ -375,7 +409,12 @@ app.post('/api/saveUserHistory', function(req, res) {
                           console.log("Error on global table insert:", err2);
                           return res.json({"error" : "failed on the global table insert"});
                         } else {
-                          return res.json({"status" : "all clear"});
+                          return res.json(
+                            {
+                              "status" : "all clear",
+                              "hex" : hex
+                            }
+                          );
                         }
                     });
                 }
@@ -386,8 +425,8 @@ app.post('/api/saveUserHistory', function(req, res) {
 
 
 app.get('/api/getUserHistory', function(req, res) {
-  	if (req.query.userID == undefined) {
-  		return res.send({"error" : "uh oh, no user ID"});
+  	if (req.query.userID == undefined || req.query.hex == undefined) {
+  		return res.send({"error" : "uh oh, please supply both userID and hex code"});
   	}
     //var initialTime = new Date();
     var params = {
@@ -395,7 +434,7 @@ app.get('/api/getUserHistory', function(req, res) {
       Key: {
         'userID': { S: req.query.userID }
       },
-      ProjectionExpression: 'userHistory'
+      ProjectionExpression: 'userHistory, hex'
     };
     ddb.getItem(params, function(err, data) {
         if (err) {
@@ -404,6 +443,8 @@ app.get('/api/getUserHistory', function(req, res) {
         } else {
           if (data.Item == undefined || data.Item.userHistory == undefined) {
             return res.json({ "error" : "getUserHistory returned nothing on DB read" });
+          } else if (data.Item.hex.S != req.query.hex) {
+            return res.json({ "error" : "query hex does not match DB hex" });
           } else {
               //var difference = (new Date() - initialTime) / 1000;
               //console.log("DB :: You waited " + difference + " seconds for the get history call");

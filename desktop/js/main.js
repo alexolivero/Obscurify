@@ -37,6 +37,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
     $scope.allTimeMoodNavClicked = function(){ $scope.currentMoodNav = ""; $scope.allTimeMoodNav = "active";};
     var recommendedTracks = [];
     $scope.userHistory = [];
+    var hex = "";
     $scope.recommendedTrackDisplayGroup = []; //should have max size of 6
     $http({
         method : "get",
@@ -59,6 +60,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
         $scope.obscurifyScore = response.data.obscurifyScore;
         $scope.recentObscurifyScore = response.data.recentObscurifyScore;
         $scope.topGenres = response.data.topGenres;
+        hex = response.data.hex;
         userID = response.data.userID;
         var longTermAudioFeatures = response.data.longTermAudioFeatures;
         var shortTermAudioFeatures = response.data.shortTermAudioFeatures;
@@ -107,7 +109,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
         $scope.doneLoading = true;
     }, function myError(err) {
         $scope.doneLoading = true;
-        console.log(err)
+        console.log(err);
         //if it doesn't work, if your authorization code expired or anything, just go back to the start and log in again
         $window.location.href = 'https://obscurifymusic.com/';
     });
@@ -165,10 +167,10 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
       if ($scope.userHistory.length == 0) {
         $http({
             method : "get",
-            url : "https://obscurifymusic.com/api/getUserHistory?&userID=" + userID
+            url : "https://obscurifymusic.com/api/getUserHistory?userID=" + userID + "&hex=" + hex
         }).then(function (response) {
             $scope.userHistory = response.data.userHistory;
-            if ($scope.userHistory.length == 0) {
+            if ($scope.userHistory == undefined || $scope.userHistory.length == 0) {
               $scope.noUserHistoryFlag = true;
             }
         });

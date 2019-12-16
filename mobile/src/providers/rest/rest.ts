@@ -34,7 +34,8 @@ export class RestProvider {
       userHistory : [],
       longTermAudioFeatures : {},
 			shortTermAudioFeatures : {},
-			audioFeatureAverages : {}
+			audioFeatureAverages : {},
+      hex : ""
     };
 
   }
@@ -128,7 +129,7 @@ export class RestProvider {
 
     getHistoryIDs() {
       if (this.userData.userHistory == null || this.userData.userHistory.length == 0) {
-        let url = "https://obscurifymusic.com/api/getUserHistory?&userID=" + this.userData.userID;
+        let url = "https://obscurifymusic.com/api/getUserHistory?userID=" + this.userData.userID + "&hex=" + this.userData.hex;
         return new Promise(resolve => {
           this.http.get(url).subscribe((data : any) => {
             resolve(data);
