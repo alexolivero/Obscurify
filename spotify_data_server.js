@@ -281,7 +281,7 @@ app.get('/spotifyData/getRecommendations', function(req, res) {
 	];
 	async.map(urls, httpGet, function (err, response){
   		if (err || response[0].error){
-  			   console.log("error on recommendations: " + response[0].error.message);
+  			   // console.log("error on recommendations: " + response[0].error.message);
   			   return res.send( {"error" : "darn it"} );
   		}
   		res.send({
@@ -314,7 +314,7 @@ app.get('/spotifyData/getHistoryItems', function(req, res) {
 	];
 	async.map(urls, httpGet, function (err, response){
 		if (err || response[0].error || response[1].error) {
-			console.log("error on get history items" + response[0].error.message);
+			console.log("error on get history items: " + response[0].error.message);
 			return res.send({"error" : "darn it"});
 		}
 		var artists = response[0].artists;
