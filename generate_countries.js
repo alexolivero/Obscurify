@@ -37,45 +37,47 @@ async function onScan(err, data) {
     } else {
         console.log("Scan succeeded.");
         data.Items.forEach(function(user) {
-            globalAverageScore += parseInt(user.obscurifyScore.N);
-            globalUserCount += 1;
-            if (user.country.S in countries) {
-                var newUserCount = parseInt(countries[user.country.S].userCount) + 1;
-                var newTotalScore = parseFloat(countries[user.country.S].averageScore) * parseInt(countries[user.country.S].userCount) + parseFloat(user.obscurifyScore.N);
-                var oldAudioFeatureAverages = countries[user.country.S].audioFeatureAverages;
-                var newAudioFeatureAverages = {
-                  'danceability' : { N: ((parseFloat(oldAudioFeatureAverages.danceability.N) * parseInt(countries[user.country.S].userCount) + parseFloat(user.longTermAudioFeatures.M.danceability.N)) / newUserCount).toString() },
-                  'energy' : { N: ((parseFloat(oldAudioFeatureAverages.energy.N) * parseInt(countries[user.country.S].userCount) + parseFloat(user.longTermAudioFeatures.M.energy.N)) / newUserCount).toString() },
-                  'happiness' : { N: ((parseFloat(oldAudioFeatureAverages.happiness.N) * parseInt(countries[user.country.S].userCount) + parseFloat(user.longTermAudioFeatures.M.happiness.N)) / newUserCount).toString() },
-                  'acousticness' : { N: ((parseFloat(oldAudioFeatureAverages.acousticness.N) * parseInt(countries[user.country.S].userCount) + parseFloat(user.longTermAudioFeatures.M.acousticness.N)) / newUserCount).toString() }
-                };
-                var breakdown = countries[user.country.S].breakdown;
-                var key = user.obscurifyScore.N.toString();
-                if (key in breakdown) {
-                    breakdown[key] = breakdown[key] + 1;
-                }
-                else {
-                    breakdown[key] = 1;
-                }
-                countries[user.country.S] = {
-                  "code" : user.country.S,
-                  "breakdown" : breakdown,
-                  "averageScore" : newTotalScore / newUserCount,
-                  "userCount" : newUserCount,
-                  "audioFeatureAverages" : newAudioFeatureAverages
-                }
-            }
-            else { //new country
-                var breakdown = {};
-                var key = user.obscurifyScore.N.toString();
-                breakdown[key] = 1;
-                countries[user.country.S] = {
-                  'code' : user.country.S,
-                  'breakdown' : breakdown,
-                  'averageScore' : user.obscurifyScore.N,
-                  'userCount' : 1,
-                  'audioFeatureAverages' : user.longTermAudioFeatures.M
-                }
+            if (user.obscurifyScore != undefined) {
+              globalAverageScore += parseInt(user.obscurifyScore.N);
+              globalUserCount += 1;
+              if (user.country.S in countries) {
+                  var newUserCount = parseInt(countries[user.country.S].userCount) + 1;
+                  var newTotalScore = parseFloat(countries[user.country.S].averageScore) * parseInt(countries[user.country.S].userCount) + parseFloat(user.obscurifyScore.N);
+                  var oldAudioFeatureAverages = countries[user.country.S].audioFeatureAverages;
+                  var newAudioFeatureAverages = {
+                    'danceability' : { N: ((parseFloat(oldAudioFeatureAverages.danceability.N) * parseInt(countries[user.country.S].userCount) + parseFloat(user.longTermAudioFeatures.M.danceability.N)) / newUserCount).toString() },
+                    'energy' : { N: ((parseFloat(oldAudioFeatureAverages.energy.N) * parseInt(countries[user.country.S].userCount) + parseFloat(user.longTermAudioFeatures.M.energy.N)) / newUserCount).toString() },
+                    'happiness' : { N: ((parseFloat(oldAudioFeatureAverages.happiness.N) * parseInt(countries[user.country.S].userCount) + parseFloat(user.longTermAudioFeatures.M.happiness.N)) / newUserCount).toString() },
+                    'acousticness' : { N: ((parseFloat(oldAudioFeatureAverages.acousticness.N) * parseInt(countries[user.country.S].userCount) + parseFloat(user.longTermAudioFeatures.M.acousticness.N)) / newUserCount).toString() }
+                  };
+                  var breakdown = countries[user.country.S].breakdown;
+                  var key = user.obscurifyScore.N.toString();
+                  if (key in breakdown) {
+                      breakdown[key] = breakdown[key] + 1;
+                  }
+                  else {
+                      breakdown[key] = 1;
+                  }
+                  countries[user.country.S] = {
+                    "code" : user.country.S,
+                    "breakdown" : breakdown,
+                    "averageScore" : newTotalScore / newUserCount,
+                    "userCount" : newUserCount,
+                    "audioFeatureAverages" : newAudioFeatureAverages
+                  }
+              }
+              else { //new country
+                  var breakdown = {};
+                  var key = user.obscurifyScore.N.toString();
+                  breakdown[key] = 1;
+                  countries[user.country.S] = {
+                    'code' : user.country.S,
+                    'breakdown' : breakdown,
+                    'averageScore' : user.obscurifyScore.N,
+                    'userCount' : 1,
+                    'audioFeatureAverages' : user.longTermAudioFeatures.M
+                  }
+              }
             }
         });
         // continue scanning if we have more items
