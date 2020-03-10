@@ -48,7 +48,9 @@ export class RestProvider {
           this.userData = data;
           if(this.userData.displayName != null && this.userData.displayName.indexOf(' ') > 0){
       			this.userData.displayName = " " + this.userData.displayName.substring(0, this.userData.displayName.indexOf(' '));
-      		}
+      		} else if(this.userData.displayName != null){
+            this.userData.displayName = " " + this.userData.displayName;
+          }
       		else if(this.userData.displayName == null){
       			this.userData.displayName = "";
       		}
