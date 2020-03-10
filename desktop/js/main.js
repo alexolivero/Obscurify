@@ -12,6 +12,9 @@ app.config(function($routeProvider,$compileProvider) {
         .when("/about", {
             templateUrl : "desktop/partials/about.html"
         })
+        .when("/privacy", {
+            templateUrl : "desktop/partials/privacy_policy.html"
+        })
         .when("/error", {
             templateUrl : "desktop/partials/error.html"
         })
