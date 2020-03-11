@@ -48,7 +48,7 @@ app.controller('mainController', function($scope, $http, $window, $routeParams) 
     }).then(function (response) {
         if (response.data.displayName != null && response.data.displayName.indexOf(' ') > 0) {
             $scope.displayName = " " + response.data.displayName.substring(0, response.data.displayName.indexOf(' '));
-        } else if (esponse.data.displayName != null) {
+        } else if (response.data.displayName != null) {
             $scope.displayName = " " + response.data.displayName;
         } else if (response.data.displayName == null) {
             $scope.displayName = "";
