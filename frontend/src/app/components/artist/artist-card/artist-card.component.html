@@ -2,14 +2,20 @@
     <img *ngIf="artist.images.length > 1" [src]="artist.images[1].url " />
     <div class="artist__card__info">
         <div fxLayout="row" fxLayoutAlign="flex-start start">
-            <span fxFlex="0 0 auto"> {{ i + 1 }} /</span> 
+            <p fxFlex="0 0 auto">
+                <span > {{ i + 1 }} /</span>
+
+            </p>
 
             <div fxLayout="column" fxFlex="1 1 auto" fxLayoutAlign="center start">
                 <p class="artist__card__info--primary">
-                    {{(artist.name.length < 20) ? (artist.name):(artist.name | slice:0:20)+'...' }}
+                    {{(artist.name.length < 20) ? (artist.name):(artist.name | slice:0:28)+'...' }}
                 </p>
-                <p *ngIf="activeView" class="artist__card__info--secondary">
+                <p *ngIf="activeView && artist.genres.length > 1" class="artist__card__info--secondary">
                     {{ artist.genres[0] }}, {{ artist.genres[1] }}
+                </p>
+                <p *ngIf="activeView && artist.genres.length == 1" class="artist__card__info--secondary">
+                    {{ artist.genres[0] }}
                 </p>
                 <p *ngIf="activeView" class="artist__card__info--secondary artist__card__stars"> {{ this.stars }}</p>
             </div>

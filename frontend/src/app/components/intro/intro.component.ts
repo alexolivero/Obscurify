@@ -32,7 +32,7 @@ export class IntroComponent implements OnInit {
   public greeting;
 
   ngOnInit() {
-    this.userName = this.checkName(this.data.display_name.split(' ')[0]);
+    this.userName = this.checkName(this.data.display_name);
     this.userImage = this.data.images[0] ? this.data.images[0].url : null;
     this.welcomeMessage = this.getRandomWelcomeMessage();
     this.greeting = this.getRandomGreeting();
@@ -52,13 +52,16 @@ export class IntroComponent implements OnInit {
   }
 
   private checkName(name) {
-    const nameArray = name.split('');
-    nameArray.forEach(element => {
-      if (Number(element)) {
-        return false;
-      }
-    });
-    return name;
+    if (name.split(' ').length >= 2) {
+      return ' ' + name.split(' ')[0] + '.';
+    } else {
+      const nameArray = name.split('');
+      nameArray.forEach(element => {
+        if (Number(element)) {
+          return '.';
+        }
+      });
+    }
   }
 
   private getRandomGreeting() {

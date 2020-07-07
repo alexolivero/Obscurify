@@ -98,7 +98,6 @@ export class HomeComponent implements OnInit {
                     this.router.navigate(['login', { serverError: true }]);
                   } else {
                     this.obscurifyInfo = { ...obscurifyData };
-                    console.log(this.obscurifyInfo);
                   }
               }
             );

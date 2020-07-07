@@ -50,7 +50,6 @@ export class ArtistListComponent implements AfterViewInit, OnInit, OnChanges {
   private sentinelBottomIntersectSub: Subscription;
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('changes in list:', changes);
     if (changes.data.currentValue.userHistory) {
 
       const historyList = [];
@@ -93,7 +92,6 @@ export class ArtistListComponent implements AfterViewInit, OnInit, OnChanges {
       selectedHistory: historyList[0]
     };
 
-    console.log(this.navState);
   }
 
   ngAfterViewInit(): void {
@@ -165,7 +163,6 @@ export class ArtistListComponent implements AfterViewInit, OnInit, OnChanges {
     if (data.selectedHistory.value !== 'current' && data.selectedHistory.value !== 'allTime') {
       this.spotifyService.getArtists({artistIDs: this.data.userHistory[data.selectedHistory.value].shortTermArtistIDs})
         .then((res: any) => {
-          console.log('res get artists', res);
           this.selectedArtistsFromHistory = [...res.artists];
           this.navState = {...data};
         })
@@ -178,7 +175,6 @@ export class ArtistListComponent implements AfterViewInit, OnInit, OnChanges {
         });
       this.spotifyService.getTracks({trackIDs: this.data.userHistory[data.selectedHistory.value].shortTermTrackIDs})
       .then((res: any) => {
-        console.log('res get tracks', res);
         this.selectedTracksFromHistory = [...res.tracks];
         this.navState = {...data};
 

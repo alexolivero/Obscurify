@@ -12,8 +12,16 @@
                 <button class="artist__nav__button" [ngClass]="{'active': navState.listType === 'artists'}" (click)="updateArtistTrack('artists')">Artists</button>
                 <button class="artist__nav__button" [ngClass]="{'active': navState.listType === 'songs'}" (click)="updateArtistTrack('songs')">Songs</button>
             </div>
+            <div class="artist__nav__playlist" fxLayout="row" fxLayoutAlign="start" *ngIf="this.navState.listType === 'songs'">
+                <button
+                    class="artist__nav__button"
+                    (click)="emitCreatePlaylist()">
+                    <i class="fas fa-plus-circle"></i>Create Playlist
+                </button>
+            </div>
             <div class="artist__nav__history">
                 <h3> View History </h3>
+                
 
                 <mat-radio-group
                     aria-labelledby="select history date"
@@ -31,13 +39,7 @@
             </mat-radio-group>
             </div>
 
-            <div class="artist__nav__playlist" fxLayout="row" fxLayoutAlign="center" *ngIf="this.navState.listType === 'songs'">
-                <button
-                    class="artist__nav__button"
-                    (click)="emitCreatePlaylist()">
-                    <i class="fas fa-plus-circle"></i>Create Playlist
-                </button>
-            </div>
+
         </div>
 
     </div>

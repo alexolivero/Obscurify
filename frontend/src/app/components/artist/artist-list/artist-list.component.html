@@ -4,8 +4,8 @@
             <h2 class="header__title">
                 {{ this.navState.selectedHistory.name }} Top {{ navState.listType}}
             </h2>
-            <button class="bottomsheet__btn" *ngIf="stickHeader" type="button" mat-button (click)="openBottomSheet()">
-                Menu
+            <button class="bottomsheet__btn" type="button" mat-button (click)="openBottomSheet()">
+                Switch list
                 </button>
         </div>
         <div #sentinelTop class="sticky_sentinel sticky_sentinel--top"></div>

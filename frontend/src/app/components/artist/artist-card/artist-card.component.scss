@@ -8,7 +8,7 @@
 .artist__card {
     width: 100%;
     min-width: 200px;
-    height: 75px;
+    height: 100px;
     position: relative;
     overflow: hidden;
     border-radius: 5px;
@@ -20,16 +20,18 @@
         position: absolute;
         object-fit: cover;
         width: 100%;
+        transform: translateY(-50%);
+        top: 50%;
     }
 
     &.active {
         height: 200px;
-        
+
         .artist__card__info {
             height: 100%;
         }
     }
-    
+
     &__info {
         height: 60px;
         transition: .3s cubic-bezier(.25,.1,.25,1);
@@ -37,10 +39,10 @@
         width: 100%;
         background: rgba(0,0,0,.55);
         border-radius: 5px;
-        bottom: 0;  
-        box-sizing: border-box;  
+        bottom: 0;
+        box-sizing: border-box;
         padding: 1rem 0.5rem;
-        font-size: 1rem;
+        font-size: 1.2rem;
 
         &--secondary, &--primary {
             transition: .3s cubic-bezier(.25,.1,.25,1);
@@ -48,13 +50,13 @@
         }
 
         &--primary {
-            margin-bottom: 0.5rem;
-            font-size: 1.5em;
+            font-size: 1em;
+            margin-bottom: 0.5em;
 
         }
 
         &--secondary {
-            font-size: 1.2em;
+            font-size: 1em;
         }
     }
 
@@ -83,7 +85,6 @@
 @include tablet {
     .artist__card {
         height: 150px;
-        width: 200px;
         margin-bottom: 1em;
         &.active {
             height: 150px;
@@ -95,7 +96,6 @@
 @include desktop {
     .artist__card {
         height: 170px;
-        width: 220px;
         margin-bottom: 1em;
 
         &__info {

@@ -32,13 +32,12 @@ export class ArtistNavComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('changes:', changes);
     if (changes.navState) {
       this.navState = {...changes.navState.currentValue };
       this.historyList = [...changes.navState.currentValue.historyList];
     }
     if (changes.navState.firstChange) {
-      this.selectedHistory = this.data.navState.historyList[0];
+      this.selectedHistory = changes.navState.currentValue.selectedHistory;
     }
   }
 
@@ -57,6 +56,7 @@ export class ArtistNavComponent implements OnChanges, OnInit {
   }
 
   updateArtistTrack(type) {
+    this.navState.listType = type;
     const navState = {
       listType: type,
       selectedHistory: this.selectedHistory,

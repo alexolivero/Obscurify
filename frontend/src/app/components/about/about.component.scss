@@ -30,7 +30,7 @@ section {
     text-align: center;
     width: 175px;
     box-sizing: border-box;
-    box-shadow: -4px 5px 4px rgba(0,0,0,0.5);
+    box-shadow: $box-shadow;
     font-family: $primary-font;
     text-decoration: none;
     font-weight: bold;

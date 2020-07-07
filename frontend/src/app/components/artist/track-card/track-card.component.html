@@ -4,11 +4,13 @@
     
     <div class="artist__card__info">
         <div fxLayout="row" fxLayoutAlign="flex-start start">
-            <span fxFlex="0 1 auto"> {{ i + 1 }} </span> /
+            <p fxFlex="0 0 auto">
+                <span > {{ i + 1 }} /</span> 
 
+            </p>
             <div fxLayout="column" fxFlex="1 1 auto" fxLayoutAlign="center start">
                 <p class="artist__card__info--primary">
-                    {{(track.name.length < 20) ? (track.name):(track.name | slice:0:20)+'...' }}
+                    {{(track.name.length < 20) ? (track.name):(track.name | slice:0:28)+'...' }}
                 </p>
                 <p *ngIf="activeView" class="artist__card__info--secondary">
                     {{ track.artists[0].name }}

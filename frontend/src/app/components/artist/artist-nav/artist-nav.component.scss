@@ -62,12 +62,16 @@
     }
 
     &__playlist {
+        margin-bottom: 2em;
+
         button {
-            background: #D8D8D8;
-            padding: 8px 1em;
+            background: #2d3436;
+            padding: 15px 1em;
             font-size: 1em;
             border: none;
             font-weight: bold;
+            box-shadow: $box-shadow;
+            color: #fff;
             i {
                 margin-right: 5px;
             }
@@ -76,7 +80,6 @@
 
     &__button {
         background: transparent;
-        border: none;
         border-radius: 5px;
         font-size: 1.5em;
         padding: 8px 1em;
