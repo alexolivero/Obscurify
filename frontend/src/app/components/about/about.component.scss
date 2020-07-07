@@ -1,0 +1,59 @@
+@import 'variables';
+@import 'mixins';
+
+main {
+    width: 100%;
+}
+
+section {
+    margin: 2em 0;
+    max-width: 772px;
+    padding: 0 2em;
+
+    p {
+        margin-bottom: 1em;
+        font-weight: normal;
+        font-family: $secondary-font;
+    }
+
+    h1, h2, h3 {
+        margin-bottom: 1rem;
+    }
+}
+
+.back__btn {
+    padding: 1em 1em;
+    background: #FFFFFF;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #000000;
+    text-align: center;
+    width: 175px;
+    box-sizing: border-box;
+    box-shadow: -4px 5px 4px rgba(0,0,0,0.5);
+    font-family: $primary-font;
+    text-decoration: none;
+    font-weight: bold;
+    
+    i {
+        margin-right: 5px;
+    }
+}
+
+
+
+aside {
+    padding: 2em;
+    background-color: #A9E5AC;
+
+}
+
+h1 {
+    font-size: 36px;
+}
+
+@include desktop {
+    h1 {
+        font-size: 72px;
+    }
+}

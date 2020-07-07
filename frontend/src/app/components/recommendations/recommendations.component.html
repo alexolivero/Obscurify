@@ -1,0 +1,48 @@
+<div class="slate">
+    <div class="recommendations" [ngClass]="{'show': this.show}">
+        <div class="header">
+            <h2 class="header__title">
+                Recommendations
+            </h2>
+        </div>
+        <div class="recommendations__content">
+            <div class="recommendations__container">
+                <!-- <button id="filter-btn" class="filter-btn" (click)="toggleFilter()">
+                  <i class="fas fa-sliders-h"></i>
+                </button> -->
+
+                <button class="refresh-btn" (click)="refreshTracks()">
+                  <span>Refresh</span>
+                  <i class="fas fa-sync"></i>
+                </button>
+          
+                <button class="add-playlist-btn" (click)="makePlaylist()">
+                  <span>Create Playlist</span>
+                  <i class="fas fa-plus-circle"></i>
+                </button>
+                <div class="track-container">
+                  <div class="card-track">
+                    <div class="card" *ngFor="let track of recommendedTracks">
+                      <div class="card-info">
+                        <a [href]="this.sanitizer.bypassSecurityTrustResourceUrl(track.uri)">
+                          <h3>
+                            {{ (track.name.length < 30) ? (track.name):(track.name | slice:0:25)+'...' }}
+                          </h3>
+                          <p>
+                            {{ track.artists[0].name }}
+                          </p>
+                        </a>
+                      </div>
+                      <div class="card-content">
+                          <img item-start *ngIf="track.album.images.length > 1" [src]="track.album.images[1].url">
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+
+    </div>
+</div>

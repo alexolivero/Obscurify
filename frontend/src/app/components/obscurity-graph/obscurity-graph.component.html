@@ -1,0 +1,25 @@
+
+<div fxLayout="row" fxLayoutAlign="end center">
+    <div class="obscurity__graph" fxLayout="column" fxLayoutAlign="center center" fxFlexAlign="end">
+        <h2>How you compare with {{ data.country}} users</h2>
+        <div class="obscurity__canvas">
+            <canvas id="canvas">
+                {{ histogram }}
+            </canvas>
+
+        </div>
+        <div class="obscurity__canvas__labels--x" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100%">
+          <p><i class="fas fa-arrow-left"></i>More Popular</p>
+          <p>More Obscure <i class="fas fa-arrow-right"></i></p>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+

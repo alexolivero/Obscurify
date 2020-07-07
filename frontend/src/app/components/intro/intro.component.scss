@@ -1,0 +1,100 @@
+@import 'variables';
+@import 'mixins';
+
+nav {
+    max-width: 1024px;
+    padding: 1em 1em;
+    margin: 0 auto;
+    position: relative;
+    color: rgba(0,0,0,0.5);
+
+    i {
+        font-size: 2em;
+        cursor: pointer;
+    }
+
+    a {
+        font-size: 1em;
+    }
+
+    button {
+        background: none;
+        border: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 1em;
+        font-weight: bold;
+        i {
+            margin-left: 5px;
+        }
+    }
+}
+
+.welcome {
+    width: 100%;
+    font-size: 1.5em;
+    padding-top: 70px;
+    padding-left: 1em;
+    padding-right: 1em;
+    text-align: center;
+
+    span {
+        color: $primary-color;
+    }
+}
+
+.profile {
+    width: 100%;
+    padding: 8em 0;
+    padding-left: 1em;
+    padding-right: 1em;
+    text-align: center;
+
+    &__image {
+        width: 50px;
+        height: 50px;
+        margin-right: 0.5em;
+        background: #e5e5e5;
+        border-radius: 50%;
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+        }
+    }
+
+    &__header {
+        max-width: 500px;
+        text-align: center;
+        font-size: 2em;
+    }
+}
+
+
+@include desktop {
+
+    .welcome {
+        font-size: 2em;
+    }
+
+    .profile {
+        padding-top: 10em;
+
+        &__image {
+            width: 50px;
+            height: 50px;
+        }
+
+        &__header {
+            font-size: 3em;
+            max-width: 800px;
+        }
+    }
+
+    .welcome {
+        padding-top: 140px;
+    }
+
+}

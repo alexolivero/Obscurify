@@ -1,0 +1,20 @@
+<footer >
+  <div class="footer" fxflex="row nowrap" fxLayoutAlign="space-between center">
+    <div class="footer__links" fxLayout="column nowrap">
+      <a routerLink="/about"> About</a>
+      <a routerLink="/privacy"> Privacy</a>
+      <a (click)="login()" *ngIf="login">Login</a>
+      <a (click)="logout()" *ngIf="!login"> Log Out</a>
+  </div>
+
+  <div class="social__links" fxLayoutAlign="row nowrap">
+      <a href="https://twitter.com/obscurifymusic">
+          <i class="fab fa-twitter-square fa-2x"> </i>
+      </a>
+      <a href="mailto:oliveroalex@gmail.com">
+          <i class="fas fa-envelope-square fa-2x"></i>
+      </a>
+  </div>
+  </div>
+
+</footer>

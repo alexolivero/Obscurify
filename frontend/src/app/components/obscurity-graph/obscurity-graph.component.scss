@@ -1,0 +1,59 @@
+@import 'variables';
+@import 'mixins';
+
+
+.obscurity__graph {
+    margin-top: 2em;
+    border-radius: 5px;
+    width: 100%;
+    padding: 2em 1em;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    background-color: #2d3436;
+    box-shadow: 22px 21px 1px 0 rgba(0, 0, 0, 0.5);
+    color: white;
+
+    h2 {
+      margin-bottom: 2em;
+    }
+}
+
+.obscurity__canvas {
+    min-height: 350px;
+    width: 100%;
+
+    &__labels--x {
+      width: 100%;
+      padding-left: 70px;
+      p {
+        font-size: 14px;
+        font-weight: normal;
+        i.fa-arrow-left {
+          margin-right: 5px;
+        }
+        i.fa-arrow-right {
+          margin-left: 5px;
+        }
+      }
+    }
+}
+
+@include desktop {
+    .obscurity__graph{
+        margin-top: 8em;
+        max-width: 600px;
+        max-height: 350px;
+        position: relative;
+        padding: 5em 5em;
+        box-sizing: content-box !important;
+
+        &__info {
+            font-size: 1rem;
+        }
+    }
+
+    .obscurity__canvas {
+        width: 100%;
+    }
+}

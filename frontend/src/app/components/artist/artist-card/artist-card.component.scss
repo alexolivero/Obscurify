@@ -1,0 +1,118 @@
+@import 'variables';
+@import 'mixins';
+
+.artist__card__stars {
+    margin-top: 1em;
+}
+
+.artist__card {
+    width: 100%;
+    min-width: 200px;
+    height: 75px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 5px 5px 4px 4px rgba(0, 0, 0, 0.5);
+    color: white;
+    transition: .3s cubic-bezier(.25,.1,.25,1);
+
+    img {
+        position: absolute;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    &.active {
+        height: 200px;
+        
+        .artist__card__info {
+            height: 100%;
+        }
+    }
+    
+    &__info {
+        height: 60px;
+        transition: .3s cubic-bezier(.25,.1,.25,1);
+        position: absolute;
+        width: 100%;
+        background: rgba(0,0,0,.55);
+        border-radius: 5px;
+        bottom: 0;  
+        box-sizing: border-box;  
+        padding: 1rem 0.5rem;
+        font-size: 1rem;
+
+        &--secondary, &--primary {
+            transition: .3s cubic-bezier(.25,.1,.25,1);
+            margin-left: 1rem;
+        }
+
+        &--primary {
+            margin-bottom: 0.5rem;
+            font-size: 1.5em;
+
+        }
+
+        &--secondary {
+            font-size: 1.2em;
+        }
+    }
+
+    &__external {
+        color: white;
+        cursor: pointer;
+    }
+
+    button {
+        margin-top: 1em;
+        background: transparent;
+        width: 125px;
+        text-align: center;
+        font-size: 12px;
+        color: #fff;
+        display: block;
+        border-radius: 25px;
+        font-weight: 700;
+        margin: 1em auto 0;
+        border: 2px solid $primary-color;
+        padding: 1em;
+        cursor: pointer;
+    }
+}
+
+@include tablet {
+    .artist__card {
+        height: 150px;
+        width: 200px;
+        margin-bottom: 1em;
+        &.active {
+            height: 150px;
+        }
+
+    }
+}
+
+@include desktop {
+    .artist__card {
+        height: 170px;
+        width: 220px;
+        margin-bottom: 1em;
+
+        &__info {
+            font-size: 1rem;
+
+            &--primary {
+                font-size: 1em;
+            }
+
+            &--secondary {
+                font-size: 1em;
+            }
+        }
+
+        &.active {
+            height: 170px;
+        }
+    }
+
+}

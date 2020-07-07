@@ -1,0 +1,44 @@
+<div class="artist__nav" [ngClass]="{'active': navOpen}">
+    <div class="artist__nav__container">
+
+        <div class="artist__nav__mobile">
+            <button (click)="closeBottomSheet()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="artist__nav__content">
+            <h2>Select</h2>
+            <div class="artist__nav__main" fxLayout="row" fxLayoutAlign="flex-start start">
+                <button class="artist__nav__button" [ngClass]="{'active': navState.listType === 'artists'}" (click)="updateArtistTrack('artists')">Artists</button>
+                <button class="artist__nav__button" [ngClass]="{'active': navState.listType === 'songs'}" (click)="updateArtistTrack('songs')">Songs</button>
+            </div>
+            <div class="artist__nav__history">
+                <h3> View History </h3>
+
+                <mat-radio-group
+                    aria-labelledby="select history date"
+                    class="artist__nav__history--select"
+                    [(ngModel)]="selectedHistory"
+                    fxLayout="column"
+                    (change)="getRadioValue($event)"
+                    [required]="true">
+                <mat-radio-button class="select__item"
+                    *ngFor="let date of historyList"
+                    [value]="date"
+                    >
+                    {{ date.name }}
+                </mat-radio-button>
+            </mat-radio-group>
+            </div>
+
+            <div class="artist__nav__playlist" fxLayout="row" fxLayoutAlign="center" *ngIf="this.navState.listType === 'songs'">
+                <button
+                    class="artist__nav__button"
+                    (click)="emitCreatePlaylist()">
+                    <i class="fas fa-plus-circle"></i>Create Playlist
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>

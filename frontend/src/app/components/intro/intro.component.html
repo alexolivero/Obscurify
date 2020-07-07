@@ -1,0 +1,37 @@
+<nav>
+    <div fxLayout="row" fxLayoutAlign="end start">
+        <button [matMenuTriggerFor]="appMenu">
+            <span class="profile__image">
+                <img  [src]="this.userImage ? this.userImage : 'assets/images/app/profile-placeholder.png'">
+            </span>
+             Menu
+        </button>
+    </div>
+
+    <mat-menu #appMenu="matMenu">
+      <button mat-menu-item (click)="logout()">Logout</button>
+      <button mat-menu-item routerLink="/about" >About</button>
+      <a  mat-menu-item href="https://www.spotify.com/us/account/apps/">Remove Obscurify Account</a>
+    </mat-menu>
+</nav>
+
+<div class="welcome" fxLayout="column" fxLayoutAlign="center center">
+    <h1>Welcome to <br /> Obscurify<span>.</span></h1>
+</div>
+
+<div *ngIf="!error">
+    <div class="profile" fxLayout="column" fxLayoutAlign="center center">
+        <h1 *ngIf="userName" class="profile__header">{{ greeting }}, <span >{{ userName }}.</span> {{ welcomeMessage }}</h1>
+        <h1 *ngIf="!userName" class="profile__header"> {{ welcomeMessage }} </h1>
+    </div>
+</div>
+
+<div *ngIf="error">
+    <div class="profile" fxLayout="column" fxLayoutAlign="center center">
+        <h1 class="profile__header">Looks like you haven't listened to music on Spotify enough to get a score.  Please try again later.</h1>
+
+    </div>
+</div>
+
+
+

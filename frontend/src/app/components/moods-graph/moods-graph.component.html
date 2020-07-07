@@ -1,0 +1,122 @@
+<div class="slate" >
+    <div class="moods-graph" [ngClass]="{'show': this.show}" *ngIf="(happinessGraphData && danceabilityGraphData && energyGraphData && acousticnessGraphData )">
+        <div class="header">
+            <h2 class="header__title">
+                Your Moods
+            </h2>
+        </div>
+        
+        <div class="moods-graph__container" [ngClass]="{'moods-graph__container--right': i%2 != 0}"  *ngFor="let item of [happinessGraphData, danceabilityGraphData, energyGraphData, acousticnessGraphData]; let i = index">
+            <div class="moods-graph__content">
+                <h3>{{ item.type }}</h3>
+                <div class="moods-graph__card">
+                    <div class="moods-graph__card__container">
+                        <p class="moods-graph__card__header">All Time</p>
+                        <p class="moods-graph__card__paragraph">{{ item.allTime.message }}</p>
+                    </div>
+
+                    <div class="moods-graph__card__container">
+                        <div class="equalizer-container {{item.allTime.level}}">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="moods-graph__card moods-graph__card--reverse">
+                    <div class="moods-graph__card__container">
+                        <p class="moods-graph__card__header">Current</p>
+                        <p class="moods-graph__card__paragraph">{{ item.current.message }}</p>
+                    </div>
+
+                    <div class="moods-graph__card__container">
+                        <div class="equalizer-container {{ item.current.level }}">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="moods-graph__container moods-graph__container--right">
+            <div class="moods-graph__content">
+                <h3>Danceability</h3>
+
+                <div class="moods-graph__card">
+                    <div class="moods-graph__card__container">
+                        <p class="moods-graph__card__header">All Time</p>
+                        <p class="moods-graph__card__paragraph">2.4% Lower than U.S Average</p>
+                    </div>
+
+                    <div class="moods-graph__card__container">
+                        <div class="equalizer-container level-one">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="moods-graph__card moods-graph__card--reverse">
+                    <div class="moods-graph__card__container">
+                        <p class="moods-graph__card__header">All Time</p>
+                        <p class="moods-graph__card__paragraph">2.4% Lower than U.S Average</p>
+                    </div>
+
+                    <div class="moods-graph__card__container">
+                        <div class="equalizer-container level-one">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div> -->
+
+        
+    </div>
+</div>

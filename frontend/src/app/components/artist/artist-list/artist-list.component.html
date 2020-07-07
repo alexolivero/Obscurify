@@ -1,0 +1,101 @@
+<div #slate class="slate">
+    <div class="artist">
+        <div class="header" [ngClass]="{'sticky': stickHeader}">
+            <h2 class="header__title">
+                {{ this.navState.selectedHistory.name }} Top {{ navState.listType}}
+            </h2>
+            <button class="bottomsheet__btn" *ngIf="stickHeader" type="button" mat-button (click)="openBottomSheet()">
+                Menu
+                </button>
+        </div>
+        <div #sentinelTop class="sticky_sentinel sticky_sentinel--top"></div>
+        <div #sentinelBottom class="sticky_sentinel sticky_sentinel--bottom"></div>
+
+
+        <div  class="artist__container" fxlayout="column" fxLayout.gt-sm="row nowrap">
+            <div fxLayout="column">
+                <div *ngIf="this.navState.selectedHistory.value == 'allTime' && this.navState.listType === 'artists'"
+                    class="artist__container__grid"
+                    fxFLex="100%"
+                    fxLayout.gt-xs="row wrap"
+                    fxLayout="column nowrap"
+                    fxLayoutGap="16px">
+
+                        <app-artist-card [artist]="artist" [i]="i" *ngFor="let artist of data.allTimeArtists | slice:0:sliceLimit; let i = index"></app-artist-card>
+
+                </div>
+                <div *ngIf="this.navState.selectedHistory.value == 'current'  && this.navState.listType === 'artists'"
+                    class="artist__container__grid"
+                    fxFLex="100%"
+                    fxLayout.gt-xs="row wrap"
+                    fxLayout="column nowrap"
+                    fxLayoutGap="16px">
+
+                    <app-artist-card [artist]="artist" [i]="i" *ngFor="let artist of data.currentArtists | slice:0:sliceLimit; let i = index"></app-artist-card>
+
+                </div>
+
+                <div *ngIf="this.navState.selectedHistory.value == 'allTime' && this.navState.listType === 'songs'"
+                class="artist__container__grid"
+                fxFLex="100%"
+                fxLayout.gt-xs="row wrap"
+                fxLayout="column nowrap"
+                fxLayoutGap="16px">
+
+                    <app-track-card [track]="track" [i]="i" *ngFor="let track of data.allTimeTracks | slice:0:sliceLimit; let i = index"></app-track-card>
+
+            </div>
+            <div *ngIf="this.navState.selectedHistory.value == 'current' && this.navState.listType === 'songs'"
+                class="artist__container__grid"
+                fxFLex="100%"
+                fxLayout.gt-xs="row wrap"
+                fxLayout="column nowrap"
+                fxLayoutGap="16px">
+
+                <app-track-card [track]="track" [i]="i" *ngFor="let track of data.currentTracks | slice:0:sliceLimit; let i = index"></app-track-card>
+
+            </div>
+
+            <div *ngIf="this.navState.selectedHistory.value != 'current' &&
+                this.navState.selectedHistory.value != 'allTime' &&
+                this.navState.listType === 'artists'"
+                class="artist__container__grid"
+                fxFLex="100%"
+                fxLayout.gt-xs="row wrap"
+                fxLayout="column nowrap"
+                fxLayoutGap="16px">
+                <app-artist-card [artist]="artist" [i]="i" *ngFor="let artist of selectedArtistsFromHistory | slice:0:sliceLimit; let i = index"></app-artist-card>
+
+
+
+            </div>
+
+            <div *ngIf="this.navState.selectedHistory.value != 'current' &&
+                this.navState.selectedHistory.value != 'allTime' &&
+                this.navState.listType === 'songs'"
+                class="artist__container__grid"
+                fxFLex="100%"
+                fxLayout.gt-xs="row wrap"
+                fxLayout="column nowrap"
+                fxLayoutGap="16px">
+            <app-track-card [track]="track" [i]="i" *ngFor="let track of selectedTracksFromHistory | slice:0:sliceLimit; let i = index"></app-track-card>
+
+
+        </div>
+
+                <div fxLayoutAlign="center center">
+                    <button *ngIf="this.sliceLimit === 12" class="artist__button artist__button--primary" (click)="showMore()">Show More</button>
+                    <button *ngIf="this.sliceLimit === 50" class="artist__button artist__button--primary" (click)="showLess()">Show Less</button>
+
+                </div>
+            </div>
+
+            <div fxFlex.gt-sm="1 0 30%" class="artist__nav--desktop" *ngIf="showNav">
+                <app-artist-nav [navState]="navState" (createPlaylist)="createPlaylist()" (updateHistory)="getHistory($event)"></app-artist-nav>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+
+<div class="slate">
+    <div class="obscurity" [ngClass]="{'show': this.show}">
+
+        <div class="header">
+            <h2 class="header__title">
+                Obscurity Rating
+            </h2>
+        </div>
+
+        <div class="percentile">
+            <div class="percentile__card">
+                <!-- <h2>{{this.data.percentileByCountry}}%</h2> -->
+                <h2>{{ this.data.obscurifyInfo.percentileByCountryAllTime | number:'1.0-0' }}%</h2>
+
+                <p>Your music is more obscure than <br>
+                    <strong>{{ this.data.obscurifyInfo.percentileByCountryAllTime | number:'1.0-0' }}%</strong>
+                    of <strong>{{ this.data.obscurifyInfo.userCountByCountry | number:'1.0-0':'en'  }} {{ this.data.country }}</strong> users on Obscurify.
+                </p>
+
+                <p><strong>{{ this.data.obscurifyInfo.totalUserCount| number:'1.0-0':'en' }} Global Users </strong> </p>
+            </div>
+        </div>
+
+        <app-obscurity-graph [data]="{
+            breakdown: data.obscurifyInfo.breakdown,
+            averageScoreCountry: data.obscurifyInfo.averageScore,
+            averageScoreGlobal: data.obscurifyInfo.globalAverageScore,
+            userRecentScore: data.recentObscurifyScore,
+            userAllTimeScore: data.allTimeObscurifyScore,
+            percentileByCountryRecent: data.obscurifyInfo.percentileByCountryRecent,
+            percentileByCountryAllTime: data.obscurifyInfo.percentileByCountryAllTime,
+            country: data.country
+        }">
+            
+        </app-obscurity-graph>
+        
+
+        
+    </div>
+</div>

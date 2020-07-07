@@ -1,0 +1,147 @@
+@import 'variables';
+@import 'mixins';
+
+.artist__nav {
+    padding: 0em 2em 2em;
+
+    height: 20em;
+    width: 100%;
+    box-sizing: border-box;
+    background: white;
+    transition: .2s cubic-bezier(.25,.1,.25,1);
+
+    &.active {
+        height: 70vh;
+    }
+
+    &__mobile {
+        margin-bottom: 1em;
+        display: flex;
+        justify-content: stretch;
+
+        button {
+            font-size: 1em;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+            cursor: pointer;
+            span {
+                float: left;
+                font-size: 24px;
+                font-weight: bold;
+            }
+
+            i {
+                margin-left: 1em;
+            }
+        }
+    }
+
+    &__content {
+        h2 {
+            margin-bottom: .5em;
+        }
+    }
+
+
+    &__main {
+        margin-bottom: 2em;
+
+        .artist__nav__button {
+            margin-right: 1em;
+            font-size: 1em;
+        }
+    }
+
+    &__history {
+        h3 {
+            margin-bottom: 1em;
+        }
+        margin-bottom: 2em;
+    }
+
+    &__playlist {
+        button {
+            background: #D8D8D8;
+            padding: 8px 1em;
+            font-size: 1em;
+            border: none;
+            font-weight: bold;
+            i {
+                margin-right: 5px;
+            }
+        }
+    }
+
+    &__button {
+        background: transparent;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.5em;
+        padding: 8px 1em;
+        border: 2px solid #e4e4e4;
+        font-weight: bold;
+        &.active {
+            background: $primary-color;
+            border: 2px solid $primary-color;
+        }
+    }
+
+    .select__item {
+        margin-bottom: 1em;
+    }
+}
+
+@include gt-xs {
+    .artist__nav__content {
+        width: 60%;
+        max-width: 310px;
+    }
+}
+
+@include lt-md {
+
+    .artist__nav {
+        &__container {
+            margin: 0em 0 0;
+        }
+    }
+
+    .artist__nav__content {
+        margin: 0 auto;
+    }
+}
+
+@include gt-md {
+
+    .artist__nav {
+        padding: 1em 1em;
+        border-radius: 5px;
+
+        height: auto;
+        box-sizing: border-box;
+        position: static;
+        background: white;
+        margin-left: 0em;
+
+
+        &__container {
+            margin: 0em 0 0;
+        }
+
+        &__content {
+            width: 100%;
+        }
+
+        &__mobile {
+            display: none;
+        }
+
+        &.active {
+            height: auto;
+        }
+
+    }
+
+}

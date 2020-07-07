@@ -1,0 +1,65 @@
+@import 'components/header';
+@import 'mixins';
+
+.slate {
+    background: #FFA69E;
+
+}
+
+.genre {
+    max-width: 1024px;
+    margin: 0 auto;
+    opacity: 0;
+    transition: opacity .3s cubic-bezier(.25,.1,.25,1);
+
+    &__list {
+        margin-top: 2em;
+    }
+
+    &__card {
+        background-color: rgba(0, 0, 0, .2);
+        border-radius: 5px;
+        padding: 1em 1.5em;
+        opacity: 0;
+        transform: translateY(50px);
+        transition: .3s cubic-bezier(.25,.1,.25,1);
+        h3 {
+            font-size: 1.5em;
+        }
+
+    }
+    
+}
+
+@include desktop {
+    .genre {
+
+        &__card {
+            padding: 1.5em 1.5em;
+
+            min-width: 636px;
+
+            h3 {
+                font-size: 3em;
+            }
+        }
+    }
+
+}
+
+@for $i from 0 through 10 {
+    .genre.show {
+        opacity: 1;
+        transform: translateY(0px);
+        transition: .3s cubic-bezier(.25,.1,.25,1);
+
+        .genre__card {
+            opacity: 1;
+            transform: translateY(0px)
+        }
+        .genre__card:nth-child(#{$i + 1}) {
+            transition:  0.3s * $i;
+        }
+    }
+
+  }

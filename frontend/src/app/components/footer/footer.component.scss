@@ -1,0 +1,28 @@
+footer {
+    min-height: 100px;
+    padding: 3em;
+    background-color: rgba(0,0,0,0.8);
+    color: white;
+    bottom: 0;
+
+    .footer {
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+
+    a {
+        color: white;
+        text-decoration: none;
+        margin-bottom: 1em;
+        cursor: pointer;
+
+        &:hover, &:focus {
+            text-decoration: underline;
+        }
+    }
+
+    .social__links  a{
+        width: 40px;
+        height: 40px;
+    }
+}

@@ -1,0 +1,17 @@
+<div class="slate" *ngIf="topGenres.length > 0">
+    <div class="genre" [ngClass]="{'show': show}">
+        <div class="header">
+            <h2 class="header__title">
+                Top Genres
+            </h2>
+        </div>
+
+        <div class="genre__list" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="1em">
+            <div class="genre__card genre__card--{{i}}" fxFlex="1 1 100%" *ngFor="let item of topGenres; let i = index">
+                <h3>{{ i + 1 }} / {{ item[0] }}</h3>
+            </div>
+
+            
+        </div>
+    </div>
+</div>

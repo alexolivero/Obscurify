@@ -1,0 +1,27 @@
+main {
+    width: 100%;
+    background-color: #A9E5AC;
+}
+
+section {
+    margin: 2em 0;
+    max-width: 772px;
+    padding: 0 2em;
+
+    p {
+        margin-bottom: 1em;
+    }
+
+    h2, h3 {
+        margin-bottom: 1em;
+    }
+}
+
+.back__btn {
+    padding: 1em 1em;
+    color: black;
+    width: 200px;
+    background-color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}

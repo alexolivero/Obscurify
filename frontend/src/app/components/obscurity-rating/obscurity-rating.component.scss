@@ -1,0 +1,81 @@
+@import 'components/header';
+@import 'variables';
+@import 'mixins';
+
+.slate {
+  background: rgba(0,0,0,0.9);
+}
+
+.obscurity {
+    max-width: 1024px;
+    margin: 2rem auto;
+    transform: translateY(100px);
+    transition: .3s cubic-bezier(.25,.1,.25,1);
+    opacity: 0;
+    transform: translateY(100px);
+
+    &.show {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+  }
+.header__title {
+    color: white;
+    border-bottom: 5px $primary-color solid;
+}
+
+.percentile {
+    display:flex;
+    justify-content: flex-start;
+    margin-top: 3em;
+
+    h2 {
+      font-size: 4em;
+      text-align: center;
+    }
+  
+    p {
+        text-align: center;
+        font-size: 1em;
+        margin-top: 1em;
+        font-weight: 500;
+    }
+  
+    &__card {
+      max-width: 600px;
+      border-radius: 5px;
+      background-color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      padding: 2em 2em 2em;
+      box-shadow: 22px 21px 4px 4px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+
+@include desktop {
+
+    .percentile {
+
+        &__card {
+            padding: 2em 2em 5em;
+            min-width: 600px;
+            box-sizing: border-box;
+        }
+
+          
+        h2 {
+          font-size: 8em;
+        }
+      
+        p {
+            font-size: 1em;
+            margin-top: 1em;
+        }
+    } 
+
+}
+  
