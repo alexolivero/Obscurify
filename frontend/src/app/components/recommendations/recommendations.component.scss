@@ -21,7 +21,6 @@
   opacity: 0;
   transform: translateY(100px);
   transition: .3s cubic-bezier(.25,.1,.25,1);
-  overflow: hidden;
 
   &.show {
     opacity: 1;
@@ -46,7 +45,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%;
+  width: calc(100% + 16px);
   height: 100%;
   border-radius: 25px 25px 0 0;
   overflow: hidden;
@@ -112,6 +111,12 @@
   -ms-overflow-style: none;  // IE 10+
   overflow: -moz-scrollbars-none;  // Firefox
   overflow-y: hidden;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
 }
 
 
@@ -121,12 +126,15 @@
   overflow-x: scroll;
   width: 2700px;
   z-index: 1;
-  padding-left: 42px;
+  padding-left: 1.5em;
   flex-wrap: wrap;
   height: 470px;
   align-items: flex-start;
   align-content: baseline;
   -webkit-box-align: start;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 
   &::-webkit-scrollbar {
     display: none;
@@ -135,7 +143,7 @@
   .card {
     background: none;
     width: 252px;
-    height: 168px;
+    height: 200px;
     margin-right: 70px;
     position: relative;
     img {
@@ -151,34 +159,27 @@
       height: 142px;
       position: absolute;
       left: -16px;
-      top: 16px;
+      top: 70px;
       display: flex;
       flex-wrap: wrap;
       align-content: flex-end;
       justify-content: flex-start;
-      padding: 16px 16px 8px;
+      padding: 16px 16px;
       transition: .3s cubic-bezier(.25,.1,.25,1);
-      top: 50px;
       box-sizing: border-box;
 
       h3 {
-        font-size: 14px;
-        margin: 0;
+        font-size: 1em;
+        margin: 0 0 5px;
         width: 100%;
         color: #fff;
       }
 
       p {
         color: #fff;
-        font-size: 10px;
+        font-size: 1em;
         margin: 0;
-      }
-      a {
-        text-decoration: none;
-        color: #fff;
-        display: flex;
-        flex-wrap: wrap;
-        align-content: flex-end;
+        font-family: $secondary-font;
       }
     }
     .card-content {
@@ -223,7 +224,7 @@
         overflow: hidden;
 
         .card {
-          min-height: 230px;
+          min-height: 240px;
           &:nth-child(9) {
             margin-left: 0;
           }

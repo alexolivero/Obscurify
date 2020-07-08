@@ -1,3 +1,5 @@
+@import 'mixins';
+
 main {
     background:linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(../../../assets/images/app/login-background.jpg);
     background-size: cover;
@@ -17,7 +19,7 @@ main {
 
     h1 {
         color: #fff;
-        font-size: 48px;
+        font-size: 4em;
         color: #FFFFFF;
         letter-spacing: 1.92px;
         text-align: center;
@@ -30,7 +32,7 @@ main {
           letter-spacing: 1.92px;
           text-align: center;
           font-weight: bold;
-    
+
         }
       }
       p {
@@ -47,7 +49,7 @@ main {
         justify-content: center;
         align-items: center;
         cursor: pointer;
-        
+
         &:hover,:focus {
             .login__btn {
                 opacity: .7;
@@ -63,5 +65,24 @@ main {
         text-decoration: none;
         font-weight: bold;
         background: transparent;
+    }
+  }
+
+
+  @include desktop {
+    main {
+
+      .login__container {
+        width: 550px;
+      }
+
+      h1 {
+        font-size: 6em;
+      }
+
+      p {
+        font-size: 1.5em;
+        text-align: center;
+      }
     }
   }

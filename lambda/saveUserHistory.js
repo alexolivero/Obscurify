@@ -54,7 +54,7 @@ exports.handler = function(event, context, callback) {
         var formattedHistory = {};
         if ((shortTermArtistIDs == undefined || shortTermArtistIDs.length == 0)
             || (shortTermTrackIDs == undefined || shortTermTrackIDs.length == 0)) {
-
+          //
         } else {
           shortTermArtistIDs = historyInstance.shortTermArtistIDs.map(id => ({"S" : id }) );
           shortTermTrackIDs = historyInstance.shortTermTrackIDs.map(id => ({"S" : id }) );
@@ -64,9 +64,9 @@ exports.handler = function(event, context, callback) {
           formattedHistory.dayOfYear = { "N" : historyInstance.dayOfYear.toString() };
           formattedHistory.year = { "N" : historyInstance.year.toString() };
         }
-        if (data.Item == undefined || data.Item.userHistory == undefined || data.Item.userHistory.L == undefined || data.Item.userHistory.L.length == 0) {
+        if (data.Item == undefined || data.Item.userHistory == undefined || data.Item.userHistory.L == undefined) {
               //user history not found in DB
-              if (shortTermTrackIDs.length > 0) {
+              if (shortTermTrackIDs.length > 0 && formattedHistory.year != undefined) {
                 userHistory.unshift( { "M" : formattedHistory} );
               }
               addOrUpdateUser(userHistory, longTermAudioFeatures, obscurifyScore.toString(),
@@ -75,8 +75,26 @@ exports.handler = function(event, context, callback) {
         } else {
             //existing user
             userHistory = data.Item.userHistory.L;
-            if (moment().year() > userHistory[0].M.year.N || (moment().dayOfYear() - userHistory[0].M.dayOfYear.N > minDaysBetweenUpdateUser)) {
-                if (shortTermTrackIDs.length > 0) {
+            if (userHistory.length == 0) {
+              if (formattedHistory.year == undefined || formattedHistory.shortTermTrackIDs == undefined) {
+                callback(null, {
+                  "statusCode": 200,
+                  "headers": {
+                      "X-Requested-With": '*',
+                      "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with',
+                      "Access-Control-Allow-Origin": '*',
+                      "Access-Control-Allow-Methods": 'POST,OPTIONS'
+                  },
+                  "body": JSON.stringify({"status" : "ok, no update history still empty"}),
+              });
+              } else {
+                userHistory.unshift( { "M" : formattedHistory} );
+                addOrUpdateUser(userHistory, longTermAudioFeatures, obscurifyScore.toString(),
+                                    longTermTrackIDs, longTermArtistIDs, country, userID,
+                                    false, data.Item.longTermAudioFeatures.M, data.Item.obscurifyScore.N);
+              }
+            } else if (moment().year() > userHistory[0].M.year.N || (moment().dayOfYear() - userHistory[0].M.dayOfYear.N > minDaysBetweenUpdateUser)) {
+                if (formattedHistory.year != undefined && formattedHistory.shortTermTrackIDs != undefined) {
                   userHistory.unshift( { "M" : formattedHistory} );
                 }
                 addOrUpdateUser(userHistory, longTermAudioFeatures, obscurifyScore.toString(),
@@ -91,7 +109,7 @@ exports.handler = function(event, context, callback) {
                       "Access-Control-Allow-Origin": '*',
                       "Access-Control-Allow-Methods": 'POST,OPTIONS'
                   },
-                  "body": JSON.stringify({"status" : "ok, no update"}),
+                  "body": JSON.stringify({"status" : "ok, no update because last history is recent"}),
               });
           	}
         }
@@ -317,7 +335,7 @@ exports.handler = function(event, context, callback) {
                                     "Access-Control-Allow-Origin": '*',
                                     "Access-Control-Allow-Methods": 'POST,OPTIONS'
                                 },
-                                "body": JSON.stringify({"status" : "all clear"}),
+                                "body": JSON.stringify({"status" : newUserFlag ? "all clear - new user added" : "all clear - user updated"}),
                             });
                         }
                     });

@@ -15,7 +15,7 @@
                   <span>Refresh</span>
                   <i class="fas fa-sync"></i>
                 </button>
-          
+
                 <button class="add-playlist-btn" (click)="makePlaylist()">
                   <span>Create Playlist</span>
                   <i class="fas fa-plus-circle"></i>
@@ -23,20 +23,21 @@
                 <div class="track-container">
                   <div class="card-track">
                     <div class="card" *ngFor="let track of recommendedTracks">
-                      <div class="card-info">
-                        <a [href]="this.sanitizer.bypassSecurityTrustResourceUrl(track.uri)">
-                          <h3>
-                            {{ (track.name.length < 30) ? (track.name):(track.name | slice:0:25)+'...' }}
-                          </h3>
-                          <p>
-                            {{ track.artists[0].name }}
-                          </p>
-                        </a>
-                      </div>
-                      <div class="card-content">
-                          <img item-start *ngIf="track.album.images.length > 1" [src]="track.album.images[1].url">
-                      </div>
+                      <a [href]="this.sanitizer.bypassSecurityTrustResourceUrl(track.uri)">
 
+                        <div class="card-info">
+                            <h3>
+                              {{ (track.name.length < 25) ? (track.name):(track.name | slice:0:20)+'...' }}
+                            </h3>
+                            <p>
+                              {{ (track.artists[0].name.length < 25) ? (track.artists[0].name):(track.artists[0].name | slice:0:20)+'...' }}
+
+                            </p>
+                        </div>
+                        <div class="card-content">
+                            <img item-start *ngIf="track.album.images.length > 1" [src]="track.album.images[1].url">
+                        </div>
+                      </a>
                     </div>
                   </div>
                 </div>
