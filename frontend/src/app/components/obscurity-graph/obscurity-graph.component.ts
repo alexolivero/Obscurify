@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, Renderer2, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, SimpleChanges, OnChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Chart } from 'chart.js';
 import * as pluginAnnotations from 'chartjs-plugin-annotation';
@@ -8,41 +8,46 @@ import * as pluginAnnotations from 'chartjs-plugin-annotation';
   templateUrl: './obscurity-graph.component.html',
   styleUrls: ['./obscurity-graph.component.scss']
 })
-export class ObscurityGraphComponent implements OnInit {
+export class ObscurityGraphComponent implements OnInit, OnChanges {
   @Input() data;
 
-  constructor(private renderer: Renderer2, public el: ElementRef, public sanitizer: DomSanitizer) {
+  constructor(public el: ElementRef, public sanitizer: DomSanitizer) {
 
   }
 
-  public histogram = [];
+  public histogram: Chart;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes.data.firstChange && changes.data.previousValue.country !== changes.data.currentValue.country) {
+      this.histogram.destroy();
+      this.ngOnInit();
+    }
+  }
 
   ngOnInit() {
     const oldData = Object.entries(this.data.breakdown);
     const labels = [...oldData.map((val: any) => {
       if (Number(val[0]) >= 110  && val[0] <= 240) {
-
         return Number(val[0]);
-
       } else {
         return false;
       }
     })].filter((val) => {
-      if (true) {
-        return val;
-      }
+      return val;
     });
 
+    let tempMax = 0;
     const dataSet = [...oldData.map((val: any) => {
       if (Number(val[0]) >= 110  && val[0] <= 240) {
+        if (Number(val[1].N) > tempMax) {
+          tempMax = Number(val[1].N);
+        }
         return Number(val[1].N);
       } else {
         return false;
       }
     })].filter((val) => {
-      if (true) {
-        return val;
-      }
+      return val;
     });
 
     let userRecentScoreToDisplay = this.data.userRecentScore;
@@ -58,6 +63,19 @@ export class ObscurityGraphComponent implements OnInit {
       userAllTimeScoreToDisplay = 110;
     }
 
+    let allTimeXAdjust = 0;
+    if (userAllTimeScoreToDisplay > 230) {
+      allTimeXAdjust = 45;
+    } else if (userAllTimeScoreToDisplay < 120) {
+      allTimeXAdjust = -45;
+    }
+    let recentXAdjust = 0;
+    if (userRecentScoreToDisplay > 230) {
+      recentXAdjust = 45;
+    } else if (userRecentScoreToDisplay < 120) {
+      recentXAdjust = -45;
+    }
+
     const userAllTimeAnnotation = {
       type: 'line',
       mode: 'vertical',
@@ -65,7 +83,6 @@ export class ObscurityGraphComponent implements OnInit {
       value: userAllTimeScoreToDisplay,
       borderColor: 'rgb(162, 158, 255)',
       borderWidth: 2,
-
       label: {
         fontColor: 'rgb(162, 158, 255)',
         content: `Your All Time ${Math.round(this.data.percentileByCountryAllTime)}%`,
@@ -73,6 +90,7 @@ export class ObscurityGraphComponent implements OnInit {
         position: 'center',
         fontSize: 10,
         yAdjust: -40,
+        xAdjust: allTimeXAdjust
       }
     };
 
@@ -83,15 +101,14 @@ export class ObscurityGraphComponent implements OnInit {
       value: userRecentScoreToDisplay,
       borderColor: 'rgb(229, 202, 169)',
       borderWidth: 2,
-
       label: {
         fontColor: 'rgb(229, 202, 169)',
         content: `Your Recent ${Math.round(this.data.percentileByCountryRecent)}%`,
         enabled: true,
         position: 'center',
         yAdjust: -65,
-        fontSize: 10
-
+        fontSize: 10,
+        xAdjust: recentXAdjust
       }
     };
 
@@ -121,7 +138,7 @@ export class ObscurityGraphComponent implements OnInit {
           backgroundColor: '#fff'
       }]
     };
-    let annotations = [userAllTimeAnnotation];
+    const annotations = [userAllTimeAnnotation];
     if (this.data.userRecentScore > 0) {
       annotations.push(userRecentAnnotation);
     }
@@ -145,7 +162,7 @@ export class ObscurityGraphComponent implements OnInit {
         pluginAnnotations
       ],
       annotation: {
-        annotations: annotations
+        annotations: (annotations)
       },
       scales: {
         yAxes: [{
@@ -157,7 +174,7 @@ export class ObscurityGraphComponent implements OnInit {
           },
           ticks: {
             fontColor: '#fff',
-            stepSize: 4000
+            stepSize: Math.ceil(tempMax/500)*100
 
           },
           gridLines: {

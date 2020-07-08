@@ -15,7 +15,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class IntroComponent implements OnInit {
   @Input() data;
   @Input() error;
-  @Output() appColor = new EventEmitter<number>();
 
   constructor(
     public element: ElementRef,

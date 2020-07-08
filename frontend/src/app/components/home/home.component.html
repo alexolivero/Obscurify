@@ -1,21 +1,22 @@
-<main class="app" *ngIf="(obscurifyInfo && 
-    user && 
-    allTimeArtists && 
-    allTimeTracks && 
-    currentArtists && 
+<main class="app" *ngIf="(obscurifyInfo &&
+    user &&
+    allTimeArtists &&
+    allTimeTracks &&
+    currentArtists &&
     currentTracks)">
 
     <app-intro [data]="user" [error]="allTimeTracks.allTimeTracks.length == 0 ? true : false"></app-intro>
     <div *ngIf="allTimeTracks.allTimeTracks.length > 0">
         <app-top-genres [data]="allTimeArtists"></app-top-genres>
         <app-obscurity-rating
+            (switchCountryEvent)="switchCountry($event)"
             [data]="{
                 obscurifyInfo: obscurifyInfo,
                 country: user.country,
                 allTimeObscurifyScore: allTimeArtists.allTimeObscurifyScore,
                 recentObscurifyScore: currentArtists.recentObscurifyScore
             }">
-        </app-obscurity-rating> 
+        </app-obscurity-rating>
         <app-artist-list
             [data]="{
                 allTimeArtists: allTimeArtists.allTimeArtists,
@@ -26,18 +27,18 @@
                 userHistory: userHistory
             }">
         </app-artist-list>
-    
-        <app-moods-graph 
+
+        <app-moods-graph
             (audioData)="getUserHistory($event)"
-            *ngIf="(audioFeatures && obscurifyInfo)" 
+            *ngIf="(audioFeatures && obscurifyInfo)"
             [data]="{
                 audioFeatureAverages: obscurifyInfo.audioFeatureAverages,
                 userAudioFeatures: audioFeatures,
                 country: user.country
             }">
         </app-moods-graph>
-    
-        <app-recommendations 
+
+        <app-recommendations
             [data]="{
                 allTimeArtistIDs: allTimeArtists.allTimeArtistIDs,
                 allTimeTrackIDs: allTimeTracks.allTimeTrackIDs,
@@ -45,10 +46,10 @@
                 currentTrackIDs: currentTracks.currentTrackIDs,
                 userInfo: user
             }">
-        </app-recommendations>  
+        </app-recommendations>
     </div>
 
-    <app-footer *ngIf="(obscurifyInfo && user && allTimeArtists && currentArtists)" [login]="false"></app-footer>      
+    <app-footer *ngIf="(obscurifyInfo && user && allTimeArtists && currentArtists)" [login]="false"></app-footer>
 </main>
 
 

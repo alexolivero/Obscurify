@@ -2,12 +2,16 @@
 @import 'mixins';
 @import 'variables';
 
+:host {
+  display: block;
+}
+
 .slate {
     background: #FFA69E;
 }
 
 .moods-graph {
-    max-width: 1024px;    
+    max-width: 1024px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -36,7 +40,7 @@
 
     &__content {
         margin-top: 2em;
-        
+
         h3 {
             font-size: 36px;
         }

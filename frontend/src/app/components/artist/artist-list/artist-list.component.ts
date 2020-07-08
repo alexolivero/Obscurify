@@ -19,7 +19,6 @@ import { BrowserCheck } from 'src/app/services/browserCheck';
 export class ArtistListComponent implements AfterViewInit, OnInit, OnChanges {
 
   @Input() data: any;
-  @Output() appColor = new EventEmitter<number>();
 
   @ViewChild('sentinelTop') sentinelTop;
   @ViewChild('sentinelBottom') sentinelBottom;

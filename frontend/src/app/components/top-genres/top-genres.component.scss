@@ -1,6 +1,10 @@
 @import 'components/header';
 @import 'mixins';
 
+:host {
+  display: block;
+}
+
 .slate {
     background: #FFA69E;
 
@@ -28,7 +32,7 @@
         }
 
     }
-    
+
 }
 
 @include desktop {

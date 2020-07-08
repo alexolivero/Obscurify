@@ -10,7 +10,6 @@
 
         <div class="percentile">
             <div class="percentile__card">
-                <!-- <h2>{{this.data.percentileByCountry}}%</h2> -->
                 <h2>{{ this.data.obscurifyInfo.percentileByCountryAllTime | number:'1.0-0' }}%</h2>
 
                 <p>Your music is more obscure than <br>
@@ -18,8 +17,19 @@
                     of <strong>{{ this.data.obscurifyInfo.userCountByCountry | number:'1.0-0':'en'  }} {{ this.data.country }}</strong> users on Obscurify.
                 </p>
 
-                <p><strong>{{ this.data.obscurifyInfo.totalUserCount| number:'1.0-0':'en' }} Global Users </strong> </p>
+                <p><strong>{{ this.data.obscurifyInfo.totalUserCount| number:'1.0-0':'en' }} </strong>Global Users</p>
             </div>
+        </div>
+        <div class="dark-theme" fxLayout="row" fxLayoutAlign="end center">
+          <p>Switch country to</p>
+
+          <mat-form-field color="primary" appearance="standard">
+            <mat-select (selectionChange)='switchCountry($event.value)' panelClass="obscurity__rating__select">
+              <mat-option *ngFor="let country of countryList" [value]="country.value">
+                {{country.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
         <app-obscurity-graph [data]="{
@@ -32,10 +42,10 @@
             percentileByCountryAllTime: data.obscurifyInfo.percentileByCountryAllTime,
             country: data.country
         }">
-            
-        </app-obscurity-graph>
-        
 
-        
+        </app-obscurity-graph>
+
+
+
     </div>
 </div>

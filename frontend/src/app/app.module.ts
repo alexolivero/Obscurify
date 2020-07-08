@@ -32,6 +32,8 @@ import { PrivacyComponent } from './components/privacy/privacy.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { ObscurifyService } from './services/obscurifyService';
 import { BrowserCheck } from './services/browserCheck';
@@ -66,6 +68,7 @@ import { environment } from '../environments/environment';
     PlatformModule,
     MatRadioModule,
     MatSnackBarModule,
+    MatSelectModule,
     FormsModule,
     AppRoutingModule,
     HttpClientModule,

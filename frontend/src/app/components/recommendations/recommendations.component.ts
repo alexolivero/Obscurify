@@ -15,7 +15,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class RecommendationsComponent implements OnInit, AfterViewInit {
   @Input() data;
-  @Output() appColor = new EventEmitter<number>();
 
   constructor(
     public element: ElementRef,

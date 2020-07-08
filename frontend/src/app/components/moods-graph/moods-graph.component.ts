@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, Input, OnChanges,SimpleChanges } from '@angular/core';
 import { IntersectionObserverService } from 'src/app/services/intersectionObserver';
 import { Subscription } from 'rxjs';
 
@@ -10,15 +10,11 @@ import { Subscription } from 'rxjs';
 })
 export class MoodsGraphComponent implements OnInit, AfterViewInit {
   @Input() data;
-  @Output() appColor = new EventEmitter<number>();
   @Output() audioData = new EventEmitter<{}>();
 
   constructor(public element: ElementRef, public intersectionObserverService: IntersectionObserverService) { }
 
   public show = false;
-
-  public longTermAudioFeatures;
-  public shortTermAudioFeatures;
 
   public happinessGraphData;
   public danceabilityGraphData;
@@ -26,82 +22,104 @@ export class MoodsGraphComponent implements OnInit, AfterViewInit {
   public acousticnessGraphData;
 
   private intersectionObserverSubs: Subscription;
+  private longTermAudioFeatures = {
+    danceability : 0,
+    energy : 0,
+    happiness : 0,
+    acousticness : 0,
+    tracksCounted : 0
+  };
+  private shortTermAudioFeatures = {
+    danceability : 0,
+    energy : 0,
+    happiness : 0,
+    acousticness : 0,
+    tracksCounted : 0
+  };
+
+  ngOnChanges(changes: SimpleChanges) {
+    if(!changes.data.firstChange && changes.data.previousValue.country != changes.data.currentValue.country) {
+      this.createAudioFeatures();
+    };
+  }
 
   ngOnInit() {
+    this.createAudioFeatures();
+    this.audioData.emit(this.longTermAudioFeatures);
 
-    const longTermAudioFeatures = {
+  }
+
+  private createAudioFeatures() {
+    this.longTermAudioFeatures = {
       danceability : 0,
       energy : 0,
       happiness : 0,
       acousticness : 0,
       tracksCounted : 0
     };
-
-    const shortTermAudioFeatures = {
+    this.shortTermAudioFeatures = {
       danceability : 0,
       energy : 0,
       happiness : 0,
       acousticness : 0,
       tracksCounted : 0
     };
-
     for (const track of this.data.userAudioFeatures[0].audio_features) {
       if (track != null) {
-        longTermAudioFeatures.danceability += track.danceability;
-        longTermAudioFeatures.energy += track.energy;
-        longTermAudioFeatures.happiness += track.valence;
-        longTermAudioFeatures.acousticness += track.acousticness;
-        longTermAudioFeatures.tracksCounted += 1;
+        this.longTermAudioFeatures.danceability += track.danceability;
+        this.longTermAudioFeatures.energy += track.energy;
+        this.longTermAudioFeatures.happiness += track.valence;
+        this.longTermAudioFeatures.acousticness += track.acousticness;
+        this.longTermAudioFeatures.tracksCounted += 1;
       }
     }
 
-    longTermAudioFeatures.danceability /= longTermAudioFeatures.tracksCounted;
-    longTermAudioFeatures.energy /= longTermAudioFeatures.tracksCounted;
-    longTermAudioFeatures.happiness /= longTermAudioFeatures.tracksCounted;
-    longTermAudioFeatures.acousticness /= longTermAudioFeatures.tracksCounted;
+    this.longTermAudioFeatures.danceability /= this.longTermAudioFeatures.tracksCounted;
+    this.longTermAudioFeatures.energy /= this.longTermAudioFeatures.tracksCounted;
+    this.longTermAudioFeatures.happiness /= this.longTermAudioFeatures.tracksCounted;
+    this.longTermAudioFeatures.acousticness /= this.longTermAudioFeatures.tracksCounted;
 
     for (const track of this.data.userAudioFeatures[1].audio_features) {
       if (track != null) {
-        shortTermAudioFeatures.danceability += track.danceability;
-        shortTermAudioFeatures.energy += track.energy;
-        shortTermAudioFeatures.happiness += track.valence;
-        shortTermAudioFeatures.acousticness += track.acousticness;
-        shortTermAudioFeatures.tracksCounted += 1;
+        this.shortTermAudioFeatures.danceability += track.danceability;
+        this.shortTermAudioFeatures.energy += track.energy;
+        this.shortTermAudioFeatures.happiness += track.valence;
+        this.shortTermAudioFeatures.acousticness += track.acousticness;
+        this.shortTermAudioFeatures.tracksCounted += 1;
       }
     }
 
-    shortTermAudioFeatures.danceability /= shortTermAudioFeatures.tracksCounted;
-    shortTermAudioFeatures.energy /= shortTermAudioFeatures.tracksCounted;
-    shortTermAudioFeatures.happiness /= shortTermAudioFeatures.tracksCounted;
-    shortTermAudioFeatures.acousticness /= shortTermAudioFeatures.tracksCounted;
+    this.shortTermAudioFeatures.danceability /= this.shortTermAudioFeatures.tracksCounted;
+    this.shortTermAudioFeatures.energy /= this.shortTermAudioFeatures.tracksCounted;
+    this.shortTermAudioFeatures.happiness /= this.shortTermAudioFeatures.tracksCounted;
+    this.shortTermAudioFeatures.acousticness /= this.shortTermAudioFeatures.tracksCounted;
 
     this.happinessGraphData = {
       type: 'Happiness',
-      current: this.createPercent(shortTermAudioFeatures, 'happiness'),
-      allTime: this.createPercent(longTermAudioFeatures, 'happiness')
+      current: this.createPercent(this.shortTermAudioFeatures, 'happiness'),
+      allTime: this.createPercent(this.longTermAudioFeatures, 'happiness')
     };
 
     this.danceabilityGraphData = {
       type: 'Danceability',
-      current: this.createPercent(shortTermAudioFeatures, 'danceability'),
-      allTime: this.createPercent(longTermAudioFeatures, 'danceability')
+      current: this.createPercent(this.shortTermAudioFeatures, 'danceability'),
+      allTime: this.createPercent(this.longTermAudioFeatures, 'danceability')
     };
 
     this.energyGraphData = {
       type: 'Energy',
-      current: this.createPercent(shortTermAudioFeatures, 'energy'),
-      allTime: this.createPercent(longTermAudioFeatures, 'energy')
+      current: this.createPercent(this.shortTermAudioFeatures, 'energy'),
+      allTime: this.createPercent(this.longTermAudioFeatures, 'energy')
     };
 
     this.acousticnessGraphData = {
       type: 'Acousticness',
-      current: this.createPercent(shortTermAudioFeatures, 'acousticness'),
-      allTime: this.createPercent(longTermAudioFeatures, 'acousticness')
+      current: this.createPercent(this.shortTermAudioFeatures, 'acousticness'),
+      allTime: this.createPercent(this.longTermAudioFeatures, 'acousticness')
     };
-
-    this.audioData.emit(longTermAudioFeatures);
-
   }
+
+
 
   private createPercent(feature, type) {
     const ratioObject = {

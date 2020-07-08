@@ -2,6 +2,10 @@
 @import "mixins";
 @import "variables";
 
+:host {
+  display: block;
+}
+
 .slate {
   background-color: #759398;
 }
@@ -18,7 +22,7 @@
   transform: translateY(100px);
   transition: .3s cubic-bezier(.25,.1,.25,1);
   overflow: hidden;
-  
+
   &.show {
     opacity: 1;
     transform: translateY(0px);
@@ -212,7 +216,7 @@
       .track-container {
         overflow: hidden;
       }
-      
+
       .card-track {
         height: 100%;
         width: 100%;
@@ -223,7 +227,7 @@
           &:nth-child(9) {
             margin-left: 0;
           }
-      
+
           &:nth-child(1n + 9) {
             margin-top: 0;
           }

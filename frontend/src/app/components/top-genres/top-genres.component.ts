@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Output, EventEmitter, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { IntersectionObserverService } from 'src/app/services/intersectionObserver';
 import { Subscription } from 'rxjs';
 import { InfoService } from 'src/app/services/infoService';
@@ -14,7 +14,6 @@ import { ObscurityFuncs } from 'src/app/utilities/obscurityFuncs';
 export class TopGenresComponent implements OnInit, AfterViewInit {
 
   @Input() data: any;
-  @Output() appColor = new EventEmitter<number>();
 
   constructor(
     public element: ElementRef,

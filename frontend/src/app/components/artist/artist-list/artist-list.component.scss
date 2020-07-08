@@ -2,6 +2,10 @@
 @import 'components/header';
 @import 'variables';
 
+:host {
+  display: block;
+}
+
 .bottomsheet__btn {
     margin-top: 1em;
     padding: 1em 2em;
@@ -33,8 +37,8 @@
 
     .header__title {
         text-transform: capitalize;
-        font-size: 2em;
         width: 100;
+        font-size: 2em;
     }
 
     &__container {
@@ -81,9 +85,9 @@
           display: none;
         }
 
-    }
+        .header__title {
+          font-size: 3em;
+      }
 
-    .header__title {
-        font-size: inherit;
     }
 }

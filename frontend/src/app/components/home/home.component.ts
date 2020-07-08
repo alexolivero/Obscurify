@@ -107,6 +107,22 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  switchCountry(countryCode) {
+    this.obscurifyService.getObscurifyData(
+      countryCode,
+      this.allTimeArtists.allTimeObscurifyScore,
+      this.currentArtists.recentObscurifyScore).subscribe(
+        (obscurifyData: any) => {
+          if (obscurifyData.error) {
+            this.router.navigate(['login', { serverError: true }]);
+          } else {
+            this.obscurifyInfo = { ...obscurifyData };
+            this.user.country = countryCode;
+          }
+      }
+    );
+  }
+
   getUserHistory(val) {
     const getUserHistoryBody = {
       hex: this.tokenSvc.oAuthToken.obscurifyToken,

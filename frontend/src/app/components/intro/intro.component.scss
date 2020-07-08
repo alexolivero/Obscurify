@@ -72,6 +72,11 @@ nav {
     }
 }
 
+.arrow {
+  font-size: 2rem;
+  padding-bottom: 3rem;
+}
+
 
 @include desktop {
 
@@ -80,7 +85,7 @@ nav {
     }
 
     .profile {
-        padding-top: 10em;
+        padding-top: 5em;
 
         &__image {
             width: 50px;
@@ -97,4 +102,27 @@ nav {
         padding-top: 140px;
     }
 
+}
+
+
+
+// Bounce Animation
+@-webkit-keyframes bounce {
+  0% { transform: translateY(-5px)  }
+  50% { transform: translateY(10px) }
+  100% { transform: translateY(-5px) }
+}
+
+@keyframes bounce {
+  0% { transform: translateY(-5px)  }
+  50% { transform: translateY(10px) }
+  100% { transform: translateY(-5px) }
+}
+
+.arrow i {
+  -webkit-animation: bounce 2s infinite ease-in-out;
+  -o-animation: bounce 2s infinite ease-in-out;
+  -ms-animation: bounce 2s infinite ease-in-out;
+  -moz-animation: bounce 2s infinite ease-in-out;
+  animation: bounce 2s infinite ease-in-out;
 }
