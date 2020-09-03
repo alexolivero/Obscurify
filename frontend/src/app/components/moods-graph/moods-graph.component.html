@@ -1,122 +1,123 @@
 <div class="slate" >
-    <div class="moods-graph" [ngClass]="{'show': this.show}" *ngIf="(happinessGraphData && danceabilityGraphData && energyGraphData && acousticnessGraphData )">
+    <div class="moods-graph" [ngClass]="{'show': this.show}">
         <div class="header">
             <h2 class="header__title">
                 Your Moods
             </h2>
         </div>
-        
-        <div class="moods-graph__container" [ngClass]="{'moods-graph__container--right': i%2 != 0}"  *ngFor="let item of [happinessGraphData, danceabilityGraphData, energyGraphData, acousticnessGraphData]; let i = index">
-            <div class="moods-graph__content">
-                <h3>{{ item.type }}</h3>
-                <div class="moods-graph__card">
-                    <div class="moods-graph__card__container">
-                        <p class="moods-graph__card__header">All Time</p>
-                        <p class="moods-graph__card__paragraph">{{ item.allTime.message }}</p>
-                    </div>
 
-                    <div class="moods-graph__card__container">
-                        <div class="equalizer-container {{item.allTime.level}}">
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                        </div>
+        <div class="moods-graph__container">
+            <div class="moods-graph__content">
+                <h3>Happiness</h3>
+
+                <div class="moods-graph__card" fxLayout="column" fxLayout.gt-sm="row nowrap">
+                  <div class="moods-graph__card__container">
+                    <p class="moods-graph__card__paragraph">
+                      Scores with a higher number sound more positive (e.g. happy, cheerful),
+                       while tracks with a lower number sound more negative (e.g. sad, angry)
+                    </p>
+                    <p class="moods-graph__card__paragraph">
+                      <strong>Current:</strong> {{happinessCurrentText}} the {{data.country}} avg
+                    </p>
+                    <p class="moods-graph__card__paragraph">
+                      <strong>All Time:</strong> {{happinessAllTimeText}} the {{data.country}} avg
+                    </p>
+                  </div>
+
+                  <div class="moods-graph__card__container" fxLayout="row" fxLayoutAlign="center end">
+                    <div class="obscurity__canvas">
+                      <canvas #happinessGraphElement id="happinessGraphElement">
+                      </canvas>
                     </div>
-                    
+                  </div>
+
+              </div>
+
+            </div>
+        </div>
+
+        <div class="moods-graph__container moods-graph__container--right">
+            <div class="moods-graph__content">
+                <h3>Danceability</h3>
+
+                <div class="moods-graph__card" fxLayout="column" fxLayout.gt-sm="row nowrap">
+                  <div class="moods-graph__card__container">
+                    <p class="moods-graph__card__paragraph">
+                      Danceability describes how suitable your music is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity.
+                    </p>
+                    <p class="moods-graph__card__paragraph">
+                      <strong>Current:</strong> {{danceabilityCurrentText}} the {{data.country}} avg
+                    </p>
+                    <p class="moods-graph__card__paragraph">
+                      <strong>All Time:</strong> {{danceabilityAllTimeText}} the {{data.country}} avg
+                    </p>
+                  </div>
+                  <div class="moods-graph__card__container" fxLayout="row" fxLayoutAlign="center end">
+                    <div class="obscurity__canvas">
+                      <canvas #danceabilityGraphElement id="danceabilityGraphElement">
+                      </canvas>
+                    </div>
+                  </div>
                 </div>
 
-                <div class="moods-graph__card moods-graph__card--reverse">
-                    <div class="moods-graph__card__container">
-                        <p class="moods-graph__card__header">Current</p>
-                        <p class="moods-graph__card__paragraph">{{ item.current.message }}</p>
-                    </div>
+            </div>
+        </div>
 
-                    <div class="moods-graph__card__container">
-                        <div class="equalizer-container {{ item.current.level }}">
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                        </div>
+        <div class="moods-graph__container">
+            <div class="moods-graph__content">
+                <h3>Energy</h3>
+
+                <div class="moods-graph__card" fxLayout="column" fxLayout.gt-sm="row nowrap">
+                  <div class="moods-graph__card__container">
+                    <p class="moods-graph__card__paragraph">
+                      Energy represents a perceptual measure of intensity and activity.
+                      Typically, energetic tracks feel fast, loud, and noisy.
+                    </p>
+                    <p class="moods-graph__card__paragraph">
+                      <strong>Current:</strong> {{energyCurrentText}} the {{data.country}} avg
+                    </p>
+                    <p class="moods-graph__card__paragraph">
+                      <strong>All Time:</strong> {{energyAllTimeText}} the {{data.country}} avg
+                    </p>
+                  </div>
+
+                  <div class="moods-graph__card__container" fxLayout="row" fxLayoutAlign="center end">
+                    <div class="obscurity__canvas">
+                      <canvas #energyGraphElement id="energyGraphElement">
+                      </canvas>
                     </div>
-                    
+                  </div>
                 </div>
             </div>
         </div>
 
-        <!-- <div class="moods-graph__container moods-graph__container--right">
+        <div class="moods-graph__container moods-graph__container--right">
             <div class="moods-graph__content">
-                <h3>Danceability</h3>
+                <h3>Acousticness</h3>
 
-                <div class="moods-graph__card">
-                    <div class="moods-graph__card__container">
-                        <p class="moods-graph__card__header">All Time</p>
-                        <p class="moods-graph__card__paragraph">2.4% Lower than U.S Average</p>
-                    </div>
+                <div class="moods-graph__card" fxLayout="column" fxLayout.gt-sm="row nowrap">
 
-                    <div class="moods-graph__card__container">
-                        <div class="equalizer-container level-one">
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                        </div>
-                    </div>
-                    
-                </div>
+                  <div class="moods-graph__card__container">
+                    <p class="moods-graph__card__paragraph">
+                    A measure whether your music is acoustic. The higher the number the more acoustic sounding your music is.
+                    </p>
+                    <p class="moods-graph__card__paragraph">
+                      <strong>Current:</strong> {{acousticnessCurrentText}} the {{data.country}} avg
+                    </p>
+                    <p class="moods-graph__card__paragraph">
+                      <strong>All Time:</strong> {{acousticnessAllTimeText}} the {{data.country}} avg
+                    </p>
+                  </div>
 
-                <div class="moods-graph__card moods-graph__card--reverse">
-                    <div class="moods-graph__card__container">
-                        <p class="moods-graph__card__header">All Time</p>
-                        <p class="moods-graph__card__paragraph">2.4% Lower than U.S Average</p>
+                  <div class="moods-graph__card__container" fxLayout="row" fxLayoutAlign="center end">
+                    <div class="obscurity__canvas">
+                        <canvas #acousticnessGraphElement id="acousticnessGraphElement">
+                        </canvas>
                     </div>
-
-                    <div class="moods-graph__card__container">
-                        <div class="equalizer-container level-one">
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                        </div>
-                    </div>
-                    
-                </div>
+                  </div>
+              </div>
             </div>
-        </div> -->
+        </div>
 
-        
     </div>
 </div>

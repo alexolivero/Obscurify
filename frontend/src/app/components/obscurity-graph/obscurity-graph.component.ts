@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ElementRef, SimpleChanges, OnChanges } from '
 import { DomSanitizer } from '@angular/platform-browser';
 import { Chart } from 'chart.js';
 import * as pluginAnnotations from 'chartjs-plugin-annotation';
+import { Platform } from '@angular/cdk/platform';
 
 @Component({
   selector: 'app-obscurity-graph',
@@ -11,7 +12,10 @@ import * as pluginAnnotations from 'chartjs-plugin-annotation';
 export class ObscurityGraphComponent implements OnInit, OnChanges {
   @Input() data;
 
-  constructor(public el: ElementRef, public sanitizer: DomSanitizer) {
+  constructor(
+    public el: ElementRef,
+    public sanitizer: DomSanitizer,
+    public platform: Platform) {
 
   }
 
@@ -103,7 +107,7 @@ export class ObscurityGraphComponent implements OnInit, OnChanges {
       borderWidth: 2,
       label: {
         fontColor: 'rgb(229, 202, 169)',
-        content: `Your Recent ${Math.round(this.data.percentileByCountryRecent)}%`,
+        content: `Your Current ${Math.round(this.data.percentileByCountryRecent)}%`,
         enabled: true,
         position: 'center',
         yAdjust: -65,
@@ -136,7 +140,9 @@ export class ObscurityGraphComponent implements OnInit, OnChanges {
       datasets: [{
           data: dataSet,
           backgroundColor: '#fff'
-      }]
+      }],
+      barPercentage: 1.0,
+      categoryPercentage: 1.0,
     };
     const annotations = [userAllTimeAnnotation];
     if (this.data.userRecentScore > 0) {
@@ -175,15 +181,12 @@ export class ObscurityGraphComponent implements OnInit, OnChanges {
           ticks: {
             fontColor: '#fff',
             stepSize: Math.ceil(tempMax/500)*100
-
           },
           gridLines: {
             display: false
           },
         }],
         xAxes: [{
-            barPercentage: 1.0,
-            categoryPercentage: 1.0,
             gridLines: {
               display: false
             },
@@ -194,10 +197,12 @@ export class ObscurityGraphComponent implements OnInit, OnChanges {
         }]
       }
     };
-    this.histogram = Chart.Bar('canvas', {
-      data,
-      options: option
-    });
+    if (this.platform.isBrowser) {
+      this.histogram = Chart.Bar('obscurityGraph', {
+        data,
+        options: option
+      });
+    }
   }
 
 

@@ -21,6 +21,10 @@ section {
     }
 }
 
+.about__ad {
+  margin-top:3em;
+}
+
 .back__btn {
     padding: 1em 1em;
     background: #FFFFFF;
@@ -34,7 +38,7 @@ section {
     font-family: $primary-font;
     text-decoration: none;
     font-weight: bold;
-    
+
     i {
         margin-right: 5px;
     }

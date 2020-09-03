@@ -1,16 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 
 import { AuthConfig } from '../shared/spotify-auth-config.i';
 import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
 
 @Injectable()
 export class AuthService {
 
-  constructor() {}
-
+  constructor(@Inject(PLATFORM_ID) private platformId) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
+  private isBrowser: boolean;
   private requestAuthUrl = 'https://accounts.spotify.com/authorize';
   private authorized$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private state = this.generateRandomString();
@@ -35,7 +38,9 @@ export class AuthService {
   };
 
   public authorize() {
-    window.location.href = this.buildAuthUrl();
+    if (this.isBrowser) {
+      window.location.href = this.buildAuthUrl();
+    }
   }
 
   // Signal someone, that router can navigate somewhere

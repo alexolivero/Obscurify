@@ -24,6 +24,7 @@ export class ObscurityRatingComponent implements OnInit, AfterViewInit {
     {value: 'US', viewValue: 'United States'},
     {value: 'AR', viewValue: 'Argentina'},
     {value: 'AU', viewValue: 'Australia'},
+    {value: 'BE', viewValue: 'Belgium'},
     {value: 'BR', viewValue: 'Brazil'},
     {value: 'CL', viewValue: 'Chile'},
     {value: 'DK', viewValue: 'Denmark'},
@@ -31,10 +32,13 @@ export class ObscurityRatingComponent implements OnInit, AfterViewInit {
     {value: 'FR', viewValue: 'France'},
     {value: 'DE', viewValue: 'Germany'},
     {value: 'GB', viewValue: 'Great Britain'},
+    {value: 'HU', viewValue: 'Hungary'},
+    {value: 'IN', viewValue: 'India'},
     {value: 'ID', viewValue: 'Indonesia'},
     {value: 'IE', viewValue: 'Ireland'},
     {value: 'IT', viewValue: 'Italy'},
     {value: 'MX', viewValue: 'Mexico'},
+    {value: 'MY', viewValue: 'Malaysia'},
     {value: 'NL', viewValue: 'Netherlands'},
     {value: 'NZ', viewValue: 'New Zealand'},
     {value: 'NO', viewValue: 'Norway'},
@@ -44,7 +48,8 @@ export class ObscurityRatingComponent implements OnInit, AfterViewInit {
     {value: 'ES', viewValue: 'Spain'},
     {value: 'SG', viewValue: 'Singapore'},
     {value: 'SE', viewValue: 'Sweden'},
-    {value: 'TR', viewValue: 'Turkey'}
+    {value: 'TR', viewValue: 'Turkey'},
+    {value: 'VN', viewValue: 'Vietnam'}
   ];
 
   ngOnInit() {

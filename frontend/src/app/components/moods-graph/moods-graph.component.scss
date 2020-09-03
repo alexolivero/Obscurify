@@ -7,7 +7,7 @@
 }
 
 .slate {
-    background: #FFA69E;
+    background: #A9E5AC;
 }
 
 .moods-graph {
@@ -36,10 +36,14 @@
         h3 {
             text-align: right;
         }
+
+
     }
 
     &__content {
         margin-top: 2em;
+        display: flex;
+        flex-direction: column;
 
         h3 {
             font-size: 36px;
@@ -66,211 +70,46 @@
     &__card__paragraph {
         font-family: $secondary-font;
         font-weight: normal;
+        line-height: 1.5;
+        margin-bottom: 1em
     }
 
     &__card__container {
-        width: 50%;
-    }
-
-    .moods-graph__container:nth-child(4n+0) {
-        .equalizer-container .bar {
-            background-color: rgb(162, 158, 255);
-        }
-    }
-    .moods-graph__container:nth-child(4n+1) {
-        .equalizer-container .bar {
-            background-color: rgb(229, 202, 169);
-        }
-    }
-    .moods-graph__container:nth-child(4n+2) {
-        .equalizer-container .bar {
-            background-color: rgb(158, 247, 255);
-        }
-    }
-    .moods-graph__container:nth-child(4n+3) {
-        .equalizer-container .bar {
-            background-color: rgb(169, 196, 229);
-        }
+        width: 100%;
     }
 }
 
+.obscurity__canvas {
+    min-height: 150px;
+    width: 100%;
 
-.equalizer-container {
-    height: 100px;
-    display: flex;
-    align-items: center;
-    position: relative;
-    justify-content: center;
-    .bar {
-      width: 8px;
-      min-height: 10px;
-      margin-right: 2px;
-      transition: all .5s cubic-bezier(0.645, 0.045, 0.355, 1);
-      will-change: transform;
-      transform: scaleY(1);
-      position: relative;
+    &__labels--x {
+      width: 100%;
+      padding-left: 70px;
+      p {
+        font-size: 14px;
+        font-weight: normal;
+        i.fa-arrow-left {
+          margin-right: 5px;
+        }
+        i.fa-arrow-right {
+          margin-left: 5px;
+        }
+      }
+    }
+}
+
+@include tablet {
+  .moods-graph {
+    &__card__container {
+      width: 50%;
+    }
+    &__card__paragraph {
+      margin-bottom: 0em
     }
   }
+}
 
-$bars: 12;
-$multiplier: 100 / $bars;
-
-.equalizer-container {
-
-    &.level-one {
-      @for $i from 0 through $bars {
-          .bar:nth-child(#{$i}) {
-              $saturation: 100 - (($i + 1) * $multiplier);
-              animation: grow-one#{$i} #{random(700) + 1500}ms alternate infinite;
-
-          }
-
-          @keyframes grow-one#{$i} {
-              @for $j from 0 through 10 {
-                  #{$j * 10}% {
-                      transform: scaleY(#{random(1)});
-                  }
-              }
-          }
-      }
-    }
-
-    &.level-two {
-      @for $i from 0 through $bars {
-          .bar:nth-child(#{$i}) {
-              $saturation: 100 - (($i + 1) * $multiplier);
-              animation: grow-two#{$i} #{random(700) + 1500}ms alternate infinite;
-          }
-
-          @keyframes grow-two#{$i} {
-              @for $j from 0 through 10 {
-                  #{$j * 10}% {
-                    transform: scaleY(#{random(2)});
-                  }
-              }
-          }
-      }
-    }
-
-    &.level-three {
-      @for $i from 0 through $bars {
-          .bar:nth-child(#{$i}) {
-              $saturation: 100 - (($i + 1) * $multiplier);
-              animation: grow-three#{$i} #{random(700) + 1500}ms alternate infinite;
-          }
-
-          @keyframes grow-three#{$i} {
-              @for $j from 0 through 10 {
-                  #{$j * 10}% {
-                    transform: scaleY(#{random(3)});
-                  }
-              }
-          }
-      }
-    }
-
-    &.level-four {
-      @for $i from 0 through $bars {
-          .bar:nth-child(#{$i}) {
-              $saturation: 100 - (($i + 1) * $multiplier);
-              animation: grow-four#{$i} #{random(700) + 1500}ms alternate infinite;
-          }
-
-          @keyframes grow-four#{$i} {
-              @for $j from 0 through 10 {
-                  #{$j * 10}% {
-                    transform: scaleY(#{random(4)});
-                  }
-              }
-          }
-      }
-    }
-
-    &.level-five {
-      @for $i from 0 through $bars {
-          .bar:nth-child(#{$i}) {
-              $saturation: 100 - (($i + 1) * $multiplier);
-              animation: grow-five#{$i} #{random(700) + 1500}ms alternate infinite;
-          }
-
-          @keyframes grow-five#{$i} {
-              @for $j from 0 through 10 {
-                  #{$j * 10}% {
-                    transform: scaleY(#{random(5)});
-                  }
-              }
-          }
-      }
-    }
-
-    &.level-six {
-      @for $i from 0 through $bars {
-          .bar:nth-child(#{$i}) {
-              $saturation: 100 - (($i + 1) * $multiplier);
-              animation: grow-six#{$i} #{random(700) + 1500}ms alternate infinite;
-          }
-
-          @keyframes grow-six#{$i} {
-              @for $j from 0 through 10 {
-                  #{$j * 10}% {
-                    transform: scaleY(#{random(6)});
-                  }
-              }
-          }
-      }
-    }
-
-    &.level-seven {
-      @for $i from 0 through $bars {
-          .bar:nth-child(#{$i}) {
-              $saturation: 100 - (($i + 1) * $multiplier);
-              animation: grow-seven#{$i} #{random(700) + 1500}ms alternate infinite;
-          }
-
-          @keyframes grow-seven#{$i} {
-              @for $j from 0 through 10 {
-                  #{$j * 10}% {
-                    transform: scaleY(#{random(8)});
-                  }
-              }
-          }
-      }
-    }
-
-    &.level-eight {
-      @for $i from 0 through $bars {
-          .bar:nth-child(#{$i}) {
-              $saturation: 100 - (($i + 1) * $multiplier);
-              animation: grow-eight#{$i} #{random(700) + 1500}ms alternate infinite;
-          }
-
-          @keyframes grow-eight#{$i} {
-              @for $j from 0 through 10 {
-                  #{$j * 10}% {
-                    transform: scaleY(#{random(9)});
-                  }
-              }
-          }
-      }
-    }
-
-    &.level-nine {
-      @for $i from 0 through $bars {
-          .bar:nth-child(#{$i}) {
-              $saturation: 100 - (($i + 1) * $multiplier);
-              animation: grow-nine#{$i} #{random(700) + 1500}ms alternate infinite;
-          }
-
-          @keyframes grow-nine#{$i} {
-              @for $j from 0 through 10 {
-                  #{$j * 10}% {
-                    transform: scaleY(#{random(10)});
-                  }
-              }
-          }
-      }
-    }
-  }
 
 @include desktop {
     .moods-graph {

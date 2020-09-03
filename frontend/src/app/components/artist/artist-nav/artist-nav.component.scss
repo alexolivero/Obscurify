@@ -96,6 +96,10 @@
     }
 }
 
+.artist__ad {
+  margin-top: 2em;
+}
+
 @include gt-xs {
     .artist__nav__content {
         width: 60%;

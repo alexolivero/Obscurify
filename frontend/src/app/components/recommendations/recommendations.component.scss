@@ -8,6 +8,7 @@
 
 .slate {
   background-color: #759398;
+  padding-bottom: 4em;
 }
 
 .recommendations {
@@ -17,7 +18,7 @@
   margin: 0 auto ;
   position: relative;
   height: 100%;
-  min-height: 620px;
+  min-height: 520px;
   opacity: 0;
   transform: translateY(100px);
   transition: .3s cubic-bezier(.25,.1,.25,1);
@@ -53,6 +54,14 @@
   padding-top: 80px;
   min-height: 620px;
 }
+
+.recommendations__ad {
+  text-align: center;
+  background-color: #759398;
+  padding-bottom: 2em;
+  border: 1px solid #759398;
+}
+
 .filter-btn {
   background-color: #2d3436;
   border: none;

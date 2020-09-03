@@ -6,13 +6,14 @@ export class BrowserCheck {
 
     public isDevice;
 
-
     constructor(public platform: Platform) {
+      if (this.platform.isBrowser) {
         if (window.screen.width < 1021) {
-            this.isDevice = true;
+          this.isDevice = true;
         } else {
             this.isDevice = false;
         }
+      }
     }
 
     checkIfBrowser() {

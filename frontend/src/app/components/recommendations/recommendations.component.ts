@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { IntersectionObserverService } from 'src/app/services/intersectionObserver';
 import { Subscription } from 'rxjs';
 import { InfoService } from 'src/app/services/infoService';
@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providers: [IntersectionObserverService]
 
 })
-export class RecommendationsComponent implements OnInit, AfterViewInit {
+export class RecommendationsComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() data;
 
   constructor(
@@ -34,42 +34,47 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
 
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.data.currentValue.allTimeArtistIDs) {
+      this.intersectionObserverService.init(this.element.nativeElement, {
+        threshold: 0.20
+      });
+      this.intersectionObserverSubs = this.intersectionObserverService
+      .getSubject()
+      .subscribe(el => {
 
-  ngAfterViewInit(): void {
-    this.intersectionObserverService.init(this.element.nativeElement, {
-      threshold: 0.20
-    });
-    this.intersectionObserverSubs = this.intersectionObserverService
-    .getSubject()
-    .subscribe(el => {
+        if (el.isIntersecting) {
+          this.show = true;
 
-      if (el.isIntersecting) {
-        this.show = true;
+          const config = {
+            allTimeArtistIDs: this.data.allTimeArtistIDs,
+            currentArtistIDs: this.data.currentArtistIDs,
+            allTimeTrackIDs: this.data.allTimeTrackIDs,
+            currentTrackIDs: this.data.currentTrackIDs,
+            country: this.data.userInfo.country
+          };
 
-        const config = {
-          allTimeArtistIDs: this.data.allTimeArtistIDs,
-          currentArtistIDs: this.data.currentArtistIDs,
-          allTimeTrackIDs: this.data.allTimeTrackIDs,
-          currentTrackIDs: this.data.currentTrackIDs,
-          country: this.data.userInfo.country
-        };
+          if (!this.initialTracks) {
+            this.spotifyService.getRecommendations(config)
+            .then((data: any) => {
+              this.recommendedTracks = data.tracks;
+              this.initialTracks = true;
+            })
+            .catch((err) => {
+              console.log('Error getting recommended Tracks');
+            });
+          }
 
-        if (!this.initialTracks) {
-          this.spotifyService.getRecommendations(config)
-          .then((data: any) => {
-            this.recommendedTracks = data.tracks;
-            this.initialTracks = true;
-          })
-          .catch((err) => {
-            console.log('Error getting recommended Tracks');
-          });
+        } else {
+          this.show = false;
         }
 
-      } else {
-        this.show = false;
-      }
+      });
+    }
+  }
 
-    });
+  ngAfterViewInit(): void {
+
   }
 
   refreshTracks() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Directive } from '@angular/core';
 import { TokenService, AuthService } from '../../services/spotifyAuth';
 import { Router } from '@angular/router';
 import { InfoService } from '../../services/infoService';
@@ -8,6 +8,7 @@ import { ObscurifyService } from 'src/app/services/obscurifyService';
 import { SpotifyService } from 'src/app/services/spotifyService';
 import { map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SeoService } from '../../services/metaData';
 
 @Component({
   selector: 'app-home',
@@ -24,8 +25,11 @@ export class HomeComponent implements OnInit {
     public authService: AuthService,
     public obscurifyService: ObscurifyService,
     public spotifyService: SpotifyService,
-    public snkBar: MatSnackBar
-  ) { }
+    public snkBar: MatSnackBar,
+    private seoService: SeoService
+  ) {
+    this.loaded = false;
+  }
   private stream: Subscription | null = null;
 
   // public bgColor = '#A9E5AC';
@@ -37,8 +41,10 @@ export class HomeComponent implements OnInit {
   public allTimeTracks = null;
   public currentArtists = null;
   public currentTracks = null;
+  public loaded = false;
 
   ngOnInit() {
+    this.seoService.setMetaTags();
     const userStream = this.tokenSvc.authTokens.pipe((x) => {
       if (this.tokenSvc.oAuthToken.spotifyToken) {
         this.authService.authorized();
@@ -132,6 +138,13 @@ export class HomeComponent implements OnInit {
     this.obscurifyService.getUserHistory(getUserHistoryBody).subscribe((res: any) => {
       if (!res.error && res.userHistory != undefined) {
         this.userHistory = [...res.userHistory];
+        for (let history of this.userHistory) {
+          let tempDate = history.formattedDate;
+          if (tempDate.length > 2) {
+            tempDate = tempDate.slice(0, tempDate.length - 2) + "'" + tempDate.slice(tempDate.length - 2);
+          }
+          history.formattedDate = tempDate;
+        }
       }
       const saveUserHistoryBody = {
         country: this.user.country,
@@ -152,10 +165,14 @@ export class HomeComponent implements OnInit {
           verticalPosition: 'top'
         });
         } else {
-          console.log('Save History', res);
+          // console.log('Save History', res);
         }
       });
     });
+  }
+
+  loadEvent(val) {
+    this.loaded = val;
   }
 
 }

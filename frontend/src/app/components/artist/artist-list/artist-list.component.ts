@@ -193,7 +193,7 @@ export class ArtistListComponent implements AfterViewInit, OnInit, OnChanges {
   createPlaylist() {
     let playlistName = '';
 
-    if (this.navState.selectedHistory.name === 'Current') {
+    if (this.navState.selectedHistory.name === 'current') {
       playlistName = 'Current';
     } else {
       playlistName = `${this.navState.selectedHistory.name} // Obscurify`;
@@ -220,8 +220,10 @@ export class ArtistListComponent implements AfterViewInit, OnInit, OnChanges {
 
     if (this.navState.selectedHistory.value === 'current') {
       config.tracks = this.data.currentTracks;
-    } else {
+    } else if (this.navState.selectedHistory.value === 'allTime') {
       config.tracks = this.data.allTimeTracks;
+    } else {
+      config.tracks = this.selectedTracksFromHistory;
     }
 
     this.spotifyService.makePlaylist(config).then((results: any) => {

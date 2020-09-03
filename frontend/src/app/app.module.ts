@@ -39,6 +39,7 @@ import { ObscurifyService } from './services/obscurifyService';
 import { BrowserCheck } from './services/browserCheck';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { SpyOnDirective } from './directives/spy-on.directive';
 
 @NgModule({
   declarations: [
@@ -59,10 +60,11 @@ import { environment } from '../environments/environment';
     AboutComponent,
     PrivacyComponent,
     FooterComponent,
+    SpyOnDirective,
   ],
   imports: [
     FlexLayoutModule,
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     BrowserAnimationsModule,
     PlatformModule,

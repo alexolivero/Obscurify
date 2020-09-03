@@ -6,9 +6,19 @@
 
 .app__loading {
     height: 100vh;
-    width: 250px;
+    width: 100%;
     margin: 0 auto;
+    position: fixed;
+    top: 0;
+    background: white;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
+    &.active {
+      display: flex;
+    }
     h1 {
         font-size: 144px;
         margin-bottom: 1rem;

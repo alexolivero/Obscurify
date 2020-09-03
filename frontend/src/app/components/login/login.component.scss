@@ -10,8 +10,9 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    min-height: 700px;
     color: white;
+    overflow: hidden;
 
     .login__container {
         width: 320px;
@@ -66,7 +67,16 @@ main {
         font-weight: bold;
         background: transparent;
     }
+
+    .banner-container {
+      padding: 1em;
+      position: absolute;
+      top: 50px;
+      overflow: hidden;
+    }
   }
+
+
 
 
   @include desktop {
