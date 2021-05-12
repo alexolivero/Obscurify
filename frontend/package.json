@@ -25,7 +25,7 @@
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
     "@angular/service-worker": "~9.1.9",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "chartjs-plugin-annotation": "^0.5.7",
     "intersection-observer": "^0.10.0",
     "ngx-cookie-service": "^3.0.4",
